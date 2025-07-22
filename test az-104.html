@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Interactivo - AZ-104</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        html {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: #1f2937; /* text-gray-900 */
+        }
+        html.dark {
+            background-color: #111827; /* bg-gray-900 */
+            color: #f9fafb; /* text-gray-100 */
+        }
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .correct {
+            background-color: #16a34a !important; /* green-600 */
+            border-color: #16a34a !important;
+            color: white !important;
+        }
+        .incorrect {
+            background-color: #dc2626 !important; /* red-600 */
+            border-color: #dc2626 !important;
+            color: white !important;
+        }
+        .selected {
+            border-color: #2563eb; /* blue-600 */
+            background-color: #dbeafe; /* blue-100 */
+        }
+        .dark .selected {
+            background-color: #1e3a8a; /* blue-900 */
+        }
+        .feedback {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .feedback.show {
+            max-height: 200px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .marked {
+            color: #f59e0b; /* amber-500 */
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .modal-container {
+            transition: transform 0.3s ease;
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 1.25rem;
+            background-color: #e5e7eb; /* gray-200 */
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .dark .progress-bar-container {
+            background-color: #374151; /* gray-700 */
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #2563eb; /* blue-600 */
+            transition: width 0.4s ease-in-out;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        .category-progress {
+            background-color: #dbeafe; /* blue-100 */
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .dark .category-progress {
+            background-color: #1e40af; /* blue-800 */
+        }
+        .category-progress-bar {
+            height: 100%;
+            transition: width 0.5s ease-in-out;
+            text-align: right;
+            padding-right: 0.5rem;
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+
+    <!-- Modal de Selección de Cantidad de Preguntas -->
+    <div id="quantity-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="modal-container bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md p-8 text-center transform scale-100">
+            <h2 class="text-2xl font-bold mb-6">Selecciona el número de preguntas</h2>
+            <div id="quantity-buttons" class="grid grid-cols-2 gap-4">
+                <button data-quantity="10" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">10 Preguntas</button>
+                <button data-quantity="30" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">30 Preguntas</button>
+                <button data-quantity="60" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">60 Preguntas</button>
+                <button data-quantity="100" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">100 Preguntas</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto hidden" id="main-quiz-content">
+        <header class="mb-8">
+             <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-4">
+                    <img src="https://images.credly.com/size/340x340/images/be8fca91-3486-4687-95b6-655299735942/azure-administrator-associate-600x600.png" alt="Certificación AZ-104" class="w-16 h-16 rounded-lg shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/64x64/cccccc/333333?text=AZ-104'">
+                    <div>
+                        <h1 class="text-3xl sm:text-4xl font-bold text-blue-600 dark:text-blue-400">Test Certificación AZ-104</h1>
+                        <p id="question-category" class="text-sm text-gray-500 dark:text-gray-400 font-medium"></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle-btn" class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-2 rounded-full shadow-md w-10 h-10 flex items-center justify-center">
+                        <i class="fas fa-adjust"></i>
+                    </button>
+                    <button id="view-btn" onclick="toggleViewModal()" class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+                        <i class="fas fa-list-check"></i> Visualizar
+                    </button>
+                </div>
+            </div>
+             <div class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+            </div>
+            <p id="progress-text" class="mt-2 text-md text-gray-600 dark:text-gray-300 text-center">Pregunta 1 de 100</p>
+        </header>
+
+        <div id="quiz-container">
+            <!-- Las preguntas se cargarán aquí -->
+        </div>
+
+        <div id="navigation-controls" class="mt-6 flex justify-between items-center">
+             <button id="prev-btn" onclick="prevQuestion()" class="nav-btn bg-gray-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 transition-transform transform hover:scale-105">
+                Anterior
+            </button>
+            <div class="flex items-center gap-4">
+                 <button id="check-btn" onclick="checkAnswer()" class="nav-btn bg-green-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-green-700 disabled:bg-green-400">
+                    Comprobar
+                </button>
+                <button id="next-btn" onclick="nextQuestion()" class="nav-btn bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-blue-700 disabled:bg-blue-400">
+                    Siguiente
+                </button>
+            </div>
+        </div>
+
+        <div id="result-container" class="hidden text-center mt-8 p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">¡Test Terminado!</h2>
+            <div id="result-details" class="text-lg mb-4"></div>
+            <p id="score-percentage" class="text-4xl font-bold mb-2"></p>
+            <p id="result-message" class="text-2xl font-semibold mb-6"></p>
+            
+            <!-- Contenedor para los resultados por categoría -->
+            <div id="category-results-container" class="mt-8 text-left">
+                <h3 class="text-xl font-bold mb-4 text-center">Desglose por Área de Aptitud</h3>
+                <div id="category-results" class="space-y-4">
+                    <!-- Los resultados por categoría se insertarán aquí -->
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                <button onclick="restartGame()" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-transform transform hover:scale-105">
+                    <i class="fas fa-redo"></i> Volver a Jugar
+                </button>
+                 <button onclick="startReview()" class="bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-transform transform hover:scale-105">
+                    <i class="fas fa-search"></i> Revisar Test
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualización (Ver Resumen) -->
+    <div id="view-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-40">
+        <div class="modal-container bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg max-h-full overflow-y-auto p-6 transform scale-95">
+             <div class="flex justify-between items-center border-b pb-3 mb-3 dark:border-gray-600">
+                 <h3 class="text-xl font-semibold">Resumen del Test</h3>
+                 <button onclick="toggleViewModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 text-2xl">&times;</button>
+            </div>
+            <div id="summary-lists" class="space-y-4">
+                <!-- Las listas se generan dinámicamente -->
+            </div>
+            <div class="mt-6 pt-4 border-t dark:border-gray-600 text-center">
+                 <button onclick="confirmFinishTest()" class="w-full bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                    Finalizar Test
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmación -->
+    <div id="confirm-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 hidden z-50">
+        <div class="modal-container bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-sm p-6 transform scale-95 text-center">
+            <h3 id="confirm-title" class="text-lg font-semibold mb-4">¿Finalizar Test?</h3>
+            <p id="confirm-message" class="mb-6 text-gray-600 dark:text-gray-300">Hay preguntas sin contestar. ¿Estás seguro?</p>
+            <div class="flex justify-center gap-4">
+                <button onclick="handleFinishConfirmation(false)" class="bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg hover:bg-gray-600">Cancelar</button>
+                <button onclick="handleFinishConfirmation(true)" class="bg-red-600 text-white font-semibold py-2 px-6 rounded-lg hover:bg-red-700">Finalizar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- DATA ---
+        const C = {
+            ID_GOV: "Administración de identidades y gobernanza en Azure",
+            STORAGE: "Implementación y administración del almacenamiento",
+            COMPUTE: "Implementación y administración de recursos de cómputo de Azure",
+            NETWORK: "Implementación y administración de redes virtuales",
+            MONITOR: "Supervisión y mantenimiento de recursos de Azure"
+        };
+
+        const originalQuizData = [
+            // Módulo 1: Identidades y Gobernanza (20 preguntas)
+            { question: "1. Necesitas asegurarte de que los nuevos recursos de almacenamiento creados en un grupo de recursos específico no permitan el acceso público. ¿Qué herramienta de Azure deberías usar?", options: ["Azure Advisor", "Azure Policy", "Control de Acceso Basado en Roles (RBAC)", "Microsoft Defender for Cloud"], answer: "Azure Policy", comment: "Azure Policy se utiliza para crear, asignar y administrar directivas que aplican reglas y efectos sobre los recursos, garantizando que cumplan con los estándares corporativos.", category: C.ID_GOV },
+            { question: "2. Un nuevo empleado necesita permisos para crear y administrar máquinas virtuales en un grupo de recursos específico, pero no debe tener permisos sobre otros tipos de recursos. ¿Qué rol RBAC deberías asignarle?", options: ["Propietario (Owner)", "Colaborador (Contributor)", "Colaborador de la máquina virtual (Virtual Machine Contributor)", "Lector (Reader)"], answer: "Colaborador de la máquina virtual (Virtual Machine Contributor)", comment: "El rol de 'Colaborador de la máquina virtual' proporciona los permisos necesarios para administrar VMs, pero no otros recursos, siguiendo el principio de privilegios mínimos.", category: C.ID_GOV },
+            { question: "3. ¿Cuál es el propósito principal de los Grupos de Administración de Azure (Management Groups)?", options: ["Agrupar máquinas virtuales para balanceo de carga.", "Aplicar políticas y control de acceso a múltiples suscripciones.", "Organizar recursos dentro de una suscripción.", "Sincronizar identidades con un Active Directory local."], answer: "Aplicar políticas y control de acceso a múltiples suscripciones.", comment: "Los grupos de administración son un nivel de ámbito por encima de las suscripciones, diseñados para gestionar de forma eficiente el acceso y las directivas en un conjunto de suscripciones.", category: C.ID_GOV },
+            { question: "4. Quieres proteger una máquina virtual crítica para que no sea eliminada accidentalmente. ¿Qué acción debes realizar?", options: ["Asignar una directiva de Azure Deny.", "Aplicar un bloqueo de recursos (Resource Lock) de tipo `CanNotDelete`.", "Quitar el rol de Colaborador a todos los usuarios.", "Habilitar la autenticación multifactor (MFA) para la suscripción."], answer: "Aplicar un bloqueo de recursos (Resource Lock) de tipo `CanNotDelete`.", comment: "Los bloqueos de recursos se utilizan para evitar que los usuarios autorizados eliminen o modifiquen accidentalmente recursos críticos.", category: C.ID_GOV },
+            { question: "5. ¿Qué servicio de Azure AD permite a los usuarios restablecer sus propias contraseñas sin la intervención del soporte técnico?", options: ["Azure AD Identity Protection", "Acceso Condicional (Conditional Access)", "Restablecimiento de contraseña de autoservicio (SSPR)", "Azure AD Privileged Identity Management (PIM)"], answer: "Restablecimiento de contraseña de autoservicio (SSPR)", comment: "SSPR es una característica de Azure AD que permite a los usuarios cambiar o restablecer su contraseña, reduciendo la carga de trabajo del departamento de TI.", category: C.ID_GOV },
+            { question: "6. ¿Qué es Azure AD Connect?", options: ["Un servicio para conectar redes virtuales entre sí.", "Una herramienta para sincronizar identidades de un Active Directory local con Azure AD.", "Un conector para servicios de almacenamiento de terceros.", "Una API para gestionar recursos de Azure mediante programación."], answer: "Una herramienta para sincronizar identidades de un Active Directory local con Azure AD.", comment: "Azure AD Connect es la herramienta de Microsoft diseñada para cumplir los objetivos de identidad híbrida, incluida la sincronización de hash de contraseñas y la federación.", category: C.ID_GOV },
+            { question: "7. Necesitas otorgar a un consultor externo acceso temporal a un rol privilegiado como 'Administrador Global'. ¿Qué servicio de Azure AD es el más adecuado?", options: ["Azure AD B2C", "Azure AD Domain Services", "Azure AD Privileged Identity Management (PIM)", "Asignaciones de roles RBAC estándar."], answer: "Azure AD Privileged Identity Management (PIM)", comment: "PIM es un servicio que permite la administración, el control y la supervisión del acceso just-in-time (JIT) a recursos importantes en Azure AD.", category: C.ID_GOV },
+            { question: "8. ¿Cuál es el ámbito de una asignación de Azure Policy?", options: ["Solo a nivel de Grupo de Recursos.", "Solo a nivel de Suscripción.", "A nivel de Grupo de Administración, Suscripción o Grupo de Recursos.", "Solo a nivel de Tenant de Azure AD."], answer: "A nivel de Grupo de Administración, Suscripción o Grupo de Recursos.", comment: "Las directivas se pueden asignar en diferentes niveles de la jerarquía de Azure para proporcionar una gobernanza granular o amplia.", category: C.ID_GOV },
+            { question: "9. ¿Para qué se utiliza el etiquetado (tagging) de recursos en Azure?", options: ["Para aplicar reglas de seguridad a los recursos.", "Para organizar los recursos con fines de facturación y administración.", "Para cifrar los datos de los recursos.", "Para conectar recursos a una red virtual."], answer: "Para organizar los recursos con fines de facturación y administración.", comment: "Las etiquetas son pares de metadatos (clave-valor) que permiten organizar lógicamente los recursos, lo que facilita la gestión de costos y la administración.", category: C.ID_GOV },
+            { question: "10. ¿Qué es una directiva de Acceso Condicional (Conditional Access) en Azure AD?", options: ["Una regla que bloquea el acceso a todos los recursos de Azure.", "Una herramienta para analizar los costos de los recursos.", "Una regla 'if-then' que evalúa señales (usuario, ubicación, etc.) para permitir, bloquear o requerir acciones adicionales (MFA) para acceder a los recursos.", "Una directiva que define los tamaños de VM permitidos."], answer: "Una regla 'if-then' que evalúa señales (usuario, ubicación, etc.) para permitir, bloquear o requerir acciones adicionales (MFA) para acceder a los recursos.", comment: "El Acceso Condicional es el corazón del plano de control de identidades de Microsoft, permitiendo una seguridad granular y automatizada.", category: C.ID_GOV },
+            { question: "51. ¿Qué es una plantilla de Azure Resource Manager (ARM)?", options: ["Un script de PowerShell para implementar recursos.", "Un archivo JSON que define uno o más recursos para implementar.", "Una imagen de máquina virtual preconfigurada.", "Un panel de control de Azure predefinido."], answer: "Un archivo JSON que define uno o más recursos para implementar.", comment: "Las plantillas ARM permiten la implementación declarativa y repetible de la infraestructura de Azure, una práctica clave de la Infraestructura como Código (IaC).", category: C.ID_GOV },
+            { question: "52. Estás configurando una VPN de sitio a sitio. ¿Qué recurso representa tu dispositivo VPN local en Azure?", options: ["Puerta de enlace de red virtual (Virtual Network Gateway).", "Conexión (Connection).", "Puerta de enlace de red local (Local Network Gateway).", "Circuito ExpressRoute."], answer: "Puerta de enlace de red local (Local Network Gateway).", comment: "La puerta de enlace de red local es un objeto en Azure que representa tu dispositivo VPN físico en tu red local.", category: C.NETWORK },
+            { question: "56. ¿Qué es una Zona DNS Privada (Private DNS Zone) en Azure?", options: ["Una zona DNS que solo se puede administrar desde una red local.", "Un servicio que proporciona resolución de nombres dentro de una red virtual y entre redes virtuales.", "Una zona DNS que está protegida por Azure Firewall.", "Un alias para una zona DNS pública."], answer: "Un servicio que proporciona resolución de nombres dentro de una red virtual y entre redes virtuales.", comment: "Las zonas DNS privadas permiten usar tus propios nombres de dominio personalizados en lugar de los nombres proporcionados por Azure.", category: C.NETWORK },
+            { question: "57. ¿Qué tipo de identidad administrada (Managed Identity) está vinculada al ciclo de vida de un recurso de Azure específico, como una VM?", options: ["Asignada por el sistema (System-assigned).", "Asignada por el usuario (User-assigned).", "Asignada por el servicio (Service-assigned).", "Asignada por el grupo (Group-assigned)."], answer: "Asignada por el sistema (System-assigned).", comment: "Una identidad administrada asignada por el sistema se crea y se elimina junto con el recurso de Azure al que está asociada.", category: C.ID_GOV },
+            { question: "67. ¿Qué rol de Azure AD se necesita como mínimo para crear y administrar casos de soporte técnico de Azure?", options: ["Administrador Global", "Propietario de la suscripción", "Administrador de Soporte Técnico", "Cualquier usuario autenticado puede crear un ticket de soporte."], answer: "Administrador de Soporte Técnico", comment: "El rol de Administrador de Soporte Técnico (o un rol con el permiso `Microsoft.Support/supportTickets/write`) es necesario para abrir y gestionar solicitudes de soporte.", category: C.ID_GOV },
+            { question: "72. ¿Qué tipo de cuenta de Azure AD se utiliza para aplicaciones que necesitan acceder a recursos de Azure sin la intervención de un usuario?", options: ["Cuenta de usuario", "Cuenta de invitado", "Entidad de servicio (Service Principal)", "Grupo"], answer: "Entidad de servicio (Service Principal)", comment: "Una entidad de servicio es una identidad que se crea para que la usen aplicaciones, servicios hospedados y herramientas automatizadas para acceder a los recursos de Azure.", category: C.ID_GOV },
+            { question: "80. ¿Cuál es el propósito de Azure Key Vault?", options: ["Almacenar copias de seguridad de máquinas virtuales.", "Almacenar y administrar de forma segura secretos, claves y certificados.", "Almacenar archivos de registro de diagnóstico.", "Almacenar imágenes de Docker."], answer: "Almacenar y administrar de forma segura secretos, claves y certificados.", comment: "Key Vault ayuda a controlar los secretos de las aplicaciones al mantenerlos en una ubicación centralizada y proporcionar un acceso seguro.", category: C.ID_GOV },
+            { question: "84. ¿Qué es el 'acceso entre tenants' en Azure AD B2B?", options: ["La capacidad de un usuario de acceder a recursos en su propio tenant.", "La configuración que controla cómo colaboran los usuarios de otros tenants contigo y cómo tus usuarios colaboran con otros tenants.", "Una conexión VPN entre dos tenants.", "La sincronización de todos los usuarios entre dos tenants."], answer: "La configuración que controla cómo colaboran los usuarios de otros tenants contigo y cómo tus usuarios colaboran con otros tenants.", comment: "Permite una colaboración segura y granular con organizaciones externas al definir qué tenants están permitidos y qué nivel de acceso tienen.", category: C.ID_GOV },
+            { question: "89. ¿Qué es una 'iniciativa' en Azure Policy?", options: ["Una única regla de directiva.", "Una colección de definiciones de directivas que se agrupan para lograr un objetivo general.", "Una exención a una directiva.", "El registro de cumplimiento de una directiva."], answer: "Una colección de definiciones de directivas que se agrupan para lograr un objetivo general.", comment: "Las iniciativas simplifican la gestión de directivas al permitirte asignar un grupo de directivas relacionadas como una sola entidad.", category: C.ID_GOV },
+            { question: "96. ¿Qué es una 'zona de aterrizaje' (Landing Zone) de Azure?", options: ["Una región de Azure específica para nuevos clientes.", "Un entorno de Azure preparado para alojar cargas de trabajo, siguiendo las mejores prácticas de gobernanza, seguridad y operaciones.", "Una red virtual preconfigurada.", "Una suscripción de Azure con recursos de ejemplo."], answer: "Un entorno de Azure preparado para alojar cargas de trabajo, siguiendo las mejores prácticas de gobernanza, seguridad y operaciones.", comment: "Las zonas de aterrizaje son el resultado de una arquitectura de escala empresarial y proporcionan una base sólida para construir y migrar aplicaciones a Azure.", category: C.ID_GOV },
+
+            // Módulo 2: Almacenamiento (20 preguntas)
+            { question: "11. ¿Qué tipo de cuenta de almacenamiento de Azure ofrece el nivel de rendimiento más alto para cargas de trabajo de baja latencia?", options: ["General-purpose v2", "General-purpose v1", "BlockBlobStorage", "Premium Block Blobs"], answer: "Premium Block Blobs", comment: "Las cuentas de almacenamiento Premium utilizan SSD y están optimizadas para cargas de trabajo que requieren tasas de transacción muy altas y baja latencia.", category: C.STORAGE },
+            { question: "12. Necesitas almacenar 2 TB de archivos que serán compartidos entre varias VMs de Azure usando el protocolo SMB. ¿Qué servicio de almacenamiento deberías usar?", options: ["Azure Blob Storage", "Azure Files", "Azure Disk Storage", "Azure Table Storage"], answer: "Azure Files", comment: "Azure Files ofrece recursos compartidos de archivos totalmente administrados en la nube a los que se puede acceder a través de los protocolos estándar SMB y NFS.", category: C.STORAGE },
+            { question: "13. ¿Qué es la Replicación con redundancia de zona (ZRS)?", options: ["Replica los datos en tres centros de datos dentro de una región.", "Replica los datos en tres zonas de disponibilidad dentro de una región.", "Replica los datos a una región secundaria.", "Crea 3 copias de los datos en un único centro de datos."], answer: "Replica los datos en tres zonas de disponibilidad dentro de una región.", comment: "ZRS ofrece alta disponibilidad al replicar los datos en tres zonas de disponibilidad distintas dentro de la misma región.", category: C.STORAGE },
+            { question: "14. ¿Para qué se utiliza una Firma de Acceso Compartido (SAS)?", options: ["Para cifrar los datos en una cuenta de almacenamiento.", "Para proporcionar acceso delegado y granular a los recursos de una cuenta de almacenamiento.", "Para conectar una cuenta de almacenamiento a una red virtual.", "Para sincronizar datos entre dos cuentas de almacenamiento."], answer: "Para proporcionar acceso delegado y granular a los recursos de una cuenta de almacenamiento.", comment: "Una SAS proporciona a los clientes un acceso seguro y delegado a los recursos de la cuenta de almacenamiento, especificando permisos y tiempo de validez.", category: C.STORAGE },
+            { question: "15. Estás configurando Azure File Sync. ¿Qué componente se instala en tu servidor de archivos de Windows Server local?", options: ["El agente de Azure Monitor.", "El agente de Azure Arc.", "El agente de Azure File Sync.", "El cliente de Azure AD Connect."], answer: "El agente de Azure File Sync.", comment: "El agente de Azure File Sync es un paquete descargable que se instala en un Windows Server para habilitar la sincronización con un recurso compartido de archivos de Azure.", category: C.STORAGE },
+            { question: "16. ¿Qué nivel de acceso de Blob Storage es el más económico para datos a los que se accede con poca frecuencia y con horas de latencia de recuperación?", options: ["Premium", "Frecuente (Hot)", "Esporádico (Cool)", "Archivo (Archive)"], answer: "Archivo (Archive)", comment: "El nivel de Archivo está optimizado para almacenar datos que rara vez se acceden, ofreciendo el costo de almacenamiento más bajo.", category: C.STORAGE },
+            { question: "17. Necesitas copiar una gran cantidad de datos desde un centro de datos local a Azure Blob Storage rápidamente, pero tu conexión a Internet es lenta. ¿Qué servicio deberías considerar?", options: ["AzCopy", "Azure Storage Explorer", "Azure Data Box", "Azure File Sync"], answer: "Azure Data Box", comment: "Azure Data Box es un dispositivo físico que Microsoft te envía para cargar datos localmente y enviarlo de vuelta, evitando las limitaciones del ancho de banda.", category: C.STORAGE },
+            { question: "18. ¿Qué característica de Azure Storage permite montar un contenedor de blobs como un sistema de archivos en una máquina Linux?", options: ["BlobFuse", "Azure File Sync", "SMB 3.0", "NFS v4.1"], answer: "BlobFuse", comment: "BlobFuse es un controlador de sistema de archivos virtual para Azure Blob Storage que permite acceder a los datos de blobs a través del sistema de archivos de Linux.", category: C.STORAGE },
+            { question: "19. ¿Cómo puedes restringir el acceso a una cuenta de almacenamiento para que solo sea accesible desde una red virtual específica?", options: ["Usando una Firma de Acceso Compartido (SAS).", "Configurando un Punto de Conexión de Servicio o un Punto de Conexión Privado.", "Asignando un rol RBAC de 'Lector de Red'.", "Creando una regla de entrada en un Grupo de Seguridad de Red (NSG)."], answer: "Configurando un Punto de Conexión de Servicio o un Punto de Conexión Privado.", comment: "Los puntos de conexión de servicio y privados son los mecanismos para asegurar el tráfico a los servicios de Azure directamente desde una red virtual.", category: C.STORAGE },
+            { question: "20. ¿Qué utilidad de línea de comandos está optimizada para copiar datos hacia y desde Azure Blob y File Storage?", options: ["bcp", "robocopy", "AzCopy", "scp"], answer: "AzCopy", comment: "AzCopy es una utilidad de línea de comandos diseñada para transferencias de datos de alto rendimiento hacia y desde Azure Storage.", category: C.STORAGE },
+            { question: "61. ¿Qué política de ciclo de vida de almacenamiento podrías aplicar para mover automáticamente blobs no modificados en 30 días del nivel Frecuente al Esporádico?", options: ["Una regla que se activa por la fecha de creación.", "Una regla con la acción `tierToCool` y una condición `daysAfterModificationGreaterThan` en 30.", "Una regla que elimina los blobs después de 30 días.", "Una regla de Azure Backup."], answer: "Una regla con la acción `tierToCool` y una condición `daysAfterModificationGreaterThan` en 30.", comment: "Las políticas de administración del ciclo de vida te permiten automatizar la transición de datos a niveles de almacenamiento más económicos.", category: C.STORAGE },
+            { question: "68. ¿Cuál es la principal ventaja de usar discos administrados (Managed Disks) en lugar de discos no administrados?", options: ["Son más baratos.", "Azure gestiona las cuentas de almacenamiento, eliminando la complejidad y proporcionando mejor escalabilidad.", "Tienen un rendimiento más rápido por defecto.", "Se pueden adjuntar a más VMs simultáneamente."], answer: "Azure gestiona las cuentas de almacenamiento, eliminando la complejidad y proporcionando mejor escalabilidad.", comment: "Los discos administrados simplifican enormemente la gestión de discos al abstraer la complejidad de las cuentas de almacenamiento.", category: C.COMPUTE },
+            { question: "70. ¿Qué es una instantánea de disco (Disk Snapshot)?", options: ["Una copia de seguridad completa de una VM.", "Una copia de solo lectura de un VHD en un momento dado, que se puede usar para crear nuevas VMs o para restaurar un disco.", "Una imagen de VM.", "Un registro de los cambios en un disco."], answer: "Una copia de solo lectura de un VHD en un momento dado, que se puede usar para crear nuevas VMs o para restaurar un disco.", comment: "Las instantáneas son una forma rápida y económica de hacer una copia de seguridad de un disco antes de realizar cambios importantes.", category: C.COMPUTE },
+            { question: "74. ¿Qué es el 'acceso anónimo' a un contenedor de Azure Blob Storage?", options: ["Acceso que requiere una clave de cuenta de almacenamiento.", "Acceso que requiere una firma de acceso compartido (SAS).", "Acceso público y no autenticado a los blobs dentro de un contenedor.", "Acceso que requiere autenticación de Azure AD."], answer: "Acceso público y no autenticado a los blobs dentro de un contenedor.", comment: "Puedes configurar un contenedor para permitir el acceso público, lo que es útil para servir activos como imágenes o documentos en un sitio web.", category: C.STORAGE },
+            { question: "77. ¿Qué es la replicación geográfica con acceso de lectura (RA-GRS) para Azure Storage?", options: ["Replica los datos en tres zonas de disponibilidad.", "Replica los datos a una región secundaria y proporciona acceso de solo lectura a los datos en la ubicación secundaria.", "Replica los datos en múltiples regiones y permite el acceso de lectura/escritura en todas ellas.", "Es una copia de seguridad de la cuenta de almacenamiento."], answer: "Replica los datos a una región secundaria y proporciona acceso de solo lectura a los datos en la ubicación secundaria.", comment: "RA-GRS proporciona alta disponibilidad para la lectura al permitir que las aplicaciones lean desde la réplica secundaria.", category: C.STORAGE },
+            { question: "79. ¿Qué es el 'Bursting' de disco en Azure?", options: ["Una característica que permite que un disco exceda su límite de rendimiento (IOPS y MB/s) durante períodos limitados.", "La capacidad de aumentar el tamaño de un disco mientras está en uso.", "Un tipo de cifrado de disco.", "La replicación de un disco a otra región."], answer: "Una característica que permite que un disco exceda su límite de rendimiento (IOPS y MB/s) durante períodos limitados.", comment: "El bursting basado en créditos permite que los discos manejen picos de tráfico inesperados de manera más efectiva.", category: C.COMPUTE },
+            { question: "85. ¿Qué es el 'Cifrado de servicio de almacenamiento de Azure' (SSE)?", options: ["Cifrado de datos en tránsito.", "Cifrado de datos en reposo, donde Azure cifra automáticamente los datos antes de persistirlos.", "Cifrado del lado del cliente.", "Cifrado de la conexión de red a la cuenta de almacenamiento."], answer: "Cifrado de datos en reposo, donde Azure cifra automáticamente los datos antes de persistirlos.", comment: "SSE está habilitado por defecto en todas las cuentas de almacenamiento y no se puede deshabilitar, garantizando que los datos en reposo estén siempre cifrados.", category: C.STORAGE },
+            { question: "91. ¿Qué es el 'Azure Disk Encryption' (ADE)?", options: ["Cifrado de datos en tránsito.", "Cifrado de datos en reposo a nivel de cuenta de almacenamiento (SSE).", "Una capacidad para cifrar los discos de SO y de datos de VMs IaaS usando BitLocker (Windows) y DM-Crypt (Linux).", "Cifrado de la conexión RDP a una VM."], answer: "Una capacidad para cifrar los discos de SO y de datos de VMs IaaS usando BitLocker (Windows) y DM-Crypt (Linux).", comment: "ADE se integra con Azure Key Vault para ayudarte a controlar y administrar las claves de cifrado de disco.", category: C.COMPUTE },
+            { question: "97. ¿Qué es la 'consistencia final' en el contexto de Azure Storage con replicación geográfica (GRS)?", options: ["Los datos se escriben en la región primaria y secundaria simultáneamente.", "Los datos se escriben en la primaria y luego se replican de forma asíncrona a la secundaria, pudiendo haber un breve retraso.", "Los datos son consistentes en todo momento en ambas regiones.", "La consistencia de los datos no está garantizada."], answer: "Los datos se escriben en la primaria y luego se replican de forma asíncrona a la secundaria, pudiendo haber un breve retraso.", comment: "Debido a la naturaleza asíncrona de la replicación, GRS y RA-GRS operan con un modelo de consistencia final para los datos en la región secundaria.", category: C.STORAGE },
+            { question: "66. ¿Qué es el emparejamiento de redes virtuales global (Global VNet Peering)?", options: ["Conectar redes virtuales en la misma región.", "Conectar redes virtuales en diferentes regiones de Azure.", "Conectar una red virtual a una red local.", "Conectar una red virtual a Internet."], answer: "Conectar redes virtuales en diferentes regiones de Azure.", comment: "El emparejamiento global permite que los recursos de una VNet se comuniquen con recursos de otra VNet en una región de Azure diferente de forma privada.", category: C.NETWORK },
+
+            // Módulo 3: Cómputo (20 preguntas)
+            { question: "21. Necesitas implementar un conjunto de máquinas virtuales idénticas que se escalen automáticamente según la demanda. ¿Qué recurso de cómputo de Azure deberías usar?", options: ["Conjuntos de disponibilidad (Availability Sets)", "Conjuntos de escalado de máquinas virtuales (Virtual Machine Scale Sets)", "Azure DevTest Labs", "Máquinas virtuales individuales"], answer: "Conjuntos de escalado de máquinas virtuales (Virtual Machine Scale Sets)", comment: "Los conjuntos de escalado permiten crear y administrar un grupo de máquinas virtuales con equilibrio de carga y escalado automático.", category: C.COMPUTE },
+            { question: "22. ¿Cuál es el propósito de un Conjunto de Disponibilidad (Availability Set)?", options: ["Escalar automáticamente el número de VMs.", "Proteger las aplicaciones contra fallos de hardware distribuyendo VMs en diferentes dominios de error y actualización.", "Distribuir VMs entre diferentes regiones de Azure.", "Agrupar VMs para una gestión de costos más sencilla."], answer: "Proteger las aplicaciones contra fallos de hardware distribuyendo VMs en diferentes dominios de error y actualización.", comment: "Un conjunto de disponibilidad garantiza que las VMs se coloquen en diferentes racks (dominios de error) y se actualicen en momentos diferentes (dominios de actualización).", category: C.COMPUTE },
+            { question: "23. ¿Qué son las Zonas de Disponibilidad (Availability Zones)?", options: ["Un conjunto de centros de datos dentro de una región, cada uno con energía, refrigeración y redes independientes.", "Un grupo lógico de máquinas virtuales para escalado.", "Un tipo de cuenta de almacenamiento con alta disponibilidad.", "Un conjunto de reglas de firewall para proteger las VMs."], answer: "Un conjunto de centros de datos dentro de una región, cada uno con energía, refrigeración y redes independientes.", comment: "Las Zonas de Disponibilidad ofrecen un SLA del 99,99% al proteger las aplicaciones y los datos de los fallos de todo un centro de datos.", category: C.COMPUTE },
+            { question: "24. Necesitas ejecutar un script de configuración en una nueva VM de Windows en el momento de su creación. ¿Qué deberías usar?", options: ["Una tarea programada de Windows.", "Una extensión de script personalizado (Custom Script Extension).", "Un script de inicio de sesión de directiva de grupo.", "Azure Automation."], answer: "Una extensión de script personalizado (Custom Script Extension).", comment: "La extensión de script personalizado descarga y ejecuta scripts en VMs de Azure. Es útil para la configuración posterior a la implementación.", category: C.COMPUTE },
+            { question: "25. ¿Qué es una imagen de máquina virtual en Azure?", options: ["Una instantánea de un disco de una VM.", "Una plantilla que se utiliza para crear una máquina virtual, que incluye un SO y software opcional.", "Un archivo de copia de seguridad de una VM.", "Un contenedor Docker."], answer: "Una plantilla que se utiliza para crear una máquina virtual, que incluye un SO y software opcional.", comment: "Las imágenes se utilizan para estandarizar y acelerar la implementación de VMs. Se pueden usar imágenes del Marketplace o crear imágenes personalizadas.", category: C.COMPUTE },
+            { question: "26. Quieres mover un disco de una VM de HDD estándar a SSD prémium. ¿Qué acción debes realizar?", options: ["No es posible cambiar el tipo de disco una vez creado.", "Detener (desasignar) la VM, cambiar el tipo de disco y luego iniciar la VM.", "Crear una nueva VM con un disco SSD prémium y migrar los datos.", "Ejecutar un comando de PowerShell mientras la VM está en funcionamiento."], answer: "Detener (desasignar) la VM, cambiar el tipo de disco y luego iniciar la VM.", comment: "Para cambiar el tipo de SKU de un disco administrado, la máquina virtual a la que está conectado el disco debe estar desasignada.", category: C.COMPUTE },
+            { question: "27. ¿Cuál de los siguientes servicios de Azure es una plataforma de contenedores como servicio (CaaS) sin servidor?", options: ["Azure Kubernetes Service (AKS)", "Azure Container Instances (ACI)", "Azure Virtual Machines", "Azure App Service"], answer: "Azure Container Instances (ACI)", comment: "ACI es la forma más rápida y sencilla de ejecutar un contenedor en Azure, sin tener que administrar ninguna máquina virtual.", category: C.COMPUTE },
+            { question: "28. Estás implementando una aplicación web en Azure App Service. Necesitas un entorno para pruebas que sea una réplica exacta del de producción. ¿Qué característica deberías usar?", options: ["Copias de seguridad (Backups)", "Ranuras de implementación (Deployment Slots)", "WebJobs", "Escalado automático (Autoscaling)"], answer: "Ranuras de implementación (Deployment Slots)", comment: "Las ranuras de implementación son entornos activos que permiten probar una nueva versión y luego intercambiarla con producción sin tiempo de inactividad.", category: C.COMPUTE },
+            { question: "29. ¿Qué es Azure Kubernetes Service (AKS)?", options: ["Un servicio para ejecutar contenedores individuales.", "Un servicio de orquestación de contenedores totalmente administrado basado en Kubernetes.", "Un servicio de compilación e implementación de CI/CD.", "Un registro privado para imágenes de Docker."], answer: "Un servicio de orquestación de contenedores totalmente administrado basado en Kubernetes.", comment: "AKS simplifica la implementación y administración de Kubernetes al descargar la sobrecarga operativa a Azure.", category: C.COMPUTE },
+            { question: "30. ¿Cómo se puede conectar de forma segura a una máquina virtual de Azure que no tiene una dirección IP pública?", options: ["Usando RDP a través de la dirección IP privada.", "Usando Azure Bastion.", "Usando el portal de Azure.", "No es posible conectarse a una VM sin IP pública."], answer: "Usando Azure Bastion.", comment: "Azure Bastion es un servicio PaaS que proporciona una conexión segura RDP/SSH a tus VMs directamente desde el portal de Azure sin necesidad de una IP pública en la VM.", category: C.COMPUTE },
+            { question: "54. Necesitas asegurarte de que una aplicación web en App Service siempre tenga al menos 2 instancias en ejecución. ¿Qué configuración debes ajustar?", options: ["La configuración de escalado automático (Autoscale).", "La configuración de escalado manual (Scale out).", "La configuración de escalado vertical (Scale up).", "La configuración de la aplicación."], answer: "La configuración de escalado manual (Scale out).", comment: "El escalado manual (o 'Recuento de instancias') te permite establecer un número fijo de instancias que se ejecutarán constantemente.", category: C.COMPUTE },
+            { question: "58. Necesitas migrar un gran número de máquinas virtuales VMware locales a Azure. ¿Qué servicio de Azure está diseñado para facilitar esta tarea?", options: ["Azure Backup", "Azure Migrate", "Azure Data Box", "Azure Automation"], answer: "Azure Migrate", comment: "Azure Migrate es el centro de servicios centralizado para descubrir, evaluar y migrar servidores, aplicaciones y datos locales a la nube de Azure.", category: C.COMPUTE },
+            { question: "59. ¿Cuál es el número máximo de dominios de actualización (Update Domains) que puedes configurar en un Conjunto de Disponibilidad?", options: ["5", "10", "20", "3"], answer: "20", comment: "Puedes configurar hasta 20 dominios de actualización en un conjunto de disponibilidad. Esto define grupos de máquinas virtuales que se pueden reiniciar al mismo tiempo.", category: C.COMPUTE },
+            { question: "60. ¿Qué SKU de Azure Bastion se necesita para usar características avanzadas como la carga/descarga de archivos nativa?", options: ["SKU Básico (Basic)", "SKU Estándar (Standard)", "SKU Premium", "SKU Avanzado (Advanced)"], answer: "SKU Estándar (Standard)", comment: "El SKU Estándar de Azure Bastion introduce características adicionales sobre el Básico, incluida la capacidad de ajustar el número de instancias.", category: C.NETWORK },
+            { question: "64. ¿Cuál es el propósito de la extensión de VM 'AzurePerformanceDiagnostics'?", options: ["Para instalar software antivirus en la VM.", "Para recopilar registros de diagnóstico que ayudan a solucionar problemas de rendimiento de las VMs de Windows.", "Para realizar copias de seguridad de la VM.", "Para configurar las reglas de red de la VM."], answer: "Para recopilar registros de diagnóstico que ayudan a solucionar problemas de rendimiento de las VMs de Windows.", comment: "Esta extensión ejecuta herramientas de diagnóstico para recopilar información y puede proporcionar un informe para resolver problemas de rendimiento.", category: C.COMPUTE },
+            { question: "75. ¿Qué servicio de Azure deberías usar para ejecutar un trabajo por lotes que requiere una gran cantidad de potencia de cómputo?", options: ["Azure App Service", "Azure Functions", "Azure Batch", "Azure Virtual Machines"], answer: "Azure Batch", comment: "Azure Batch está diseñado para ejecutar aplicaciones de computación de alto rendimiento (HPC) y a gran escala en paralelo de manera eficiente.", category: C.COMPUTE },
+            { question: "76. ¿Qué es un WebJob de Azure?", options: ["Una característica de App Service que permite ejecutar un programa o script en segundo plano.", "Un tipo de máquina virtual.", "Un servicio de CI/CD.", "Una regla de alerta."], answer: "Una característica de App Service que permite ejecutar un programa o script en segundo plano.", comment: "Los WebJobs son útiles para tareas en segundo plano, como el procesamiento de imágenes, el procesamiento de colas, etc.", category: C.COMPUTE },
+            { question: "83. ¿Qué es un 'grupo de selección de ubicación de proximidad' (Proximity Placement Group)?", options: ["Un grupo lógico para asegurarse de que los recursos de cómputo de Azure estén físicamente ubicados lo más cerca posible.", "Un grupo de recursos que se encuentran en la misma región.", "Un grupo de seguridad de aplicaciones.", "Un grupo de VMs que comparten la misma subred."], answer: "Un grupo lógico para asegurarse de que los recursos de cómputo de Azure estén físicamente ubicados lo más cerca posible.", comment: "Esto es crucial para cargas de trabajo que requieren baja latencia entre máquinas virtuales, como las aplicaciones de HPC o SAP.", category: C.COMPUTE },
+            { question: "88. ¿Cuál es el propósito de la extensión de VM 'AADLoginForWindows'?", options: ["Para unir la VM a un dominio de Active Directory local.", "Para permitir el inicio de sesión en una VM de Windows utilizando credenciales de Azure AD.", "Para instalar el navegador Edge en la VM.", "Para configurar el firewall de Windows."], answer: "Para permitir el inicio de sesión en una VM de Windows utilizando credenciales de Azure AD.", comment: "Permite una gestión de acceso centralizada y basada en la nube para tus VMs, habilitando MFA y acceso condicional.", category: C.COMPUTE },
+            { question: "93. ¿Qué es un 'plan de App Service' (App Service Plan)?", options: ["Una aplicación web individual.", "Un conjunto de recursos de cómputo (región, número de VMs, etc.) en los que se ejecutan una o más aplicaciones web.", "Un plan de copia de seguridad para una aplicación web.", "Un conjunto de reglas de escalado para una aplicación web."], answer: "Un conjunto de recursos de cómputo (región, número de VMs, etc.) en los que se ejecutan una o más aplicaciones web.", comment: "El plan de App Service es la unidad de escala y costo. Puedes alojar múltiples aplicaciones en el mismo plan para optimizar costos.", category: C.COMPUTE },
+            { question: "100. ¿Qué es un 'grupo de hosts dedicados' (Dedicated Host Group) de Azure?", options: ["Un grupo de máquinas virtuales que están dedicadas a un solo cliente.", "Un servicio que proporciona servidores físicos, dedicados a una sola suscripción, para alojar una o más VMs.", "Un tipo de plan de App Service.", "Un grupo de administradores dedicados a tu cuenta."], answer: "Un servicio que proporciona servidores físicos, dedicados a una sola suscripción, para alojar una o más VMs.", comment: "Los hosts dedicados proporcionan aislamiento a nivel de servidor físico, lo que puede ser necesario para cumplir con requisitos de cumplimiento normativo.", category: C.COMPUTE },
+
+            // Módulo 4: Redes (20 preguntas)
+            { question: "31. ¿Qué componente de red de Azure se utiliza para filtrar el tráfico hacia y desde los recursos de Azure en una red virtual?", options: ["Azure Load Balancer", "Azure Firewall", "Grupos de Seguridad de Red (NSG)", "Azure DNS"], answer: "Grupos de Seguridad de Red (NSG)", comment: "Un NSG contiene una lista de reglas de seguridad que permiten o deniegan el tráfico de red a los recursos. Se pueden asociar a subredes o a NICs.", category: C.NETWORK },
+            { question: "32. Necesitas conectar dos redes virtuales en la misma región para que los recursos en ambas puedan comunicarse. ¿Qué deberías configurar?", options: ["Una puerta de enlace de VPN.", "Emparejamiento de redes virtuales (VNet Peering).", "Una conexión ExpressRoute.", "Un punto de conexión de servicio."], answer: "Emparejamiento de redes virtuales (VNet Peering).", comment: "El emparejamiento de VNet permite conectar redes virtuales de forma transparente. El tráfico entre las redes emparejadas utiliza la red troncal de Microsoft.", category: C.NETWORK },
+            { question: "33. ¿Cuál es la diferencia principal entre un Azure Load Balancer Básico y uno Estándar?", options: ["El Básico solo funciona con VMs, mientras que el Estándar funciona con cualquier recurso.", "El Estándar está respaldado por un SLA y puede abarcar Zonas de Disponibilidad, mientras que el Básico no.", "El Básico es para tráfico interno y el Estándar para tráfico público.", "El Estándar incluye protección contra DDoS, mientras que el Básico no."], answer: "El Estándar está respaldado por un SLA y puede abarcar Zonas de Disponibilidad, mientras que el Básico no.", comment: "El Load Balancer Estándar es la oferta recomendada, ya que proporciona una mayor escala, seguridad y alta disponibilidad.", category: C.NETWORK },
+            { question: "34. ¿Qué servicio de Azure proporciona un equilibrio de carga de capa 7 (HTTP/HTTPS) con enrutamiento basado en URL?", options: ["Azure Load Balancer", "Azure Traffic Manager", "Azure Application Gateway", "Azure Firewall"], answer: "Azure Application Gateway", comment: "Application Gateway es un equilibrador de carga de tráfico web que permite administrar el tráfico a las aplicaciones web. Funciona en la capa de aplicación (OSI capa 7).", category: C.NETWORK },
+            { question: "35. ¿Cómo funciona Azure Traffic Manager?", options: ["Equilibrando la carga del tráfico de red en la capa 4.", "Usando DNS para dirigir a los clientes a los puntos de conexión en diferentes regiones según un método de enrutamiento.", "Filtrando el tráfico malicioso a las aplicaciones web.", "Proporcionando conectividad privada entre redes locales y Azure."], answer: "Usando DNS para dirigir a los clientes a los puntos de conexión en diferentes regiones según un método de enrutamiento.", comment: "Traffic Manager es un equilibrador de carga de tráfico basado en DNS. No ve el tráfico que pasa entre el cliente y el servicio.", category: C.NETWORK },
+            { question: "36. Necesitas establecer una conexión privada y dedicada entre tu centro de datos local y Azure. ¿Qué servicio deberías usar?", options: ["VPN de sitio a sitio", "VPN de punto a sitio", "Azure ExpressRoute", "Emparejamiento de VNet"], answer: "Azure ExpressRoute", comment: "ExpressRoute permite extender las redes locales a la nube de Microsoft a través de una conexión privada, ofreciendo mayor fiabilidad y velocidades más rápidas.", category: C.NETWORK },
+            { question: "37. ¿Qué es una tabla de rutas (Route Table) en Azure?", options: ["Una lista de reglas de NSG.", "Una tabla que contiene entradas que especifican cómo se deben enrutar los paquetes en una red virtual.", "Un registro de las consultas DNS.", "Una lista de las conexiones de emparejamiento de VNet."], answer: "Una tabla que contiene entradas que especifican cómo se deben enrutar los paquetes en una red virtual.", comment: "Puedes crear tablas de rutas para anular las rutas predeterminadas de Azure, por ejemplo, para forzar el tráfico a través de una NVA.", category: C.NETWORK },
+            { question: "38. ¿Cuál es el propósito de Azure DNS?", options: ["Proporcionar un firewall para dominios.", "Un servicio de alojamiento para dominios DNS que proporciona resolución de nombres mediante la infraestructura de Azure.", "Registrar nuevos nombres de dominio.", "Equilibrar la carga del tráfico DNS."], answer: "Un servicio de alojamiento para dominios DNS que proporciona resolución de nombres mediante la infraestructura de Azure.", comment: "Puedes alojar tus zonas DNS (por ejemplo, `contoso.com`) en Azure y administrar los registros DNS para tus servicios.", category: C.NETWORK },
+            { question: "39. Estás configurando un Application Gateway y necesitas protegerlo contra inyección de SQL. ¿Qué característica debes habilitar?", options: ["Reglas de enrutamiento básicas.", "Descarga de SSL.", "Firewall de aplicaciones web (WAF).", "Afinidad de sesión basada en cookies."], answer: "Firewall de aplicaciones web (WAF).", comment: "El WAF es una característica de Application Gateway que proporciona protección centralizada de las aplicaciones web frente a vulnerabilidades comunes.", category: C.NETWORK },
+            { question: "40. ¿Qué es un Punto de Conexión Privado (Private Endpoint) de Azure?", options: ["Una dirección IP pública para un servicio de Azure.", "Una interfaz de red que te conecta de forma privada y segura a un servicio con tecnología de Azure Private Link.", "Un túnel VPN a un servicio específico.", "Un registro DNS para un servicio interno."], answer: "Una interfaz de red que te conecta de forma privada y segura a un servicio con tecnología de Azure Private Link.", comment: "Un punto de conexión privado utiliza una IP privada de tu VNet, lo que permite que el tráfico al servicio de Azure permanezca en la red de Microsoft.", category: C.NETWORK },
+            { question: "62. ¿Qué es un grupo de seguridad de aplicaciones (ASG)?", options: ["Un grupo de direcciones IP que se pueden usar en reglas de NSG.", "Una construcción lógica que permite agrupar VMs y definir políticas de seguridad de red basadas en esas agrupaciones.", "Un grupo de Azure AD para asignar permisos de red.", "Un tipo de firewall de aplicaciones."], answer: "Una construcción lógica que permite agrupar VMs y definir políticas de seguridad de red basadas en esas agrupaciones.", comment: "Los ASG te permiten configurar la seguridad de la red como una extensión natural de la estructura de una aplicación, agrupando las VMs por carga de trabajo.", category: C.NETWORK },
+            { question: "63. Necesitas asegurar que una aplicación en un VMSS mantenga un estado de sesión consistente. ¿Qué configuración del balanceador de carga deberías usar?", options: ["Reglas NAT de entrada.", "Sondeos de estado (Health Probes).", "Persistencia de sesión (Afinidad de sesión) configurada como `SourceIP`.", "Reglas de salida."], answer: "Persistencia de sesión (Afinidad de sesión) configurada como `SourceIP`.", comment: "La afinidad de sesión dirige todo el tráfico de un cliente a la misma instancia de VM en el backend durante la sesión.", category: C.NETWORK },
+            { question: "65. ¿Qué método de enrutamiento de Traffic Manager mejora el rendimiento al reducir la latencia para los usuarios finales?", options: ["Prioridad", "Ponderado", "Rendimiento", "Geográfico"], answer: "Rendimiento", comment: "El perfil de enrutamiento de Rendimiento está diseñado para mejorar la capacidad de respuesta de la aplicación al dirigir el tráfico al punto de conexión con la latencia más baja.", category: C.NETWORK },
+            { question: "69. ¿Qué herramienta de Network Watcher te permite verificar si se permite o deniega el tráfico entre una VM y un destino específico?", options: ["Topología", "Verificación de flujo de IP (IP Flow Verify)", "Próximo salto (Next Hop)", "Captura de paquetes"], answer: "Verificación de flujo de IP (IP Flow Verify)", comment: "Esta herramienta te ayuda a diagnosticar rápidamente problemas de conectividad al indicarte si el tráfico está siendo bloqueado por una regla de NSG.", category: C.NETWORK },
+            { question: "73. ¿Cómo puedes forzar todo el tráfico de salida de una subred a través de una NVA para su inspección?", options: ["Configurando una regla de NSG para redirigir el tráfico.", "Creando una tabla de rutas con una UDR que dirija el tráfico `0.0.0.0/0` a la IP de la NVA.", "Usando un Application Gateway.", "Habilitando el reenvío de IP en la NVA."], answer: "Creando una tabla de rutas con una UDR que dirija el tráfico `0.0.0.0/0` a la IP de la NVA.", comment: "Esta técnica, conocida como 'túnel forzado', es común en arquitecturas de red seguras para inspeccionar todo el tráfico saliente.", category: C.NETWORK },
+            { question: "81. ¿Qué es el 'reenvío de IP' (IP Forwarding) en una NIC de Azure?", options: ["Una configuración que permite a una VM recibir tráfico no destinado a su propia IP.", "Una forma de redirigir el tráfico a otra VM.", "Una configuración de equilibrio de carga.", "Una regla de firewall."], answer: "Una configuración que permite a una VM recibir tráfico no destinado a su propia IP.", comment: "Esta opción es crucial para las aplicaciones virtuales de red (NVA), como firewalls o balanceadores de carga, que necesitan procesar tráfico.", category: C.NETWORK },
+            { question: "86. ¿Qué es una regla de 'salida' (Outbound Rule) en un Azure Load Balancer Estándar?", options: ["Una regla que permite el tráfico entrante desde Internet.", "Una regla que define cómo se traduce la dirección de red de origen (SNAT) para el tráfico saliente.", "Una regla que sondea el estado de las VMs del backend.", "Una regla que distribuye el tráfico entrante."], answer: "Una regla que define cómo se traduce la dirección de red de origen (SNAT) para el tráfico saliente.", comment: "Las reglas de salida proporcionan un control explícito y escalable sobre la conectividad a Internet saliente para los recursos de una VNet.", category: C.NETWORK },
+            { question: "90. ¿Qué es el 'sondeo de estado' (Health Probe) en un Azure Load Balancer?", options: ["Una herramienta para verificar la latencia de la red.", "Un mecanismo que utiliza el balanceador de carga para detectar el estado de las instancias en el grupo de backend.", "Un informe sobre el estado de la plataforma Azure.", "Una regla de alerta de métrica."], answer: "Un mecanismo que utiliza el balanceador de carga para detectar el estado de las instancias en el grupo de backend.", comment: "El balanceador de carga solo envía tráfico a las instancias que responden correctamente al sondeo de estado.", category: C.NETWORK },
+            { question: "94. ¿Qué es el 'peering de circuito' (Circuit Peering) en Azure ExpressRoute?", options: ["La conexión física entre tu red y la de Microsoft.", "Las diferentes sesiones de enrutamiento BGP que se establecen a través de un circuito ExpressRoute (peering privado y de Microsoft).", "La conexión entre dos circuitos ExpressRoute.", "La conexión de un circuito ExpressRoute a una VNet."], answer: "Las diferentes sesiones de enrutamiento BGP que se establecen a través de un circuito ExpressRoute (peering privado y de Microsoft).", comment: "Cada tipo de peering es una sesión de enrutamiento BGP independiente que proporciona acceso a diferentes conjuntos de servicios de Microsoft.", category: C.NETWORK },
+            { question: "99. ¿Qué es la 'afinidad de sesión' en Azure Application Gateway?", options: ["Una característica que garantiza que todas las solicitudes de un cliente durante una sesión se dirijan a la misma instancia de servidor backend.", "Una regla que dirige el tráfico a la región más cercana.", "Una configuración de seguridad que bloquea sesiones maliciosas.", "Una métrica que mide la duración de la sesión del usuario."], answer: "Una característica que garantiza que todas las solicitudes de un cliente durante una sesión se dirijan a la misma instancia de servidor backend.", comment: "Esto es importante para aplicaciones que almacenan datos de sesión en el servidor, garantizando una experiencia de usuario consistente.", category: C.NETWORK },
+
+            // Módulo 5: Monitorización y Mantenimiento (20 preguntas)
+            { question: "41. ¿Qué servicio de Azure se utiliza para recopilar, analizar y actuar sobre los datos de telemetría de tus entornos?", options: ["Azure Advisor", "Azure Monitor", "Microsoft Defender for Cloud", "Azure Service Health"], answer: "Azure Monitor", comment: "Azure Monitor es la plataforma de supervisión centralizada de Azure que recopila métricas y registros de la mayoría de los servicios de Azure.", category: C.MONITOR },
+            { question: "42. En Azure Monitor, ¿cuál es la diferencia fundamental entre Métricas y Registros?", options: ["Las métricas son numéricas y se recopilan a intervalos regulares; los registros contienen varios tipos de datos y se consultan con KQL.", "Las métricas son para la facturación y los registros son para la seguridad.", "Las métricas solo provienen de VMs y los registros de todos los demás servicios.", "No hay ninguna diferencia, son dos nombres para lo mismo."], answer: "Las métricas son numéricas y se recopilan a intervalos regulares; los registros contienen varios tipos de datos y se consultan con KQL.", comment: "Las métricas son ligeras y para escenarios casi en tiempo real. Los registros (en Log Analytics) son para un análisis más profundo y complejo.", category: C.MONITOR },
+            { question: "43. Necesitas recibir un email cuando la CPU de una VM supere el 90% durante 5 minutos. ¿Qué deberías configurar?", options: ["Un panel (Dashboard).", "Una consulta de Log Analytics.", "Una regla de alerta de métrica (Metric Alert Rule).", "Un libro (Workbook)."], answer: "Una regla de alerta de métrica (Metric Alert Rule).", comment: "Las reglas de alerta de métricas evalúan las métricas de los recursos a intervalos regulares y activan una alerta cuando se cumple una condición.", category: C.MONITOR },
+            { question: "44. ¿Qué es un almacén de Recovery Services (Recovery Services vault)?", options: ["Una cuenta de almacenamiento para archivos de registro.", "Un recurso que almacena datos de copia de seguridad y puntos de recuperación para VMs y SQL Server en VMs.", "Un lugar para almacenar secretos y claves de cifrado.", "Un repositorio para plantillas de ARM."], answer: "Un recurso que almacena datos de copia de seguridad y puntos de recuperación para VMs y SQL Server en VMs.", comment: "Es la entidad de almacenamiento central para Azure Backup y Azure Site Recovery.", category: C.MONITOR },
+            { question: "45. ¿Qué es una directiva de copia de seguridad (Backup Policy) en Azure Backup?", options: ["Una directiva de Azure que define qué VMs se pueden respaldar.", "Un conjunto de reglas que definen cuándo se realizan las copias de seguridad y durante cuánto tiempo se retienen.", "Un script que ejecuta la copia de seguridad.", "Un rol RBAC para administrar las copias de seguridad."], answer: "Un conjunto de reglas que definen cuándo se realizan las copias de seguridad y durante cuánto tiempo se retienen.", comment: "Las directivas de copia de seguridad proporcionan una forma de estandarizar y automatizar la protección de datos para grupos de recursos similares.", category: C.MONITOR },
+            { question: "46. ¿Qué tipo de restauración de Azure VM Backup te permite restaurar archivos y carpetas individuales sin restaurar toda la VM?", options: ["Restauración completa de la VM.", "Restauración de disco.", "Recuperación a nivel de elemento (Item-Level Recovery).", "Reimplementación de la VM."], answer: "Recuperación a nivel de elemento (Item-Level Recovery).", comment: "La recuperación a nivel de elemento permite montar los discos de un punto de recuperación como unidades y luego explorar y copiar archivos individuales.", category: C.MONITOR },
+            { question: "47. ¿Qué herramienta de Azure Monitor se utiliza para crear visualizaciones interactivas y ricas en datos?", options: ["Alertas (Alerts)", "Métricas (Metrics)", "Libros (Workbooks)", "Registros de actividad (Activity Logs)"], answer: "Libros (Workbooks)", comment: "Los libros combinan texto, consultas de análisis, métricas de Azure y parámetros en informes interactivos enriquecidos.", category: C.MONITOR },
+            { question: "48. ¿Qué información se encuentra en el Registro de Actividad (Activity Log) de Azure?", options: ["Métricas de rendimiento de las VMs.", "Registros de eventos de aplicaciones que se ejecutan en las VMs.", "Registros a nivel de suscripción sobre eventos del plano de control, como la creación de un nuevo recurso.", "Consultas DNS realizadas en una VNet."], answer: "Registros a nivel de suscripción sobre eventos del plano de control, como la creación de un nuevo recurso.", comment: "El registro de actividad registra quién, qué y cuándo para cualquier operación de escritura (PUT, POST, DELETE) realizada en los recursos.", category: C.MONITOR },
+            { question: "49. ¿Para qué se utiliza Azure Service Health?", options: ["Para monitorizar el rendimiento de tus propias aplicaciones.", "Para proporcionar información personalizada sobre cómo los problemas de la plataforma Azure pueden afectarte.", "Para analizar los costos de los servicios de Azure.", "Para realizar copias de seguridad de los servicios de Azure."], answer: "Para proporcionar información personalizada sobre cómo los problemas de la plataforma Azure pueden afectarte.", comment: "Service Health te mantiene informado sobre la salud de la plataforma Azure y su impacto en tus recursos específicos.", category: C.MONITOR },
+            { question: "50. Necesitas analizar registros de diagnóstico de varios recursos en un solo lugar con un lenguaje de consulta avanzado. ¿A dónde deberías enviarlos?", options: ["A una cuenta de Azure Storage.", "A un Azure Event Hub.", "A un área de trabajo de Log Analytics.", "A una dirección de correo electrónico."], answer: "A un área de trabajo de Log Analytics.", comment: "Un área de trabajo de Log Analytics es el entorno principal para almacenar y analizar datos de registro de Azure Monitor utilizando KQL.", category: C.MONITOR },
+            { question: "53. ¿Cuál es el propósito principal de Network Watcher?", options: ["Proteger la red contra ataques DDoS.", "Proporcionar herramientas para supervisar, diagnosticar y ver métricas para los recursos en una red virtual.", "Conectar redes locales a Azure.", "Filtrar el tráfico web malicioso."], answer: "Proporcionar herramientas para supervisar, diagnosticar y ver métricas para los recursos en una red virtual.", comment: "Network Watcher incluye herramientas como Verificación de flujo de IP, Próximo salto y Captura de paquetes para solucionar problemas de conectividad.", category: C.NETWORK },
+            { question: "55. ¿Qué es el 'soft delete' para Azure Virtual Machines?", options: ["Una característica que mueve las VMs eliminadas a una papelera de reciclaje.", "Una característica de Azure Backup que retiene los datos de copia de seguridad de una VM eliminada durante 14 días.", "Un tipo de bloqueo de recursos.", "Una política de Azure que previene la eliminación de VMs."], answer: "Una característica de Azure Backup que retiene los datos de copia de seguridad de una VM eliminada durante 14 días.", comment: "La eliminación temporal es una característica de seguridad clave en Azure Backup que ayuda a recuperar datos de copia de seguridad incluso si son eliminados.", category: C.MONITOR },
+            { question: "71. ¿Qué es Azure Advisor?", options: ["Un servicio de soporte técnico de pago.", "Un consultor de nube que ayuda a seguir las mejores prácticas para optimizar las implementaciones de Azure.", "Una herramienta para migrar recursos a Azure.", "Un servicio para monitorizar el estado de la plataforma Azure."], answer: "Un consultor de nube que ayuda a seguir las mejores prácticas para optimizar las implementaciones de Azure.", comment: "Azure Advisor analiza la configuración de tus recursos para proporcionar recomendaciones personalizadas y accionables.", category: C.ID_GOV },
+            { question: "78. ¿Qué es un grupo de acciones (Action Group) en Azure Monitor?", options: ["Un grupo de recursos de Azure.", "Una colección de preferencias de notificación y acciones que se pueden desencadenar por una alerta.", "Un grupo de usuarios que pueden ver las alertas.", "Un conjunto de reglas de alerta."], answer: "Una colección de preferencias de notificación y acciones que se pueden desencadenar por una alerta.", comment: "Los grupos de acciones permiten definir acciones reutilizables como enviar un correo electrónico, un SMS, llamar a un webhook, etc., cuando se dispara una alerta.", category: C.MONITOR },
+            { question: "82. ¿Qué es Azure Site Recovery (ASR)?", options: ["Un servicio de copia de seguridad para sitios web.", "Un servicio que contribuye a tu estrategia de recuperación ante desastres (DR) al orquestar la replicación y conmutación por error.", "Una herramienta para recuperar sitios web eliminados.", "Un servicio de monitorización del tiempo de actividad del sitio web."], answer: "Un servicio que contribuye a tu estrategia de recuperación ante desastres (DR) al orquestar la replicación y conmutación por error.", comment: "ASR ayuda a garantizar la continuidad del negocio al mantener las cargas de trabajo en funcionamiento durante las interrupciones.", category: C.MONITOR },
+            { question: "87. ¿Qué es 'Azure Cost Management + Billing'?", options: ["Un servicio para pagar tus facturas de Azure.", "Un conjunto de herramientas que te ayudan a analizar, administrar y optimizar tus costos de Azure.", "Un servicio para crear presupuestos para recursos.", "Todas las anteriores."], answer: "Todas las anteriores.", comment: "Es el centro para todo lo relacionado con la gestión financiera de tu entorno de Azure, desde el análisis de costos hasta el pago de facturas.", category: C.ID_GOV },
+            { question: "92. ¿Qué modo de conexión de Azure Arc permite la gestión en tiempo real de un servidor local desde Azure?", options: ["Modo desconectado", "Modo conectado", "Modo híbrido", "Modo de solo inventario"], answer: "Modo conectado", comment: "En el modo conectado, el agente de Azure Connected Machine mantiene una conexión constante con Azure, lo que permite escenarios de gestión en tiempo real.", category: C.ID_GOV },
+            { question: "95. ¿Qué es el 'acceso basado en el punto final' en Azure Policy?", options: ["Una forma de aplicar políticas a los puntos de conexión de servicio.", "Una forma de aplicar políticas a los puntos de conexión privados.", "No es un término estándar de Azure Policy.", "Una política que restringe qué tipos de puntos de conexión se pueden crear."], answer: "No es un término estándar de Azure Policy.", comment: "Las políticas se aplican a ámbitos (grupos de administración, suscripciones, etc.) y tipos de recursos, no directamente a 'puntos de conexión'.", category: C.ID_GOV },
+            { question: "98. ¿Qué es el 'análisis de cambios' (Change Analysis) en Azure Monitor?", options: ["Un registro de los cambios de costos en Azure.", "Una herramienta que ayuda a identificar qué cambios en los recursos de Azure podrían haber causado un problema.", "Un análisis de los cambios en el código fuente de una aplicación.", "Un registro de los cambios de roles RBAC."], answer: "Una herramienta que ayuda a identificar qué cambios en los recursos de Azure podrían haber causado un problema.", comment: "El análisis de cambios se basa en los datos de Azure Resource Graph para proporcionar información sobre los cambios en la infraestructura.", category: C.MONITOR },
+            { question: "95. ¿Qué es el 'acceso basado en el punto final' (Endpoint-based access) en Azure Policy?", options: ["Una forma de aplicar políticas a los puntos de conexión de servicio.", "Una forma de aplicar políticas a los puntos de conexión privados.", "No es un término estándar de Azure Policy.", "Una política que restringe qué tipos de puntos de conexión se pueden crear."], answer: "No es un término estándar de Azure Policy.", comment: "Las políticas se aplican a ámbitos (grupos de administración, suscripciones, etc.) y tipos de recursos, no directamente a 'puntos de conexión'.", category: C.ID_GOV }
+        ];
+
+        // --- STATE ---
+        let quizData = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let markedQuestions = [];
+        let selectedOption = null;
+        let inReviewMode = false;
+        let startTime;
+        let currentTheme = localStorage.getItem('theme') || 'system';
+
+        // --- DOM ELEMENTS ---
+        const quizContainer = document.getElementById('quiz-container');
+        const resultContainer = document.getElementById('result-container');
+        const navigationControls = document.getElementById('navigation-controls');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const checkBtn = document.getElementById('check-btn');
+        const viewModal = document.getElementById('view-modal');
+        const summaryListsContainer = document.getElementById('summary-lists');
+        const confirmModal = document.getElementById('confirm-modal');
+        const quantityModal = document.getElementById('quantity-modal');
+        const mainQuizContent = document.getElementById('main-quiz-content');
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const quantityButtonsContainer = document.getElementById('quantity-buttons');
+        const questionCategoryElement = document.getElementById('question-category');
+
+        // --- FUNCTIONS ---
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function selectQuantity(quantity) {
+            quantityModal.classList.add('hidden');
+            mainQuizContent.classList.remove('hidden');
+            startGame(quantity);
+        }
+        
+        function startGame(numQuestions) {
+            inReviewMode = false;
+            quizData = shuffle([...originalQuizData]).slice(0, numQuestions);
+            currentQuestionIndex = 0;
+            userAnswers = Array(quizData.length).fill(null);
+            markedQuestions = Array(quizData.length).fill(false);
+            selectedOption = null;
+            startTime = new Date();
+            
+            resultContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            navigationControls.classList.remove('hidden');
+            document.querySelector('header').classList.remove('hidden');
+            
+            updateProgressBarVisual();
+            loadQuestion();
+        }
+
+        function startReview() {
+            inReviewMode = true;
+            currentQuestionIndex = 0;
+            resultContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            navigationControls.classList.remove('hidden');
+            document.querySelector('header').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            selectedOption = null; 
+            const questionData = quizData[currentQuestionIndex];
+            
+            questionCategoryElement.textContent = questionData.category;
+
+            let optionsToDisplay = [...questionData.options];
+            if (!inReviewMode && userAnswers[currentQuestionIndex] === null) {
+                optionsToDisplay = shuffle(optionsToDisplay);
+            }
+
+            let optionsHtml = optionsToDisplay.map((option, index) => {
+                const optionLetter = String.fromCharCode(65 + index);
+                const escapedOption = option.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
+                return `<button class="option-btn w-full text-left p-4 border-2 rounded-lg dark:border-gray-600 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200" data-option-value="${escapedOption}">${optionLetter}. ${option}</button>`;
+            }).join('');
+
+            quizContainer.innerHTML = `
+                <div class="question-card bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <div class="flex justify-between items-start mb-4">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">${questionData.question}</h2>
+                        <button onclick="toggleMarkQuestion()" id="mark-btn" class="text-2xl ${markedQuestions[currentQuestionIndex] ? 'marked' : 'text-gray-400'} hover:text-amber-500 transition-colors">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+                    <div class="options-container space-y-3">${optionsHtml}</div>
+                    <div id="feedback-${currentQuestionIndex}" class="feedback mt-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-700">
+                        <p class="font-bold text-gray-900 dark:text-gray-100">Comentario:</p>
+                        <p class="text-gray-900 dark:text-gray-100">${questionData.comment}</p>
+                    </div>
+                </div>
+            `;
+            
+            quizContainer.querySelectorAll('.option-btn').forEach(button => {
+                button.addEventListener('click', () => selectOption(button, button.dataset.optionValue));
+            });
+            
+            updateNavigation();
+            
+            const isAnswered = userAnswers[currentQuestionIndex] !== null;
+            if (isAnswered) {
+                const userAnswer = userAnswers[currentQuestionIndex];
+                quizContainer.querySelectorAll('.option-btn').forEach(btn => {
+                    if (btn.dataset.optionValue === userAnswer) {
+                         btn.classList.add('selected');
+                    }
+                });
+                showFeedback(false); 
+            }
+
+            if(inReviewMode) {
+                document.getElementById('mark-btn').disabled = true;
+            }
+        }
+
+        function updateNavigation() {
+            progressText.textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizData.length}`;
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if(inReviewMode) {
+                checkBtn.classList.add('hidden');
+                nextBtn.disabled = currentQuestionIndex === quizData.length - 1;
+                nextBtn.textContent = (currentQuestionIndex === quizData.length - 1) ? 'Ver Resultados' : 'Siguiente';
+            } else {
+                checkBtn.classList.remove('hidden');
+                checkBtn.disabled = selectedOption === null || userAnswers[currentQuestionIndex] !== null;
+                nextBtn.disabled = userAnswers[currentQuestionIndex] === null;
+                nextBtn.textContent = 'Siguiente';
+            }
+        }
+        
+        function selectOption(btnElement, optionValue) {
+            if (userAnswers[currentQuestionIndex] !== null || inReviewMode) return;
+            quizContainer.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            btnElement.classList.add('selected');
+            selectedOption = optionValue;
+            checkBtn.disabled = false;
+        }
+
+        function checkAnswer() {
+            if (selectedOption === null || inReviewMode) return;
+            userAnswers[currentQuestionIndex] = selectedOption;
+            showFeedback(true);
+            updateNavigation(); 
+            updateProgressBarVisual();
+        }
+        
+        function showFeedback(animate) {
+            const questionData = quizData[currentQuestionIndex];
+            const userAnswer = userAnswers[currentQuestionIndex];
+            const options = quizContainer.querySelectorAll('.option-btn');
+            
+            options.forEach(btn => {
+                btn.disabled = true;
+                if (btn.dataset.optionValue === questionData.answer) {
+                    btn.classList.add('correct');
+                } else if (btn.dataset.optionValue === userAnswer) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            const feedbackDiv = document.getElementById(`feedback-${currentQuestionIndex}`);
+            if (animate) {
+                feedbackDiv.classList.add('show');
+            } else {
+                feedbackDiv.style.maxHeight = '200px';
+                feedbackDiv.style.paddingTop = '1rem';
+                feedbackDiv.style.paddingBottom = '1rem';
+                feedbackDiv.classList.add('show');
+            }
+        }
+        
+        function toggleMarkQuestion() {
+            if (inReviewMode) return;
+            const markBtn = document.getElementById('mark-btn');
+            markedQuestions[currentQuestionIndex] = !markedQuestions[currentQuestionIndex];
+            markBtn.classList.toggle('marked');
+            markBtn.classList.toggle('text-gray-400');
+        }
+
+        function nextQuestion() {
+            if (inReviewMode) {
+                if (currentQuestionIndex < quizData.length - 1) {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+                return;
+            }
+            
+            if (userAnswers[currentQuestionIndex] === null) {
+                userAnswers[currentQuestionIndex] = "No contestada"; 
+            }
+            
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                confirmFinishTest();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+        
+        function jumpToQuestion(index) {
+            currentQuestionIndex = index;
+            loadQuestion();
+            toggleViewModal();
+        }
+
+        function showResults() {
+            quizContainer.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+            navigationControls.classList.add('hidden');
+
+            let correctAnswers = 0;
+            let incorrectAnswers = 0;
+            let unansweredCount = 0;
+            
+            const categoryScores = {};
+            // Initialize category scores
+            Object.values(C).forEach(catName => {
+                categoryScores[catName] = { correct: 0, total: 0 };
+            });
+
+            userAnswers.forEach((answer, index) => {
+                const questionData = quizData[index];
+                const category = questionData.category;
+                categoryScores[category].total++;
+
+                if (answer === "No contestada") {
+                    unansweredCount++;
+                } else if (answer === questionData.answer) {
+                    correctAnswers++;
+                    categoryScores[category].correct++;
+                } else {
+                    incorrectAnswers++;
+                }
+            });
+            
+            const totalQuestions = quizData.length;
+            const percentage = totalQuestions > 0 ? ((correctAnswers / totalQuestions) * 100).toFixed(2) : 0;
+            
+            const endTime = new Date();
+            const durationMs = endTime - startTime;
+            const minutes = Math.floor(durationMs / 60000);
+            const seconds = ((durationMs % 60000) / 1000).toFixed(0);
+            const durationString = `${minutes}m ${seconds}s`;
+
+            document.getElementById('result-details').innerHTML = `
+                <span class="text-green-500 font-bold">Acertadas: ${correctAnswers}</span> | 
+                <span class="text-red-500 font-bold">Incorrectas: ${incorrectAnswers}</span> |
+                <span class="text-gray-500 font-bold">Sin contestar: ${unansweredCount}</span><br>
+                <span class="text-gray-700 dark:text-gray-300 font-bold">Duración: ${durationString}</span>
+            `;
+            
+            const scorePercentageEl = document.getElementById('score-percentage');
+            const resultMessageEl = document.getElementById('result-message');
+            scorePercentageEl.textContent = `${percentage}%`;
+            
+            if (percentage >= 70) {
+                resultMessageEl.textContent = "¡Aprobado!";
+                resultMessageEl.className = "text-2xl font-semibold text-green-500";
+                scorePercentageEl.className = "text-4xl font-bold mb-2 text-green-500";
+            } else {
+                resultMessageEl.textContent = "Necesitas repasar";
+                resultMessageEl.className = "text-2xl font-semibold text-red-500";
+                scorePercentageEl.className = "text-4xl font-bold mb-2 text-red-500";
+            }
+
+            // --- Render Category Results ---
+            const categoryResultsEl = document.getElementById('category-results');
+            categoryResultsEl.innerHTML = '';
+            for (const categoryName in categoryScores) {
+                const score = categoryScores[categoryName];
+                if (score.total > 0) {
+                    const catPercentage = ((score.correct / score.total) * 100);
+                    const catPercentageFormatted = catPercentage.toFixed(0);
+                    const barColor = catPercentage >= 70 ? 'bg-green-500' : (catPercentage >= 50 ? 'bg-yellow-500' : 'bg-red-500');
+
+                    categoryResultsEl.innerHTML += `
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-md font-medium text-gray-800 dark:text-gray-200">${categoryName}</span>
+                                <span class="text-sm font-semibold text-gray-600 dark:text-gray-300">${score.correct} / ${score.total}</span>
+                            </div>
+                            <div class="category-progress h-6 w-full">
+                                <div class="category-progress-bar ${barColor}" style="width: ${catPercentageFormatted}%">
+                                    ${catPercentageFormatted}%
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+        
+        function restartGame() {
+           quantityModal.classList.remove('hidden');
+           mainQuizContent.classList.add('hidden');
+        }
+
+        function toggleViewModal() {
+            if (viewModal.classList.contains('hidden')) {
+                updateViewModalLists();
+                viewModal.classList.remove('hidden');
+                setTimeout(() => {
+                    viewModal.classList.add('opacity-100');
+                    viewModal.querySelector('.modal-container').classList.remove('scale-95');
+                }, 10);
+            } else {
+                viewModal.classList.remove('opacity-100');
+                viewModal.querySelector('.modal-container').classList.add('scale-95');
+                setTimeout(() => viewModal.classList.add('hidden'), 300);
+            }
+        }
+
+        function updateViewModalLists() {
+            summaryListsContainer.innerHTML = '';
+            const lists = {
+                'Sin Contestar': [],
+                'Contestadas': [],
+                'Marcadas para Revisar': []
+            };
+
+            quizData.forEach((q, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = index + 1;
+                btn.className = 'h-10 w-10 flex items-center justify-center rounded font-bold transition relative';
+                btn.onclick = () => jumpToQuestion(index);
+
+                const isAnswered = userAnswers[index] !== null && userAnswers[index] !== "No contestada";
+                
+                if (isAnswered) {
+                    btn.classList.add('bg-green-200', 'text-green-800', 'hover:bg-green-300', 'dark:bg-green-800', 'dark:text-green-100', 'dark:hover:bg-green-700');
+                    if (userAnswers[index] !== q.answer) {
+                        btn.classList.remove('bg-green-200', 'hover:bg-green-300', 'dark:bg-green-800', 'dark:hover:bg-green-700');
+                        btn.classList.add('bg-red-200', 'text-red-800', 'hover:bg-red-300', 'dark:bg-red-800', 'dark:text-red-100', 'dark:hover:bg-red-700');
+                    }
+                    lists['Contestadas'].push(btn);
+                } else {
+                    btn.classList.add('bg-gray-200', 'text-gray-800', 'hover:bg-gray-300', 'dark:bg-gray-600', 'dark:text-gray-100', 'dark:hover:bg-gray-500');
+                    lists['Sin Contestar'].push(btn);
+                }
+
+                if (markedQuestions[index]) {
+                    const clone = btn.cloneNode(true);
+                    clone.onclick = () => jumpToQuestion(index);
+                    lists['Marcadas para Revisar'].push(clone);
+                }
+            });
+
+            for (const [title, buttonList] of Object.entries(lists)) {
+                const container = document.createElement('div');
+                container.innerHTML = `<h4 class="font-bold mb-2 text-lg border-b pb-1 dark:border-gray-500">${title}</h4>`;
+                const listWrapper = document.createElement('div');
+                listWrapper.className = 'flex flex-wrap gap-2 justify-start';
+                if (buttonList.length > 0) {
+                    buttonList.forEach(btn => listWrapper.appendChild(btn));
+                } else {
+                    listWrapper.innerHTML = '<p class="text-sm text-gray-500 w-full">Ninguna</p>';
+                }
+                container.appendChild(listWrapper);
+                summaryListsContainer.appendChild(container);
+            }
+        }
+        
+        function confirmFinishTest() {
+            const unansweredCount = userAnswers.filter(a => a === null || a === "No contestada").length;
+            document.getElementById('confirm-title').textContent = unansweredCount > 0 ? '¿Finalizar Test?' : '¿Finalizar y ver resultados?';
+            document.getElementById('confirm-message').textContent = unansweredCount > 0 ? `Advertencia: Tienes ${unansweredCount} preguntas sin contestar. ¿Estás seguro?` : `Has contestado todas las preguntas. ¿Quieres finalizar?`;
+            
+            confirmModal.classList.remove('hidden');
+            setTimeout(() => confirmModal.querySelector('.modal-container').classList.remove('scale-95'), 10);
+        }
+        
+        function handleFinishConfirmation(confirmed) {
+            confirmModal.querySelector('.modal-container').classList.add('scale-95');
+            setTimeout(() => confirmModal.classList.add('hidden'), 200);
+
+            if (confirmed) {
+                showResults();
+                if (!viewModal.classList.contains('hidden')) {
+                    toggleViewModal();
+                }
+            }
+        }
+
+        function applyTheme(theme) {
+            const htmlEl = document.documentElement;
+            currentTheme = theme;
+            localStorage.setItem('theme', theme);
+            const icon = themeToggleBtn.querySelector('i');
+
+            if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlEl.classList.add('dark');
+                if (icon) icon.className = 'fas fa-sun';
+            } else {
+                htmlEl.classList.remove('dark');
+                if (icon) icon.className = 'fas fa-moon';
+            }
+        }
+
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            htmlEl.classList.toggle('dark');
+            currentTheme = htmlEl.classList.contains('dark') ? 'dark' : 'light';
+            localStorage.setItem('theme', currentTheme);
+            applyTheme(currentTheme);
+        }
+
+        function updateProgressBarVisual() {
+            let answeredCount = userAnswers.filter(answer => answer !== null && answer !== "No contestada").length;
+            const progress = (answeredCount / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressBar.textContent = `${Math.round(progress)}%`;
+        }
+
+        window.onload = function() {
+            themeToggleBtn.onclick = toggleTheme;
+            applyTheme(localStorage.getItem('theme') || 'system');
+
+            quantityButtonsContainer.querySelectorAll('button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const quantity = parseInt(event.target.dataset.quantity);
+                    selectQuantity(quantity);
+                });
+            });
+        };
+    </script>
+</body>
+</html>
