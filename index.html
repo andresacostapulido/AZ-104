@@ -123,6 +123,33 @@
             animation: fade-in 0.4s ease;
         }
     </style>
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .case-study-card {
+            transition: all 0.3s ease;
+        }
+        
+        .case-study-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .case-study-card.added {
+            opacity: 0.5;
+            pointer-events: none;
+            background-color: #f0fdf4;
+        }
+        
+        .dark .case-study-card.added {
+            background-color: #064e3b;
+        }
+    </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
     <!-- Sección de login -->
@@ -130,15 +157,29 @@
       <div style="font-weight:bold; color:#b91c1c; font-size:1.3em; margin-bottom:20px;">&lt;&lt;&lt;&lt; Acceso Restringido &gt;&gt;&gt;&gt;</div>
       <button onclick="loginGoogle()" style="padding:10px 20px; font-size:1.2em; background:#2563eb; color:white; border-radius:8px;">Iniciar sesión con Google</button>
     </div>
-    <!-- Modal de selección de cantidad de preguntas -->
+    <!-- Modal de selección de tipo de preguntas -->
     <div id="quantity-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
       <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-10 animate-fade-in text-center">
-        <h2 class="text-2xl font-bold mb-6 text-blue-700 dark:text-blue-300">¿Cuántas preguntas quieres responder?</h2>
-        <div id="quantity-buttons" class="flex flex-wrap gap-4 justify-center mb-6">
-          <button data-quantity="10" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all text-lg shadow-md">10</button>
-          <button data-quantity="30" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all text-lg shadow-md">30</button>
-          <button data-quantity="60" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all text-lg shadow-md">60</button>
-          <button data-quantity="100" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-all text-lg shadow-md">100</button>
+        <h2 class="text-2xl font-bold mb-6 text-blue-700 dark:text-blue-300">Selecciona el tipo de preguntas</h2>
+        <div id="quantity-buttons" class="flex flex-col gap-4 justify-center mb-6">
+          <div class="border-b pb-4 mb-4">
+            <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Preguntas de Teoría</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <button data-type="theory" data-quantity="10" class="bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all text-sm shadow-md">10 preguntas</button>
+              <button data-type="theory" data-quantity="30" class="bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all text-sm shadow-md">30 preguntas</button>
+              <button data-type="theory" data-quantity="60" class="bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all text-sm shadow-md">60 preguntas</button>
+              <button data-type="theory" data-quantity="100" class="bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all text-sm shadow-md">100 preguntas</button>
+            </div>
+          </div>
+          <div class="border-t pt-4">
+            <h3 class="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-300">Preguntas Tipo Examen</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <button data-type="exam" data-quantity="10" class="bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-all text-sm shadow-md">10 preguntas</button>
+              <button data-type="exam" data-quantity="30" class="bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-all text-sm shadow-md">30 preguntas</button>
+              <button data-type="exam" data-quantity="60" class="bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-all text-sm shadow-md">60 preguntas</button>
+              <button data-type="exam" data-quantity="100" class="bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 transition-all text-sm shadow-md">100 preguntas</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -386,6 +427,1638 @@
             subtopic: "Implementación y administración de Azure Blueprints"
         });
 
+        // Agregar nuevas preguntas del PDF AZ-104
+        originalQuizData.push({
+            question: "101. Su empresa tiene varios departamentos. Cada departamento tiene un número de máquinas virtuales (VMs). La empresa tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. Todas las VMs están ubicadas en RG1. Desea asociar cada VM con su departamento respectivo. ¿Qué debe hacer?",
+            options: [
+                "Crear Grupos de Administración de Azure para cada departamento.",
+                "Crear un grupo de recursos para cada departamento.",
+                "Asignar etiquetas a las máquinas virtuales.",
+                "Modificar la configuración de las máquinas virtuales."
+            ],
+            answer: "Asignar etiquetas a las máquinas virtuales.",
+            comment: "Al asignar etiquetas, puede organizar los recursos de una manera que tenga sentido para su organización, lo que le permitirá filtrar y ver fácilmente los recursos según criterios como el departamento, el entorno o el centro de costos. En este caso, puede crear una etiqueta llamada 'Departamento' y asignar el valor apropiado a cada VM.",
+            category: C.ID_GOV,
+            subtopic: "Administración de etiquetas de recursos"
+        });
+
+        originalQuizData.push({
+            question: "102. Su empresa tiene una suscripción de Azure Active Directory (Azure AD). Desea implementar una política de acceso condicional de Azure AD. La política debe configurarse para requerir que los miembros del grupo de Administradores Globales utilicen la Autenticación Multifactor y un dispositivo unido a Azure AD cuando se conecten a Azure AD desde ubicaciones no confiables. Solución: Accede a la página de autenticación multifactor para modificar la configuración del usuario. ¿La solución cumple el objetivo?",
+            options: ["Sí", "No"],
+            answer: "No",
+            comment: "La solución no cumple el objetivo. Aunque acceder a la página de autenticación multifactor le permite configurar la autenticación multifactor para los usuarios, no se dirige específicamente a los miembros del grupo de Administradores Globales. Para cumplir el objetivo de requerir que los Administradores Globales utilicen la Autenticación Multifactor y un dispositivo unido a Azure AD al conectarse desde ubicaciones no confiables, debe configurar una política de acceso condicional de Azure AD.",
+            category: C.ID_GOV,
+            subtopic: "Configuración de políticas de acceso condicional"
+        });
+
+        originalQuizData.push({
+            question: "103. Su empresa tiene una suscripción de Azure Active Directory (Azure AD). Desea implementar una política de acceso condicional de Azure AD. La política debe configurarse para requerir que los miembros del grupo de Administradores Globales utilicen la Autenticación Multifactor y un dispositivo unido a Azure AD cuando se conecten a Azure AD desde ubicaciones no confiables. Solución: Accede al portal de Azure para modificar el control de concesión de la política de acceso condicional de Azure AD. ¿La solución cumple el objetivo?",
+            options: ["Sí", "No"],
+            answer: "Sí",
+            comment: "SÍ. Dentro de una política de acceso condicional: • Control de Acceso de CONCESIÓN: un administrador puede usar los controles de acceso para conceder o bloquear acceso a los recursos. • Control de Acceso de SESIÓN: un administrador puede utilizar los controles de sesión para habilitar experiencias limitadas dentro de aplicaciones en la nube específicas.",
+            category: C.ID_GOV,
+            subtopic: "Configuración de políticas de acceso condicional"
+        });
+
+        originalQuizData.push({
+            question: "104. Está planeando implementar una máquina virtual de Ubuntu Server en la suscripción de Azure de su empresa. Se le exige implementar una implementación personalizada que incluya la adición de una autoridad de certificación raíz (CA) confiable en particular. ¿Cuál de las siguientes opciones debe usar para crear la máquina virtual?",
+            options: [
+                "El cmdlet New-AzureRmVm.",
+                "El cmdlet New-AzVM.",
+                "El cmdlet Create-AzVM.",
+                "El comando az vm create."
+            ],
+            answer: "El comando az vm create.",
+            comment: "El comando az vm create. Necesita crear una VM de Ubuntu Linux usando un script cloud-init para la configuración. Por ejemplo, az vm create -g MyResourceGroup -n MyVm --image debian --custom-data MyCloudInitScript.yml.",
+            category: C.COMPUTE,
+            subtopic: "Creación de máquinas virtuales con configuración personalizada"
+        });
+
+        originalQuizData.push({
+            question: "105. Su empresa tiene un inquilino de Azure Active Directory (Azure AD) llamado weyland.com configurado para coexistencia híbrida con el dominio de Active Directory local. Tiene un servidor llamado DirSync1 configurado como servidor DirSync. Crea una nueva cuenta de usuario en el Active Directory local. Ahora necesita replicar la información del usuario a Azure AD inmediatamente. Solución: Ejecuta el cmdlet de PowerShell Start-ADSyncSyncCycle -PolicyType Initial. ¿La solución cumple el objetivo?",
+            options: ["Sí", "No"],
+            answer: "No",
+            comment: "NO. 'Initial' realizará una sincronización completa y agregará la cuenta de usuario creada, pero llevará tiempo. 'Delta' iniciará una sincronización delta y traerá solo el último cambio, por lo que será 'inmediatamente' y cumplirá los requisitos.",
+            category: C.ID_GOV,
+            subtopic: "Sincronización de Azure AD Connect"
+        });
+
+        originalQuizData.push({
+            question: "106. Su empresa tiene una suscripción de Microsoft Azure. La empresa tiene centros de datos en Los Ángeles y Nueva York. Está configurando los dos centros de datos como sitios geoclusterizados para la resiliencia del sitio. Debe recomendar una opción de redundancia de almacenamiento de Azure. Tiene los siguientes requisitos de almacenamiento de datos: • Los datos deben almacenarse en múltiples nodos. • Los datos deben almacenarse en nodos en ubicaciones geográficas separadas. • Los datos se pueden leer tanto desde la ubicación secundaria como desde la ubicación principal. ¿Cuál de las siguientes opciones de redundancia de almacenamiento de Azure debe recomendar?",
+            options: [
+                "Almacenamiento geo-redundante",
+                "Almacenamiento geo-redundante de solo lectura",
+                "Almacenamiento con redundancia de zona",
+                "Almacenamiento con redundancia local"
+            ],
+            answer: "Almacenamiento geo-redundante de solo lectura",
+            comment: "El almacenamiento geo-redundante de solo lectura (RA-GRS) se utiliza para lograr una mayor disponibilidad en caso de que los datos no estén disponibles en la región principal. Esta es una característica opcional que requiere que la cuenta de almacenamiento esté georeplicada.",
+            category: C.STORAGE,
+            subtopic: "Configuración de redundancia de almacenamiento"
+        });
+
+        originalQuizData.push({
+            question: "107. Su empresa tiene una suscripción de Azure que incluye una cuenta de almacenamiento, un grupo de recursos, un contenedor de blobs y un recurso compartido de archivos. Un colega llamado Jon Ross utiliza una plantilla de Azure Resource Manager (ARM) para implementar una máquina virtual y una cuenta de Azure Storage adicional. Desea revisar la plantilla ARM que utilizó Jon Ross. Solución: Accede al panel del Grupo de Recursos. ¿La solución cumple el objetivo?",
+            options: ["Sí", "No"],
+            answer: "Sí",
+            comment: "Para ver una plantilla desde el historial de implementación: 1. Vaya al grupo de recursos de su nuevo grupo de recursos. Seleccione el enlace que muestra el resultado de la última implementación. 2. Verá un historial de implementaciones; seleccione la implementación. 3. El portal muestra un resumen de la implementación. Para ver la plantilla que usó para la implementación, seleccione 'Ver plantilla'. Debe usar el panel del Grupo de Recursos.",
+            category: C.ID_GOV,
+            subtopic: "Revisión de plantillas ARM"
+        });
+
+        originalQuizData.push({
+            question: "108. Su empresa tiene tres máquinas virtuales (VMs) incluidas en un conjunto de disponibilidad. Intenta cambiar el tamaño de una de las VMs, lo que devuelve un mensaje de error de asignación. Es imperativo que se cambie el tamaño de la VM. ¿Cuál de las siguientes acciones debe tomar?",
+            options: [
+                "Solo debe detener una de las VMs.",
+                "Debe detener dos de las VMs.",
+                "Debe detener las tres VMs.",
+                "Debe eliminar la VM necesaria del conjunto de disponibilidad."
+            ],
+            answer: "Debe detener las tres VMs.",
+            comment: "Si la VM que desea redimensionar forma parte de un conjunto de disponibilidad, entonces debe detener todas las VMs del conjunto de disponibilidad antes de cambiar el tamaño de cualquier VM en el conjunto de disponibilidad. La razón es que todas las VMs en ejecución en el conjunto de disponibilidad deben usar el mismo clúster de hardware físico. Por lo tanto, si se requiere un cambio de clúster de hardware físico, todas las VMs deben detenerse primero y luego reiniciarse una por una en diferentes clústeres de hardware físico.",
+            category: C.COMPUTE,
+            subtopic: "Administración de conjuntos de disponibilidad"
+        });
+
+        originalQuizData.push({
+            question: "109. Tiene una máquina virtual (VM) de Azure que tiene un único disco de datos. Se le ha encomendado la tarea de adjuntar este disco de datos a otra VM de Azure. Debe asegurarse de que su estrategia permita que las máquinas virtuales estén fuera de línea el menor tiempo posible. ¿Cuál de las siguientes acciones debe tomar PRIMERO?",
+            options: [
+                "Detener la VM que incluye el disco de datos.",
+                "Detener la VM a la que se debe adjuntar el disco de datos.",
+                "Desacoplar el disco de datos.",
+                "Eliminar la VM que incluye el disco de datos."
+            ],
+            answer: "Desacoplar el disco de datos.",
+            comment: "Puede simplemente desacoplar un disco de datos de una VM y adjuntarlo a la otra VM sin detener ninguna de las VMs. Desacoplar un disco no requiere que detenga o elimine la VM, asegurando que la VM misma permanezca operativa.",
+            category: C.COMPUTE,
+            subtopic: "Administración de discos de máquinas virtuales"
+        });
+
+        originalQuizData.push({
+            question: "110. Su empresa tiene una suscripción de Azure. Necesita implementar varias máquinas virtuales (VMs) de Azure utilizando plantillas de Azure Resource Manager (ARM). Se le ha informado que las VMs se incluirán en un único conjunto de disponibilidad. Se le exige asegurarse de que la plantilla ARM que configure permita que la mayor cantidad posible de VMs permanezcan accesibles en caso de fallos de infraestructura o mantenimiento. ¿Cuál de los siguientes valores debe configurar para la propiedad platformFaultDomainCount?",
+            options: ["10", "30", "Valor mínimo", "Valor máximo"],
+            answer: "Valor máximo",
+            comment: "El número de dominios de error para los conjuntos de disponibilidad administrados varía por región (dos o tres). Un dominio de error es un grupo de recursos de hardware subyacentes físicamente separados. En Azure, el valor máximo para platformFaultDomainCount es 3. Para asegurar la máxima accesibilidad en caso de falla, debe establecer la propiedad platformFaultDomainCount en su valor máximo de 3.",
+            category: C.COMPUTE,
+            subtopic: "Configuración de conjuntos de disponibilidad"
+        });
+
+        originalQuizData.push({
+            question: "111. Su empresa tiene una suscripción de Azure. Necesita implementar varias máquinas virtuales (VMs) de Azure utilizando plantillas de Azure Resource Manager (ARM). Se le ha informado que las VMs se incluirán en un único conjunto de disponibilidad. Se le exige asegurarse de que la plantilla ARM que configure permita que la mayor cantidad posible de VMs permanezcan accesibles en caso de fallos de infraestructura o mantenimiento. ¿Cuál de los siguientes valores debe configurar para la propiedad platformUpdateDomainCount?",
+            options: ["10", "30", "40"],
+            answer: "30",
+            comment: "A cada máquina virtual en su conjunto de disponibilidad se le asigna un dominio de actualización y un dominio de error. Por defecto, se asignan cinco dominios de actualización no configurables por el usuario (las implementaciones de Resource Manager pueden luego aumentarse para proporcionar hasta 20 dominios de actualización) para indicar grupos de máquinas virtuales y hardware físico subyacente que pueden reiniciarse al mismo tiempo.",
+            category: C.COMPUTE,
+            subtopic: "Configuración de conjuntos de disponibilidad"
+        });
+
+        originalQuizData.push({
+            question: "112. Ha descargado una plantilla de Azure Resource Manager (ARM) para implementar numerosas máquinas virtuales (VMs). La plantilla ARM se basa en una VM actual, pero debe adaptarse para hacer referencia a una contraseña administrativa. Debe asegurarse de que la contraseña no se almacene en texto sin formato. Se está preparando para crear los componentes necesarios para lograr su objetivo. ¿Cuál de los siguientes elementos debe crear para lograr su objetivo?",
+            options: [
+                "Un Azure Key Vault",
+                "Una política de acceso",
+                "Ambas opciones anteriores",
+                "Ninguna de las anteriores"
+            ],
+            answer: "Ambas opciones anteriores",
+            comment: "Un Azure Key Vault: para almacenar de forma segura la contraseña administrativa, garantizando que no esté en texto sin formato. Una política de acceso: para controlar el acceso a los secretos almacenados en el Key Vault, especificando quién puede realizar operaciones sobre ellos.",
+            category: C.ID_GOV,
+            subtopic: "Configuración de Azure Key Vault"
+        });
+
+        originalQuizData.push({
+            question: "113. Su empresa tiene un inquilino de Azure Active Directory (Azure AD) configurado para coexistencia híbrida con el dominio de Active Directory local. Planea implementar varias máquinas virtuales (VMs) nuevas en Azure. Las VMs tendrán el mismo sistema operativo y los mismos requisitos de software personalizados. Configura una VM de referencia en el entorno virtual local. Luego generaliza la VM para crear una imagen. Necesita cargar la imagen a Azure para asegurarse de que esté disponible para su selección cuando cree las nuevas VMs de Azure. ¿Qué cmdlets de PowerShell debe usar?",
+            options: [
+                "Add-AzVM",
+                "Add-AzVhd",
+                "Add-AzImage",
+                "Add-AzImageDataDisk"
+            ],
+            answer: "Add-AzVhd",
+            comment: "El cmdlet Add-AzVhd carga discos duros virtuales locales, en formato de archivo .vhd, a una cuenta de almacenamiento de blobs como discos duros virtuales fijos.",
+            category: C.COMPUTE,
+            subtopic: "Carga de imágenes de máquinas virtuales"
+        });
+
+        originalQuizData.push({
+            question: "114. Su empresa tiene una suscripción de Azure que incluye varias máquinas virtuales (VMs) de Azure, todas ellas parte de la misma red virtual. Su empresa también tiene un servidor Hyper-V local que aloja una VM, llamada VM1, que debe replicarse en Azure. ¿Cuáles de los siguientes objetos deben crearse para lograr este objetivo?",
+            options: [
+                "Sitio Hyper-V",
+                "Azure Recovery Services Vault",
+                "Política de replicación",
+                "Todas las anteriores"
+            ],
+            answer: "Todas las anteriores",
+            comment: "• Sitio Hyper-V: Representa los servidores Hyper-V locales que se protegerán. • Azure Recovery Services Vault: Un componente clave en ASR que almacena puntos de recuperación y orquesta la replicación, la conmutación por error y la recuperación ante desastres. • Política de replicación: Define la configuración de replicación, incluida la frecuencia y la retención.",
+            category: C.MONITOR,
+            subtopic: "Configuración de Azure Site Recovery"
+        });
+
+        originalQuizData.push({
+            question: "115. La suscripción de Azure de su empresa incluye dos redes de Azure llamadas VirtualNetworkA y VirtualNetworkB. VirtualNetworkA incluye una puerta de enlace VPN que está configurada para utilizar enrutamiento estático. Además, existe una conexión VPN de sitio a sitio entre la red local de su empresa y VirtualNetworkA. Ha configurado una conexión VPN de punto a sitio a VirtualNetworkA desde una estación de trabajo con Windows 10. Después de configurar el emparejamiento de redes virtuales entre VirtualNetworkA y VirtualNetworkB, confirma que puede acceder a VirtualNetworkB desde la red local de la empresa. Sin embargo, descubre que no puede establecer una conexión con VirtualNetworkB desde la estación de trabajo con Windows 10. Debe asegurarse de que se pueda establecer una conexión con VirtualNetworkB desde la estación de trabajo con Windows 10. Solución: Descarga y reinstala el paquete de configuración del cliente VPN en la estación de trabajo con Windows 10. ¿La solución cumple el objetivo?",
+            options: ["Sí", "No"],
+            answer: "Sí",
+            comment: "Si realiza un cambio en la topología de su red y tiene clientes VPN de Windows, el paquete de cliente VPN para clientes de Windows debe descargarse e instalarse de nuevo para que los cambios se apliquen al cliente.",
+            category: C.NETWORK,
+            subtopic: "Configuración de VPN de punto a sitio"
+        });
+
+        originalQuizData.push({
+            question: "116. Su empresa tiene máquinas virtuales (VMs) alojadas en Microsoft Azure. Las VMs están ubicadas en una única red virtual de Azure llamada VNet1. La empresa tiene usuarios que trabajan de forma remota. Los trabajadores remotos requieren acceso a las VMs en VNet1. Necesita proporcionar acceso a los trabajadores remotos. ¿Qué debe hacer?",
+            options: [
+                "Configurar una VPN de sitio a sitio (S2S).",
+                "Configurar una VPN de VNet a VNet.",
+                "Configurar una VPN de punto a sitio (P2S).",
+                "Configurar DirectAccess en una VM de servidor Windows Server 2012.",
+                "Configurar una VPN multisitio."
+            ],
+            answer: "Configurar una VPN de punto a sitio (P2S).",
+            comment: "Una conexión de puerta de enlace VPN de punto a sitio (P2S) le permite crear una conexión segura a su red virtual desde un equipo cliente individual. Este tipo de conexión permite a los clientes remotos individuales conectarse de forma segura a una red virtual (VNet) de Azure a través de Internet. Una VPN de sitio a sitio (S2S) se usa para conectar redes locales a una VNet de Azure, mientras que una VPN de VNet a VNet se usa para conectar dos o más VNets de Azure entre sí.",
+            category: C.NETWORK,
+            subtopic: "Configuración de VPN de punto a sitio"
+        });
+
+        originalQuizData.push({
+            question: "117. Su empresa tiene un grupo de disponibilidad Microsoft SQL Server Always On configurado en sus máquinas virtuales (VMs) de Azure. Necesita configurar un equilibrador de carga interno de Azure como oyente para el grupo de disponibilidad. Solución: Crea una sonda de salud HTTP en el puerto 1433. ¿La solución cumple el objetivo?",
+            options: ["Sí", "No"],
+            answer: "No",
+            comment: "No, crear una sonda de salud HTTP en el puerto 1433 no cumple el objetivo. Para configurar un equilibrador de carga interno de Azure como oyente para el grupo de disponibilidad, debe crear una sonda de salud TCP en el puerto 1433. SQL Server utiliza TCP para comunicarse en el puerto 1433.",
+            category: C.NETWORK,
+            subtopic: "Configuración de equilibradores de carga"
+        });
+
+        originalQuizData.push({
+            question: "118. Su empresa tiene un grupo de disponibilidad Microsoft SQL Server Always On configurado en sus máquinas virtuales (VMs) de Azure. Necesita configurar un equilibrador de carga interno de Azure como oyente para el grupo de disponibilidad. Solución: Habilita la IP Flotante. ¿La solución cumple el objetivo?",
+            options: ["Sí", "No"],
+            answer: "Sí",
+            comment: "Sí, habilitar la IP Flotante en el equilibrador de carga interno de Azure como oyente para el grupo de disponibilidad puede cumplir el objetivo. Al habilitar la IP Flotante, el equilibrador de carga utilizará una dirección IP flotante como dirección IP de origen para los flujos salientes del grupo de backend. Esto asegurará que la dirección IP utilizada por el grupo de backend permanezca igual incluso si una VM se reinicia o se reemplaza, lo cual es importante para mantener el oyente del grupo de disponibilidad.",
+            category: C.NETWORK,
+            subtopic: "Configuración de equilibradores de carga"
+        });
+
+        originalQuizData.push({
+            question: "119. Su empresa tiene dos servidores locales llamados SRV01 y SRV02. Los desarrolladores han creado una aplicación que se ejecuta en SRV01. La aplicación llama a un servicio en SRV02 por dirección IP. Planea migrar la aplicación a máquinas virtuales (VMs) de Azure. Ha configurado dos VMs en una única subred en una red virtual de Azure. Necesita configurar las dos VMs con direcciones IP internas estáticas. ¿Qué debe hacer?",
+            options: [
+                "Ejecutar el cmdlet de PowerShell New-AzureRMVMConfig.",
+                "Ejecutar el cmdlet de PowerShell Set-AzureSubnet.",
+                "Modificar las propiedades de la VM en el Portal de administración de Azure.",
+                "Modificar las propiedades de IP en el Centro de redes y recursos compartidos de Windows.",
+                "Ejecutar el cmdlet de PowerShell Set-AzureStaticVNetIP."
+            ],
+            answer: "Ejecutar el cmdlet de PowerShell Set-AzureStaticVNetIP.",
+            comment: "Para establecer una dirección IP estática para una VM creada previamente, puede usar el cmdlet Set-AzureStaticVNetIP. Si ya existe una IP, debe eliminarla antes. El cmdlet Update-AzureVM reinicia la VM como parte del proceso de actualización para asignar la nueva IP.",
+            category: C.NETWORK,
+            subtopic: "Configuración de direcciones IP estáticas"
+        });
+
+        originalQuizData.push({
+            question: "120. Su empresa tiene una suscripción de Azure Active Directory (Azure AD). Necesita implementar cinco máquinas virtuales (VMs) en la subred de la red virtual de su empresa. Cada VM tendrá una dirección IP pública y una privada. Las reglas de seguridad de entrada y salida para todas estas máquinas virtuales deben ser idénticas. ¿Cuál es la menor cantidad de grupos de seguridad necesarios para esta configuración?",
+            options: ["4", "3", "2", "1"],
+            answer: "1",
+            comment: "En Azure, los Grupos de Seguridad de Red (NSG) se utilizan para controlar el tráfico. Dado que todas las VMs requieren las mismas reglas de seguridad, puede asignar un único NSG a nivel de subred. Esto garantiza que las reglas de seguridad se apliquen uniformemente a todas las VMs dentro de esa subred.",
+            category: C.NETWORK,
+            subtopic: "Configuración de grupos de seguridad de red"
+        });
+
+        originalQuizData.push({
+            question: "121. La suscripción de Azure de su empresa incluye máquinas virtuales (VMs) de Azure que ejecutan Windows Server 2016. Una de las VMs se respalda todos los días utilizando Azure Backup Instant Restore. Cuando la VM se infecta con ransomware de cifrado de datos, decide recuperar los archivos de la VM. ¿Cuál de las siguientes afirmaciones es VERDADERA en este escenario?",
+            options: [
+                "Solo puede recuperar los archivos en la VM infectada.",
+                "Puede recuperar los archivos en cualquier VM dentro de la suscripción de la empresa.",
+                "Solo puede recuperar los archivos en una nueva VM.",
+                "No podrá recuperar los archivos."
+            ],
+            answer: "Puede recuperar los archivos en cualquier VM dentro de la suscripción de la empresa.",
+            comment: "Puede restaurar archivos montando la copia de seguridad en su propia máquina local o en cualquier VM en Azure siempre que tengan la misma versión del SO. No puede restaurar archivos a una versión anterior o posterior del SO; debe ser un sistema operativo cliente compatible. Restaurar archivos a una VM infectada no es la mejor opción.",
+            category: C.MONITOR,
+            subtopic: "Recuperación de archivos con Azure Backup"
+        });
+
+        originalQuizData.push({
+            question: "122. Administra una solución en Azure que actualmente presenta problemas de rendimiento. Necesita encontrar la causa de los problemas de rendimiento relacionados con las métricas en la infraestructura de Azure.",
+            options: [
+                "Azure Sentinel",
+                "Azure Monitor",
+                "Registro de actividad de Azure",
+                "Azure Advisor"
+            ],
+            answer: "Azure Monitor",
+            comment: "Las métricas en Azure Monitor se almacenan en una base de datos de series temporales optimizada para analizar datos con marca de tiempo. Esto hace que las métricas sean particularmente adecuadas para alertas y detección rápida de problemas.",
+            category: C.MONITOR,
+            subtopic: "Análisis de métricas con Azure Monitor"
+        });
+
+        originalQuizData.push({
+            question: "123. Su empresa tiene una suscripción de Azure que incluye un almacén de Recovery Services. Desea utilizar Azure Backup para programar una copia de seguridad de las máquinas virtuales (VMs) de su empresa en el almacén de Recovery Services. ¿Cuáles de las siguientes VMs puede respaldar? Elija todas las que correspondan.",
+            options: [
+                "VMs que ejecutan Windows 10.",
+                "VMs que ejecutan Windows Server 2012 o superior.",
+                "VMs que NO han sido apagadas.",
+                "VMs que ejecutan Debian 8.2+.",
+                "VMs que han sido apagadas."
+            ],
+            answer: "VMs que ejecutan Windows 10.,VMs que ejecutan Windows Server 2012 o superior.,VMs que NO han sido apagadas.,VMs que ejecutan Debian 8.2+.,VMs que han sido apagadas.",
+            comment: "Azure Backup admite la copia de seguridad de sistemas operativos de servidor Windows de 64 bits desde Windows Server 2008, sistemas operativos Windows 10 de 64 bits, y sistemas operativos Debian de 64 bits desde Debian 7.9+. Azure Backup admite la copia de seguridad de VMs que están apagadas o sin conexión.",
+            category: C.MONITOR,
+            subtopic: "Configuración de Azure Backup"
+        });
+
+        originalQuizData.push({
+            question: "124. Tiene un inquilino de Azure Active Directory (Azure AD) llamado contoso.com. Tiene un archivo CSV que contiene los nombres y direcciones de correo electrónico de 500 usuarios externos. Necesita crear una cuenta de usuario invitado en contoso.com para cada uno de los 500 usuarios externos. Solución: Crea un script de PowerShell que ejecuta el cmdlet New-AzureADMSInvitation para cada usuario externo. ¿Esto cumple el objetivo?",
+            options: ["Sí", "No"],
+            answer: "Sí",
+            comment: "Sí, esta solución debería cumplir el objetivo. El cmdlet New-AzureADMSInvitation se puede utilizar para enviar invitaciones a usuarios externos para que se conviertan en usuarios invitados en un inquilino de Azure AD. Al ejecutar el cmdlet para cada usuario externo en el archivo CSV, se puede crear una cuenta de usuario invitado.",
+            category: C.ID_GOV,
+            subtopic: "Gestión de usuarios invitados"
+        });
+
+        originalQuizData.push({
+            question: "125. ¿Qué es Azure Bastion y cuál es su principal ventaja de seguridad?",
+            options: [
+                "Un servicio de VPN que permite conexiones seguras a VMs",
+                "Un servicio de acceso RDP/SSH completamente gestionado que elimina la necesidad de IPs públicas en las VMs",
+                "Un firewall de aplicaciones web para proteger aplicaciones",
+                "Un servicio de autenticación multifactor para VMs"
+            ],
+            answer: "Un servicio de acceso RDP/SSH completamente gestionado que elimina la necesidad de IPs públicas en las VMs",
+            comment: "Azure Bastion es un servicio de acceso RDP/SSH completamente gestionado que proporciona conectividad segura y fluida a las máquinas virtuales directamente desde el portal de Azure. La principal ventaja es que elimina la necesidad de tener direcciones IP públicas en las VMs, mejorando significativamente la seguridad.",
+            category: C.NETWORK,
+            subtopic: "Configuración de Azure Bastion"
+        });
+
+        originalQuizData.push({
+            question: "126. ¿Qué es Azure Application Gateway y cuándo deberías usarlo?",
+            options: [
+                "Un equilibrador de carga de nivel 4 para distribuir tráfico TCP/UDP",
+                "Un equilibrador de carga de nivel 7 que proporciona enrutamiento basado en URL y descarga SSL",
+                "Un firewall de aplicaciones web para proteger contra ataques",
+                "Un proxy inverso para aplicaciones web"
+            ],
+            answer: "Un equilibrador de carga de nivel 7 que proporciona enrutamiento basado en URL y descarga SSL",
+            comment: "Azure Application Gateway es un equilibrador de carga de nivel 7 que proporciona enrutamiento basado en URL, descarga SSL, y capacidades de firewall de aplicaciones web. Es ideal cuando necesitas enrutamiento basado en contenido o descarga SSL para mejorar el rendimiento.",
+            category: C.NETWORK,
+            subtopic: "Configuración de Application Gateway"
+        });
+
+        originalQuizData.push({
+            question: "127. ¿Qué es Azure Front Door y cuál es su principal beneficio?",
+            options: [
+                "Un servicio de CDN para distribuir contenido estático",
+                "Un servicio de protección DDoS para aplicaciones web",
+                "Un punto de entrada global que optimiza la entrega de aplicaciones web y proporciona alta disponibilidad",
+                "Un firewall de aplicaciones web para proteger contra ataques"
+            ],
+            answer: "Un punto de entrada global que optimiza la entrega de aplicaciones web y proporciona alta disponibilidad",
+            comment: "Azure Front Door es un punto de entrada global que optimiza la entrega de aplicaciones web y proporciona alta disponibilidad. Utiliza el protocolo Anycast para dirigir el tráfico al punto de presencia más cercano, mejorando significativamente el rendimiento y la disponibilidad.",
+            category: C.NETWORK,
+            subtopic: "Configuración de Azure Front Door"
+        });
+
+        originalQuizData.push({
+            question: "128. ¿Qué es Azure Container Registry (ACR) y cuál es su propósito principal?",
+            options: [
+                "Un servicio de orquestación de contenedores",
+                "Un registro privado de Docker para almacenar y gestionar imágenes de contenedores",
+                "Un servicio de monitoreo para contenedores",
+                "Un servicio de backup para contenedores"
+            ],
+            answer: "Un registro privado de Docker para almacenar y gestionar imágenes de contenedores",
+            comment: "Azure Container Registry es un servicio de registro privado de Docker que permite almacenar y gestionar imágenes de contenedores. Proporciona almacenamiento seguro, integración con Azure Active Directory, y puede integrarse con Azure Kubernetes Service y otros servicios de Azure.",
+            category: C.COMPUTE,
+            subtopic: "Configuración de Azure Container Registry"
+        });
+
+        originalQuizData.push({
+            question: "129. ¿Qué es Azure Monitor y cuáles son sus componentes principales?",
+            options: [
+                "Un servicio de backup y recuperación",
+                "Un servicio de monitoreo completo que incluye métricas, registros, alertas y dashboards",
+                "Un servicio de logging para aplicaciones",
+                "Un servicio de análisis de costos"
+            ],
+            answer: "Un servicio de monitoreo completo que incluye métricas, registros, alertas y dashboards",
+            comment: "Azure Monitor es un servicio de monitoreo completo que proporciona métricas en tiempo real, recopilación de registros, alertas configurables, dashboards personalizables y análisis de datos. Es fundamental para el monitoreo de aplicaciones e infraestructura en Azure.",
+            category: C.MONITOR,
+            subtopic: "Configuración de Azure Monitor"
+        });
+
+        originalQuizData.push({
+            question: "130. ¿Qué es Azure Sentinel y cuál es su propósito principal?",
+            options: [
+                "Un servicio de backup para datos críticos",
+                "Un servicio de SIEM (Security Information and Event Management) nativo de la nube",
+                "Un servicio de monitoreo de rendimiento",
+                "Un servicio de análisis de costos"
+            ],
+            answer: "Un servicio de SIEM (Security Information and Event Management) nativo de la nube",
+            comment: "Azure Sentinel es un SIEM nativo de la nube que proporciona análisis de seguridad inteligente y respuesta a amenazas a nivel empresarial. Recopila datos de seguridad de toda la organización, detecta amenazas y responde automáticamente a incidentes de seguridad.",
+            category: C.SECURITY,
+            subtopic: "Configuración de Azure Sentinel"
+        });
+
+        // Array de preguntas tipo examen (100 preguntas únicas del PDF)
+        const examQuizData = [
+            // Pregunta 1 - Azure Resource Manager
+            {
+                question: "¿Cuál es el propósito principal de Azure Resource Manager (ARM)?",
+                options: [
+                    "Solo para crear máquinas virtuales",
+                    "Para gestionar y organizar recursos de Azure de manera declarativa",
+                    "Solo para configurar redes virtuales",
+                    "Para administrar usuarios de Azure AD"
+                ],
+                answer: "Para gestionar y organizar recursos de Azure de manera declarativa",
+                comment: "Azure Resource Manager es el servicio de implementación y administración de Azure. Proporciona una capa de administración que le permite crear, actualizar y eliminar recursos en su cuenta de Azure.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 2 - Grupos de recursos
+            {
+                question: "¿Qué es un grupo de recursos en Azure?",
+                options: [
+                    "Un contenedor lógico para organizar recursos relacionados",
+                    "Un grupo de usuarios con permisos similares",
+                    "Una colección de suscripciones",
+                    "Un conjunto de regiones de Azure"
+                ],
+                answer: "Un contenedor lógico para organizar recursos relacionados",
+                comment: "Un grupo de recursos es un contenedor lógico en el que se implementan y administran recursos de Azure como aplicaciones web, bases de datos y cuentas de almacenamiento.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 3 - Suscripciones vs Grupos de recursos
+            {
+                question: "¿Cuál es la diferencia entre una suscripción y un grupo de recursos?",
+                options: [
+                    "No hay diferencia, son lo mismo",
+                    "Una suscripción puede contener múltiples grupos de recursos, pero un grupo de recursos no puede contener suscripciones",
+                    "Un grupo de recursos puede contener múltiples suscripciones",
+                    "Las suscripciones son solo para facturación"
+                ],
+                answer: "Una suscripción puede contener múltiples grupos de recursos, pero un grupo de recursos no puede contener suscripciones",
+                comment: "Una suscripción es un contenedor lógico para recursos de Azure que incluye límites de facturación y cuotas. Un grupo de recursos es un contenedor lógico dentro de una suscripción para organizar recursos relacionados.",
+                category: C.ID_GOV,
+                subtopic: "Administrar suscripciones"
+            },
+            // Pregunta 4 - Azure Policy
+            {
+                question: "¿Qué es Azure Policy?",
+                options: [
+                    "Un servicio de monitoreo",
+                    "Un servicio que le permite crear, asignar y administrar políticas para controlar recursos",
+                    "Un servicio de backup",
+                    "Un servicio de networking"
+                ],
+                answer: "Un servicio que le permite crear, asignar y administrar políticas para controlar recursos",
+                comment: "Azure Policy es un servicio que le permite crear, asignar y administrar políticas. Estas políticas aplican diferentes reglas y efectos sobre sus recursos para que estos cumplan con los estándares corporativos y los acuerdos de nivel de servicio.",
+                category: C.ID_GOV,
+                subtopic: "Implementación y administración de Azure Policy"
+            },
+            // Pregunta 5 - Azure Blueprints
+            {
+                question: "¿Qué es Azure Blueprints?",
+                options: [
+                    "Un servicio de diagramas",
+                    "Un servicio que le permite definir un conjunto de recursos, políticas, roles y plantillas ARM para implementar y gobernar entornos de Azure",
+                    "Un servicio de planificación",
+                    "Un servicio de documentación"
+                ],
+                answer: "Un servicio que le permite definir un conjunto de recursos, políticas, roles y plantillas ARM para implementar y gobernar entornos de Azure",
+                comment: "Azure Blueprints le permite definir un conjunto de recursos, políticas, roles y plantillas ARM para implementar y gobernar entornos de Azure de manera repetible y segura.",
+                category: C.ID_GOV,
+                subtopic: "Implementación y administración de Azure Policy"
+            },
+            // Pregunta 6 - Azure Active Directory
+            {
+                question: "¿Qué es Azure Active Directory (Azure AD)?",
+                options: [
+                    "Un servicio de directorio activo local",
+                    "Un servicio de identidad y acceso basado en la nube de Microsoft",
+                    "Un servicio de almacenamiento",
+                    "Un servicio de networking"
+                ],
+                answer: "Un servicio de identidad y acceso basado en la nube de Microsoft",
+                comment: "Azure Active Directory es el servicio de identidad y acceso basado en la nube de Microsoft que ayuda a sus empleados a iniciar sesión y acceder a recursos internos y externos.",
+                category: C.ID_GOV,
+                subtopic: "Administrar usuarios y grupos de Microsoft Entra"
+            },
+            // Pregunta 7 del PDF
+            {
+                question: "La solución de Azure de su empresa utiliza la Autenticación Multifactor cuando los usuarios no están en la oficina. La opción \"Por Autenticación\" se ha configurado como modelo de uso. Después de la adquisición de una empresa más pequeña y la adición del nuevo personal a Azure Active Directory (Azure AD), se le informa que estos empleados también deben utilizar la Autenticación Multifactor. Para lograr esto, la configuración \"Por Usuario Habilitado\" debe establecerse para el modelo de uso. Solución: Reconfigura el modelo de uso existente a través de la CLI de Azure. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "La solución proporcionada no cumple el objetivo de configurar la opción \"Por Usuario Habilitado\" para que los nuevos empleados utilicen la Autenticación Multifactor. Para lograr el resultado deseado, la configuración \"Por Usuario Habilitado\" debe configurarse directamente para los nuevos empleados, no reconfigurando el modelo de uso existente a través de la CLI de Azure. Dado que actualmente no es posible cambiar el modelo de uso de un proveedor existente, debe crear uno nuevo y reactivar su servidor existente con las credenciales de activación del nuevo proveedor.",
+                category: C.ID_GOV,
+                subtopic: "Administración del acceso de usuarios a los recursos de Azure"
+            },
+            // Pregunta 8 del PDF
+            {
+                question: "La solución de Azure de su empresa utiliza la Autenticación Multifactor cuando los usuarios no están en la oficina. La opción \"Por Autenticación\" se ha configurado como modelo de uso. Después de la adquisición de una empresa más pequeña y la adición del nuevo personal a Azure Active Directory (Azure AD), se le informa que estos empleados también deben utilizar la Autenticación Multifactor. Para lograr esto, la configuración \"Por Usuario Habilitado\" debe establecerse para el modelo de uso. Solución: Crea un nuevo proveedor de Autenticación Multifactor con una copia de seguridad de los datos del proveedor de Autenticación Multifactor existente. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "Esta funcionalidad estaría disponible como una característica en las licencias de Azure AD Premium.",
+                category: C.ID_GOV,
+                subtopic: "Administración del acceso de usuarios a los recursos de Azure"
+            },
+            // Pregunta 9 del PDF
+            {
+                question: "Su empresa tiene un inquilino de Azure Active Directory (Azure AD) llamado weyland.com configurado para coexistencia híbrida con el dominio de Active Directory local. Tiene un servidor llamado DirSync1 configurado como servidor DirSync. Crea una nueva cuenta de usuario en el Active Directory local. Ahora necesita replicar la información del usuario a Azure AD inmediatamente. Solución: Ejecuta el cmdlet de PowerShell Start-ADSyncSyncCycle -PolicyType Initial. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "NO. 'Initial' realizará una sincronización completa y agregará la cuenta de usuario creada, pero llevará tiempo. 'Delta' iniciará una sincronización delta y traerá solo el último cambio, por lo que será 'inmediatamente' y cumplirá los requisitos.",
+                category: C.ID_GOV,
+                subtopic: "Administrar usuarios y grupos de Microsoft Entra"
+            },
+            // Pregunta 10 del PDF
+            {
+                question: "Su empresa tiene un inquilino de Azure Active Directory (Azure AD) llamado weyland.com configurado para coexistencia híbrida con el dominio de Active Directory local. Tiene un servidor llamado DirSync1 configurado como servidor DirSync. Crea una nueva cuenta de usuario en el Active Directory local. Ahora necesita replicar la información del usuario a Azure AD inmediatamente. Solución: Utiliza Sitios y Servicios de Active Directory para forzar la replicación del Catálogo Global en un controlador de dominio. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "Utilizar Sitios y Servicios de Active Directory para forzar la replicación del Catálogo Global en un controlador de dominio no afecta directamente el proceso de sincronización entre el Active Directory local y Azure AD. Para replicar la nueva información de usuario a Azure AD inmediatamente, debe usar Azure AD Connect.",
+                category: C.ID_GOV,
+                subtopic: "Administrar usuarios y grupos de Microsoft Entra"
+            },
+            // Pregunta 11 del PDF
+            {
+                question: "Su empresa tiene un inquilino de Azure Active Directory (Azure AD) llamado weyland.com configurado para coexistencia híbrida con el dominio de Active Directory local. Tiene un servidor llamado DirSync1 configurado como servidor DirSync. Crea una nueva cuenta de usuario en el Active Directory local. Ahora necesita replicar la información del usuario a Azure AD inmediatamente. Solución: Reinicia el servicio NetLogon en un controlador de dominio. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "Si necesita ejecutar manualmente un ciclo de sincronización, entonces desde PowerShell ejecute Start-ADSyncSyncCycle -PolicyType Delta. Para iniciar un ciclo de sincronización completo, ejecute Start-ADSyncSyncCycle -PolicyType Initial. Ejecutar un ciclo de sincronización completo puede ser muy lento, por lo que si necesita replicar la información de usuario a Azure AD inmediatamente, debe ejecutar Start-ADSyncSyncCycle -PolicyType Delta.",
+                category: C.ID_GOV,
+                subtopic: "Administrar usuarios y grupos de Microsoft Entra"
+            },
+            // Pregunta 12 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Microsoft Azure. La empresa tiene centros de datos en Los Ángeles y Nueva York. Está configurando los dos centros de datos como sitios geoclusterizados para la resiliencia del sitio. Debe recomendar una opción de redundancia de almacenamiento de Azure. Tiene los siguientes requisitos de almacenamiento de datos: • Los datos deben almacenarse en múltiples nodos. • Los datos deben almacenarse en nodos en ubicaciones geográficas separadas. • Los datos se pueden leer tanto desde la ubicación secundaria como desde la ubicación principal. ¿Cuál de las siguientes opciones de redundancia de almacenamiento de Azure debe recomendar?",
+                options: [
+                    "Almacenamiento geo-redundante",
+                    "Almacenamiento geo-redundante de solo lectura",
+                    "Almacenamiento con redundancia de zona",
+                    "Almacenamiento con redundancia local"
+                ],
+                answer: "Almacenamiento geo-redundante de solo lectura",
+                comment: "El almacenamiento geo-redundante de solo lectura (RA-GRS) se utiliza para lograr una mayor disponibilidad en caso de que los datos no estén disponibles en la región principal. Esta es una característica opcional que requiere que la cuenta de almacenamiento esté georeplicada.",
+                category: C.STORAGE,
+                subtopic: "Configuración de la redundancia de Azure Storage"
+            },
+            // Pregunta 13 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Azure que incluye una cuenta de almacenamiento, un grupo de recursos, un contenedor de blobs y un recurso compartido de archivos. Un colega llamado Jon Ross utiliza una plantilla de Azure Resource Manager (ARM) para implementar una máquina virtual y una cuenta de Azure Storage adicional. Desea revisar la plantilla ARM que utilizó Jon Ross. Solución: Accede al panel de la Máquina Virtual. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "No, acceder al panel de la Máquina Virtual no proporciona acceso a la plantilla ARM utilizada por Jon Ross. El panel de la Máquina Virtual solo muestra información sobre la VM y sus recursos relacionados, pero no la plantilla ARM utilizada para implementarla. Para revisar la plantilla ARM, debe acceder al historial de implementaciones del grupo de recursos donde se implementaron la VM y la cuenta de almacenamiento adicional.",
+                category: C.COMPUTE,
+                subtopic: "Interpretación de una plantilla de Azure Resource Manager o un archivo de Bicep"
+            },
+            // Pregunta 14 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Azure que incluye una cuenta de almacenamiento, un grupo de recursos, un contenedor de blobs y un recurso compartido de archivos. Un colega llamado Jon Ross utiliza una plantilla de Azure Resource Manager (ARM) para implementar una máquina virtual y una cuenta de Azure Storage adicional. Desea revisar la plantilla ARM que utilizó Jon Ross. Solución: Accede al panel del Grupo de Recursos. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "Sí",
+                comment: "Para ver una plantilla desde el historial de implementación: 1. Vaya al grupo de recursos de su nuevo grupo de recursos. Seleccione el enlace que muestra el resultado de la última implementación. 2. Verá un historial de implementaciones; seleccione la implementación. 3. El portal muestra un resumen de la implementación. Para ver la plantilla que usó para la implementación, seleccione \"Ver plantilla\". Debe usar el panel del Grupo de Recursos.",
+                category: C.COMPUTE,
+                subtopic: "Interpretación de una plantilla de Azure Resource Manager o un archivo de Bicep"
+            },
+            // Pregunta 15 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Azure que incluye una cuenta de almacenamiento, un grupo de recursos, un contenedor de blobs y un recurso compartido de archivos. Un colega llamado Jon Ross utiliza una plantilla de Azure Resource Manager (ARM) para implementar una máquina virtual y una cuenta de Azure Storage adicional. Desea revisar la plantilla ARM que utilizó Jon Ross. Solución: Accede al panel del Contenedor. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "Debe usar el panel del Grupo de Recursos. No, acceder al panel del Contenedor no proporciona acceso a la plantilla ARM utilizada por Jon Ross. El panel del Contenedor muestra información sobre el contenedor de blobs dentro de la cuenta de almacenamiento, pero no proporciona acceso al historial de implementación ni a las plantillas ARM.",
+                category: C.STORAGE,
+                subtopic: "Creación y configuración de un contenedor en Blob Storage"
+            },
+            // Pregunta 16 del PDF
+            {
+                question: "Su empresa tiene tres máquinas virtuales (VMs) incluidas en un conjunto de disponibilidad. Intenta cambiar el tamaño de una de las VMs, lo que devuelve un mensaje de error de asignación. Es imperativo que se cambie el tamaño de la VM. ¿Cuál de las siguientes acciones debe tomar?",
+                options: [
+                    "Solo debe detener una de las VMs.",
+                    "Debe detener dos de las VMs.",
+                    "Debe detener las tres VMs.",
+                    "Debe eliminar la VM necesaria del conjunto de disponibilidad."
+                ],
+                answer: "Debe detener las tres VMs.",
+                comment: "Si la VM que desea redimensionar forma parte de un conjunto de disponibilidad, entonces debe detener todas las VMs del conjunto de disponibilidad antes de cambiar el tamaño de cualquier VM en el conjunto de disponibilidad. La razón es que todas las VMs en ejecución en el conjunto de disponibilidad deben usar el mismo clúster de hardware físico. Por lo tanto, si se requiere un cambio de clúster de hardware físico, todas las VMs deben detenerse primero y luego reiniciarse una por una en diferentes clústeres de hardware físico.",
+                category: C.COMPUTE,
+                subtopic: "Administración de los tamaños de máquina virtual"
+            },
+            // Pregunta 17 del PDF
+            {
+                question: "Tiene una máquina virtual (VM) de Azure que tiene un único disco de datos. Se le ha encomendado la tarea de adjuntar este disco de datos a otra VM de Azure. Debe asegurarse de que su estrategia permita que las máquinas virtuales estén fuera de línea el menor tiempo posible. ¿Cuál de las siguientes acciones debe tomar PRIMERO?",
+                options: [
+                    "Detener la VM que incluye el disco de datos.",
+                    "Detener la VM a la que se debe adjuntar el disco de datos.",
+                    "Desacoplar el disco de datos.",
+                    "Eliminar la VM que incluye el disco de datos."
+                ],
+                answer: "Desacoplar el disco de datos.",
+                comment: "Puede simplemente desacoplar un disco de datos de una VM y adjuntarlo a la otra VM sin detener ninguna de las VMs. Desacoplar un disco no requiere que detenga o elimine la VM, asegurando que la VM misma permanezca operativa.",
+                category: C.COMPUTE,
+                subtopic: "Administración de discos de máquinas virtuales"
+            },
+            // Pregunta 18 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Azure. Necesita implementar varias máquinas virtuales (VMs) de Azure utilizando plantillas de Azure Resource Manager (ARM). Se le ha informado que las VMs se incluirán en un único conjunto de disponibilidad. Se le exige asegurarse de que la plantilla ARM que configure permita que la mayor cantidad posible de VMs permanezcan accesibles en caso de fallos de infraestructura o mantenimiento. ¿Cuál de los siguientes valores debe configurar para la propiedad platformFaultDomainCount?",
+                options: ["10", "30", "Valor mínimo", "Valor máximo"],
+                answer: "Valor máximo",
+                comment: "El número de dominios de error para los conjuntos de disponibilidad administrados varía por región (dos o tres). Un dominio de error es un grupo de recursos de hardware subyacentes físicamente separados. En Azure, el valor máximo para platformFaultDomainCount es 3. Para asegurar la máxima accesibilidad en caso de falla, debe establecer la propiedad platformFaultDomainCount en su valor máximo de 3.",
+                category: C.COMPUTE,
+                subtopic: "Implementación de máquinas virtuales en zonas de disponibilidad y conjuntos de disponibilidad"
+            },
+            // Pregunta 19 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Azure. Necesita implementar varias máquinas virtuales (VMs) de Azure utilizando plantillas de Azure Resource Manager (ARM). Se le ha informado que las VMs se incluirán en un único conjunto de disponibilidad. Se le exige asegurarse de que la plantilla ARM que configure permita que la mayor cantidad posible de VMs permanezcan accesibles en caso de fallos de infraestructura o mantenimiento. ¿Cuál de los siguientes valores debe configurar para la propiedad platformUpdateDomainCount?",
+                options: ["10", "30", "40"],
+                answer: "30",
+                comment: "A cada máquina virtual en su conjunto de disponibilidad se le asigna un dominio de actualización y un dominio de error. Por defecto, se asignan cinco dominios de actualización no configurables por el usuario (las implementaciones de Resource Manager pueden luego aumentarse para proporcionar hasta 20 dominios de actualización) para indicar grupos de máquinas virtuales y hardware físico subyacente que pueden reiniciarse al mismo tiempo.",
+                category: C.COMPUTE,
+                subtopic: "Implementación de máquinas virtuales en zonas de disponibilidad y conjuntos de disponibilidad"
+            },
+            // Pregunta 20 del PDF
+            {
+                question: "Ha descargado una plantilla de Azure Resource Manager (ARM) para implementar numerosas máquinas virtuales (VMs). La plantilla ARM se basa en una VM actual, pero debe adaptarse para hacer referencia a una contraseña administrativa. Debe asegurarse de que la contraseña no se almacene en texto sin formato. Se está preparando para crear los componentes necesarios para lograr su objetivo. ¿Cuál de los siguientes elementos debe crear para lograr su objetivo?",
+                options: [
+                    "Un Azure Key Vault",
+                    "Una política de acceso",
+                    "Ambos elementos anteriores",
+                    "Ninguno de los elementos anteriores"
+                ],
+                answer: "Ambos elementos anteriores",
+                comment: "Un Azure Key Vault: para almacenar de forma segura la contraseña administrativa, garantizando que no esté en texto sin formato. Una política de acceso: para controlar el acceso a los secretos almacenados en el Key Vault, especificando quién puede realizar operaciones sobre ellos.",
+                category: C.ID_GOV,
+                subtopic: "Implementación y administración de Azure Policy"
+            },
+            // Pregunta 21 del PDF
+            {
+                question: "Su empresa tiene un inquilino de Azure Active Directory (Azure AD) configurado para coexistencia híbrida con el dominio de Active Directory local. Planea implementar varias VMs nuevas. Necesita una solución que garantice que los scripts se ejecuten en las nuevas VMs. ¿Cuál de las siguientes es la mejor solución?",
+                options: [
+                    "Configurar un archivo por lotes SetupComplete.cmd en el directorio %windir%\\setup\\scripts.",
+                    "Configurar un Objeto de Política de Grupo (GPO) para ejecutar los scripts como scripts de inicio de sesión.",
+                    "Configurar un Objeto de Política de Grupo (GPO) para ejecutar los scripts como scripts de inicio.",
+                    "Colocar los scripts en un nuevo disco duro virtual (VHD)."
+                ],
+                answer: "Configurar un archivo por lotes SetupComplete.cmd en el directorio %windir%\\setup\\scripts.",
+                comment: "Después de implementar una Máquina Virtual, a menudo necesita realizar cambios. Una alternativa para personalizar su VM es la extensión CustomScript. Esta extensión es ejecutada por el Agente de VM y le permite especificar qué archivos descargar de su cuenta de almacenamiento y qué archivo ejecutar (el único requisito es que ejecute un archivo .ps1).",
+                category: C.COMPUTE,
+                subtopic: "Creación de una máquina virtual"
+            },
+            // Pregunta 22 del PDF
+            {
+                question: "Su empresa tiene un inquilino de Azure Active Directory (Azure AD) configurado para coexistencia híbrida con el dominio de Active Directory local. Planea implementar varias máquinas virtuales (VMs) nuevas en Azure. Las VMs tendrán el mismo sistema operativo y los mismos requisitos de software personalizados. Configura una VM de referencia en el entorno virtual local. Luego generaliza la VM para crear una imagen. Necesita cargar la imagen a Azure para asegurarse de que esté disponible para su selección cuando cree las nuevas VMs de Azure. ¿Qué cmdlets de PowerShell debe usar?",
+                options: [
+                    "Add-AzVM",
+                    "Add-AzVhd",
+                    "Add-AzImage",
+                    "Add-AzImageDataDisk"
+                ],
+                answer: "Add-AzVhd",
+                comment: "El cmdlet Add-AzVhd carga discos duros virtuales locales, en formato de archivo .vhd, a una cuenta de almacenamiento de blobs como discos duros virtuales fijos.",
+                category: C.COMPUTE,
+                subtopic: "Creación de una máquina virtual"
+            },
+            // Pregunta 23 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Azure que incluye varias máquinas virtuales (VMs) de Azure, todas ellas parte de la misma red virtual. Su empresa también tiene un servidor Hyper-V local que aloja una VM, llamada VM1, que debe replicarse en Azure. ¿Cuáles de los siguientes objetos deben crearse para lograr este objetivo?",
+                options: [
+                    "Sitio Hyper-V, Azure Recovery Services Vault, Política de replicación",
+                    "Solo Azure Recovery Services Vault",
+                    "Solo Sitio Hyper-V",
+                    "Solo Política de replicación"
+                ],
+                answer: "Sitio Hyper-V, Azure Recovery Services Vault, Política de replicación",
+                comment: "Sitio Hyper-V: Representa los servidores Hyper-V locales que se protegerán. Azure Recovery Services Vault: Un componente clave en ASR que almacena puntos de recuperación y orquesta la replicación, la conmutación por error y la recuperación ante desastres. Política de replicación: Define la configuración de replicación, incluida la frecuencia y la retención.",
+                category: C.MONITOR,
+                subtopic: "Configuración de Recovery Services Vault"
+            },
+            // Pregunta 24 del PDF
+            {
+                question: "La suscripción de Azure de su empresa incluye dos redes de Azure llamadas VirtualNetworkA y VirtualNetworkB. VirtualNetworkA incluye una puerta de enlace VPN que está configurada para utilizar enrutamiento estático. Además, existe una conexión VPN de sitio a sitio entre la red local de su empresa y VirtualNetworkA. Ha configurado una conexión VPN de punto a sitio a VirtualNetworkA desde una estación de trabajo con Windows 10. Después de configurar el emparejamiento de redes virtuales entre VirtualNetworkA y VirtualNetworkB, confirma que puede acceder a VirtualNetworkB desde la red local de la empresa. Sin embargo, descubre que no puede establecer una conexión con VirtualNetworkB desde la estación de trabajo con Windows 10. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "El hecho de que pueda acceder a VirtualNetworkB desde la red local indica que \"Permitir/Usar tránsito de puerta de enlace\" está configurado y funcionando. El siguiente paso para resolver el problema del cliente con Windows 10 sería reiniciar/reinstalar la configuración del cliente VPN en la estación de trabajo.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración del emparejamiento de red virtual"
+            },
+            // Pregunta 25 del PDF
+            {
+                question: "La suscripción de Azure de su empresa incluye dos redes de Azure llamadas VirtualNetworkA y VirtualNetworkB. VirtualNetworkA incluye una puerta de enlace VPN que está configurada para utilizar enrutamiento estático. Además, existe una conexión VPN de sitio a sitio entre la red local de su empresa y VirtualNetworkA. Ha configurado una conexión VPN de punto a sitio a VirtualNetworkA desde una estación de trabajo con Windows 10. Después de configurar el emparejamiento de redes virtuales entre VirtualNetworkA y VirtualNetworkB, confirma que puede acceder a VirtualNetworkB desde la red local de la empresa. Sin embargo, descubre que no puede establecer una conexión con VirtualNetworkB desde la estación de trabajo con Windows 10. Debe asegurarse de que se pueda establecer una conexión con VirtualNetworkB desde la estación de trabajo con Windows 10. Solución: Elige la configuración \"Permitir tránsito de puerta de enlace\" en VirtualNetworkB. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "Si realiza un cambio en la topología de su red y tiene clientes VPN de Windows, el paquete de cliente VPN para clientes de Windows debe descargarse e instalarse de nuevo para que los cambios se apliquen al cliente.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración del emparejamiento de red virtual"
+            },
+            // Pregunta 26 del PDF
+            {
+                question: "La suscripción de Azure de su empresa incluye dos redes de Azure llamadas VirtualNetworkA y VirtualNetworkB. VirtualNetworkA incluye una puerta de enlace VPN que está configurada para utilizar enrutamiento estático. Además, existe una conexión VPN de sitio a sitio entre la red local de su empresa y VirtualNetworkA. Ha configurado una conexión VPN de punto a sitio a VirtualNetworkA desde una estación de trabajo con Windows 10. Después de configurar el emparejamiento de redes virtuales entre VirtualNetworkA y VirtualNetworkB, confirma que puede acceder a VirtualNetworkB desde la red local de la empresa. Sin embargo, descubre que no puede establecer una conexión con VirtualNetworkB desde la estación de trabajo con Windows 10. Debe asegurarse de que se pueda establecer una conexión con VirtualNetworkB desde la estación de trabajo con Windows 10. Solución: Descarga y reinstala el paquete de configuración del cliente VPN en la estación de trabajo con Windows 10. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "Sí",
+                comment: "Si realiza un cambio en la topología de su red y tiene clientes VPN de Windows, el paquete de cliente VPN para clientes de Windows debe descargarse e instalarse de nuevo para que los cambios se apliquen al cliente.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración del emparejamiento de red virtual"
+            },
+            // Pregunta 27 del PDF
+            {
+                question: "Su empresa tiene máquinas virtuales (VMs) alojadas en Microsoft Azure. Las VMs están ubicadas en una única red virtual de Azure llamada VNet1. La empresa tiene usuarios que trabajan de forma remota. Los trabajadores remotos requieren acceso a las VMs en VNet1. Necesita proporcionar acceso a los trabajadores remotos. ¿Qué debe hacer?",
+                options: [
+                    "Configurar una VPN de sitio a sitio (S2S).",
+                    "Configurar una VPN de VNet a VNet.",
+                    "Configurar una VPN de punto a sitio (P2S).",
+                    "Configurar DirectAccess en una VM de servidor Windows Server 2012.",
+                    "Configurar una VPN multisitio."
+                ],
+                answer: "Configurar una VPN de punto a sitio (P2S).",
+                comment: "Una conexión de puerta de enlace VPN de punto a sitio (P2S) le permite crear una conexión segura a su red virtual desde un equipo cliente individual. Este tipo de conexión permite a los clientes remotos individuales conectarse de forma segura a una red virtual (VNet) de Azure a través de Internet. Una VPN de sitio a sitio (S2S) se usa para conectar redes locales a una VNet de Azure, mientras que una VPN de VNet a VNet se usa para conectar dos o más VNets de Azure entre sí.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración de redes virtuales y subredes"
+            },
+            // Pregunta 28 del PDF
+            {
+                question: "Su empresa tiene un grupo de disponibilidad Microsoft SQL Server Always On configurado en sus máquinas virtuales (VMs) de Azure. Necesita configurar un equilibrador de carga interno de Azure como oyente para el grupo de disponibilidad. Solución: Crea una sonda de salud HTTP en el puerto 1433. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "No, crear una sonda de salud HTTP en el puerto 1433 no cumple el objetivo. Para configurar un equilibrador de carga interno de Azure como oyente para el grupo de disponibilidad, debe crear una sonda de salud TCP en el puerto 1433. SQL Server utiliza TCP para comunicarse en el puerto 1433.",
+                category: C.NETWORK,
+                subtopic: "Configuración de un equilibrador de carga interno o público"
+            },
+            // Pregunta 29 del PDF
+            {
+                question: "Su empresa tiene un grupo de disponibilidad Microsoft SQL Server Always On configurado en sus máquinas virtuales (VMs) de Azure. Necesita configurar un equilibrador de carga interno de Azure como oyente para el grupo de disponibilidad. Solución: Configura la persistencia de sesión en \"IP de Cliente\". ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "La persistencia de sesión asegura que un cliente permanecerá conectado al mismo servidor durante toda una sesión o período de tiempo. Debido a que el equilibrio de carga puede, por defecto, enviar a los usuarios a servidores únicos cada vez que se conectan, esto puede significar que las solicitudes complicadas o repetidas se ralenticen.",
+                category: C.NETWORK,
+                subtopic: "Configuración de un equilibrador de carga interno o público"
+            },
+            // Pregunta 30 del PDF
+            {
+                question: "Su empresa tiene un grupo de disponibilidad Microsoft SQL Server Always On configurado en sus máquinas virtuales (VMs) de Azure. Necesita configurar un equilibrador de carga interno de Azure como oyente para el grupo de disponibilidad. Solución: Habilita la IP Flotante. ¿La solución cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "Sí",
+                comment: "Sí, habilitar la IP Flotante en el equilibrador de carga interno de Azure como oyente para el grupo de disponibilidad puede cumplir el objetivo. Al habilitar la IP Flotante, el equilibrador de carga utilizará una dirección IP flotante como dirección IP de origen para los flujos salientes del grupo de backend. Esto asegurará que la dirección IP utilizada por el grupo de backend permanezca igual incluso si una VM se reinicia o se reemplaza, lo cual es importante para mantener el oyente del grupo de disponibilidad.",
+                category: C.NETWORK,
+                subtopic: "Configuración de un equilibrador de carga interno o público"
+            },
+            // Pregunta 31 del PDF
+            {
+                question: "Su empresa tiene dos servidores locales llamados SRV01 y SRV02. Los desarrolladores han creado una aplicación que se ejecuta en SRV01. La aplicación llama a un servicio en SRV02 por dirección IP. Planea migrar la aplicación a máquinas virtuales (VMs) de Azure. Ha configurado dos VMs en una única subred en una red virtual de Azure. Necesita configurar las dos VMs con direcciones IP internas estáticas. ¿Qué debe hacer?",
+                options: [
+                    "Ejecutar el cmdlet de PowerShell New-AzureRMVMConfig.",
+                    "Ejecutar el cmdlet de PowerShell Set-AzureSubnet.",
+                    "Modificar las propiedades de la VM en el Portal de administración de Azure.",
+                    "Modificar las propiedades de IP en el Centro de redes y recursos compartidos de Windows.",
+                    "Ejecutar el cmdlet de PowerShell Set-AzureStaticVNetIP."
+                ],
+                answer: "Ejecutar el cmdlet de PowerShell Set-AzureStaticVNetIP.",
+                comment: "Para establecer una dirección IP estática para una VM creada previamente, puede usar el cmdlet Set-AzureStaticVNetIP. Si ya existe una IP, debe eliminarla antes. El cmdlet Update-AzureVM reinicia la VM como parte del proceso de actualización para asignar la nueva IP.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración de redes virtuales y subredes"
+            },
+            // Pregunta 32 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Azure Active Directory (Azure AD). Necesita implementar cinco máquinas virtuales (VMs) en la subred de la red virtual de su empresa. Cada VM tendrá una dirección IP pública y una privada. Las reglas de seguridad de entrada y salida para todas estas máquinas virtuales deben ser idénticas. ¿Cuál es la menor cantidad de interfaces de red necesarias para esta configuración?",
+                options: ["5", "10", "20", "40"],
+                answer: "5",
+                comment: "Para implementar cinco VMs con direcciones IP públicas y privadas, necesitaría al menos cinco interfaces de red (una para cada VM). Cada VM requiere una interfaz de red para conectarse a la red virtual. Aunque tengan las mismas reglas de seguridad de entrada y salida, se puede crear un NSG y adjuntarlo a cada NIC. Por lo tanto, 5 NICs es la respuesta correcta.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración de redes virtuales y subredes"
+            },
+            // Pregunta 33 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Azure Active Directory (Azure AD). Necesita implementar cinco máquinas virtuales (VMs) en la subred de la red virtual de su empresa. Cada VM tendrá una dirección IP pública y una privada. Las reglas de seguridad de entrada y salida para todas estas máquinas virtuales deben ser idénticas. ¿Cuál es la menor cantidad de grupos de seguridad necesarios para esta configuración?",
+                options: ["4", "3", "2", "1"],
+                answer: "1",
+                comment: "En Azure, los Grupos de Seguridad de Red (NSG) se utilizan para controlar el tráfico. Dado que todas las VMs requieren las mismas reglas de seguridad, puede asignar un único NSG a nivel de subred. Esto garantiza que las reglas de seguridad se apliquen uniformemente a todas las VMs dentro de esa subred.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración de grupos de seguridad de red (NSG) y grupos de seguridad de aplicaciones"
+            },
+            // Pregunta 34 del PDF
+            {
+                question: "La suscripción de Azure de su empresa incluye máquinas virtuales (VMs) de Azure que ejecutan Windows Server 2016. Una de las VMs se respalda todos los días utilizando Azure Backup Instant Restore. Cuando la VM se infecta con ransomware de cifrado de datos, decide recuperar los archivos de la VM. ¿Cuál de las siguientes afirmaciones es VERDADERA en este escenario?",
+                options: [
+                    "Solo puede recuperar los archivos en la VM infectada.",
+                    "Puede recuperar los archivos en cualquier VM dentro de la suscripción de la empresa.",
+                    "Solo puede recuperar los archivos en una nueva VM.",
+                    "No podrá recuperar los archivos."
+                ],
+                answer: "Puede recuperar los archivos en cualquier VM dentro de la suscripción de la empresa.",
+                comment: "Puede restaurar archivos montando la copia de seguridad en su propia máquina local o en cualquier VM en Azure siempre que tengan la misma versión del SO. No puede restaurar archivos a una versión anterior o posterior del SO; debe ser un sistema operativo cliente compatible. Restaurar archivos a una VM infectada no es la mejor opción.",
+                category: C.MONITOR,
+                subtopic: "Configuración de Recovery Services Vault"
+            },
+            // Pregunta 35 del PDF
+            {
+                question: "La suscripción de Azure de su empresa incluye máquinas virtuales (VMs) de Azure que ejecutan Windows Server 2016. Una de las VMs se respalda todos los días utilizando Azure Backup Instant Restore. Cuando la VM se infecta con ransomware de cifrado de datos, se le exige restaurar la VM. ¿Cuál de las siguientes acciones debe tomar?",
+                options: [
+                    "Debe restaurar la VM después de eliminar la VM infectada.",
+                    "Debe restaurar la VM a cualquier VM dentro de la suscripción de la empresa.",
+                    "Debe restaurar la VM a una nueva VM de Azure.",
+                    "Debe restaurar la VM a un dispositivo Windows local."
+                ],
+                answer: "Debe restaurar la VM a una nueva VM de Azure.",
+                comment: "Azure Backup proporciona la restauración instantánea para VMs, lo que permite una recuperación rápida en casos como ataques de ransomware. El mejor enfoque es restaurar la VM a una nueva VM de Azure en lugar de sobrescribir o restaurar en una VM existente, para asegurar que la VM infectada no afecte el sistema restaurado.",
+                category: C.MONITOR,
+                subtopic: "Configuración de Recovery Services Vault"
+            },
+            // Pregunta 36 del PDF
+            {
+                question: "Administra una solución en Azure que actualmente presenta problemas de rendimiento. Necesita encontrar la causa de los problemas de rendimiento relacionados con las métricas en la infraestructura de Azure.",
+                options: [
+                    "Azure Sentinel",
+                    "Azure Monitor",
+                    "Registro de actividad de Azure",
+                    "Azure Advisor"
+                ],
+                answer: "Azure Monitor",
+                comment: "Las métricas en Azure Monitor se almacenan en una base de datos de series temporales optimizada para analizar datos con marca de tiempo. Esto hace que las métricas sean particularmente adecuadas para alertas y detección rápida de problemas.",
+                category: C.MONITOR,
+                subtopic: "Interpretación de métricas en Azure Monitor"
+            },
+            // Pregunta 37 del PDF
+            {
+                question: "Su empresa tiene una suscripción de Azure que incluye un almacén de Recovery Services. Desea utilizar Azure Backup para programar una copia de seguridad de las máquinas virtuales (VMs) de su empresa en el almacén de Recovery Services. ¿Cuáles de las siguientes VMs puede respaldar? Elija todas las que correspondan.",
+                options: [
+                    "VMs que ejecutan Windows 10.",
+                    "VMs que ejecutan Windows Server 2012 o superior.",
+                    "VMs que NO han sido apagadas.",
+                    "VMs que ejecutan Debian 8.2+.",
+                    "VMs que han sido apagadas."
+                ],
+                answer: "VMs que ejecutan Windows 10., VMs que ejecutan Windows Server 2012 o superior., VMs que NO han sido apagadas., VMs que ejecutan Debian 8.2+., VMs que han sido apagadas.",
+                comment: "Azure Backup admite la copia de seguridad de sistemas operativos de servidor Windows de 64 bits desde Windows Server 2008, sistemas operativos Windows 10 de 64 bits, y sistemas operativos Debian de 64 bits desde Debian 7.9+. Azure Backup admite la copia de seguridad de VMs que están apagadas o sin conexión.",
+                category: C.MONITOR,
+                subtopic: "Configuración de Recovery Services Vault"
+            },
+            // Pregunta 38 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado contoso.com. Tiene un archivo CSV que contiene los nombres y direcciones de correo electrónico de 500 usuarios externos. Necesita crear una cuenta de usuario invitado en contoso.com para cada uno de los 500 usuarios externos. Solución: Crea un script de PowerShell que ejecuta el cmdlet New-AzureADUser para cada usuario. ¿Esto cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "El cmdlet New-AzureADUser crea un usuario en Azure Active Directory (Azure AD). Para invitar a un nuevo usuario externo a su directorio, debe usar el cmdlet New-AzureADMSInvitation.",
+                category: C.ID_GOV,
+                subtopic: "Administración de usuarios externos"
+            },
+            // Pregunta 39 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado contoso.com. Tiene un archivo CSV que contiene los nombres y direcciones de correo electrónico de 500 usuarios externos. Necesita crear una cuenta de usuario invitado en contoso.com para cada uno de los 500 usuarios externos. Solución: Desde Azure AD en el portal de Azure, utiliza la operación \"Crear usuarios en bloque\". ¿Esto cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "\"Creación en bloque\" es para nuevos usuarios de Azure AD, no para invitados. Para invitados, debe usar \"Invitar usuarios en bloque\" y preparar un archivo .csv con la información del usuario y las preferencias de invitación. También se puede usar el cmdlet New-AzureADMSInvitation para invitar a usuarios externos.",
+                category: C.ID_GOV,
+                subtopic: "Administración de usuarios externos"
+            },
+            // Pregunta 40 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado contoso.com. Tiene un archivo CSV que contiene los nombres y direcciones de correo electrónico de 500 usuarios externos. Necesita crear una cuenta de usuario invitado en contoso.com para cada uno de los 500 usuarios externos. Solución: Crea un script de PowerShell que ejecuta el cmdlet New-AzureADMSInvitation para cada usuario externo. ¿Esto cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "Sí",
+                comment: "Sí, esta solución debería cumplir el objetivo. El cmdlet New-AzureADMSInvitation se puede utilizar para enviar invitaciones a usuarios externos para que se conviertan en usuarios invitados en un inquilino de Azure AD. Al ejecutar el cmdlet para cada usuario externo en el archivo CSV, se puede crear una cuenta de usuario invitado.",
+                category: C.ID_GOV,
+                subtopic: "Administración de usuarios externos"
+            },
+            // Pregunta 41 del PDF
+            {
+                question: "Tiene las máquinas virtuales de Azure que se muestran en la siguiente tabla: (tabla no proporcionada) Tiene un almacén de Recovery Services que protege VM1 y VM2. Necesita proteger VM3 y VM4 utilizando Recovery Services. ¿Qué debe hacer primero?",
+                options: [
+                    "Crear un nuevo almacén de Recovery Services",
+                    "Crear una cuenta de almacenamiento",
+                    "Configurar las extensiones para VM3 y VM4",
+                    "Crear una nueva política de copia de seguridad"
+                ],
+                answer: "Crear un nuevo almacén de Recovery Services",
+                comment: "Un almacén de Recovery Services es una entidad de almacenamiento en Azure que almacena datos. Se utiliza para contener datos de copia de seguridad o información de configuración para VMs, cargas de trabajo, servidores o estaciones de trabajo, y puede usarse para diversos servicios de Azure.",
+                category: C.MONITOR,
+                subtopic: "Configuración de Recovery Services Vault"
+            },
+            // Pregunta 42 del PDF
+            {
+                question: "Tiene una suscripción de Azure llamada Subscription1 que contiene un grupo de recursos llamado RG1. En RG1, crea un equilibrador de carga interno llamado LB1 y un equilibrador de carga público llamado LB2. Debe asegurarse de que un administrador llamado Admin1 pueda administrar LB1 y LB2. La solución debe seguir el principio de privilegio mínimo. ¿Qué rol debe asignar a Admin1 para cada tarea?",
+                options: [
+                    "Rol para LB1: Colaborador de red, Rol para LB2: Colaborador de red",
+                    "Rol para LB1: Propietario, Rol para LB2: Propietario",
+                    "Rol para LB1: Lector, Rol para LB2: Lector",
+                    "Rol para LB1: Administrador de acceso de usuario, Rol para LB2: Administrador de acceso de usuario"
+                ],
+                answer: "Rol para LB1: Colaborador de red, Rol para LB2: Colaborador de red",
+                comment: "El rol de Colaborador de red en LB1 y LB2 es la respuesta correcta. Con este rol, el usuario puede agregar o crear una dirección de backend y crear o modificar sondas de salud. Si se desea agregar direcciones a los grupos de backend (ej., IPs de una VNet), se requiere el rol de Colaborador de red a nivel de grupo de recursos (o al menos en la VNet).",
+                category: C.NETWORK,
+                subtopic: "Configuración de un equilibrador de carga interno o público"
+            },
+            // Pregunta 43 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un inquilino de Azure Active Directory (Azure AD) llamado contoso.com y un clúster de Azure Kubernetes Service (AKS) llamado AKS1. Un administrador informa que no puede conceder acceso a AKS1 a los usuarios de contoso.com. Debe asegurarse de que se pueda conceder acceso a AKS1 a los usuarios de contoso.com. ¿Qué debe hacer primero?",
+                options: [
+                    "Desde contoso.com, modificar la configuración de relaciones de la organización.",
+                    "Desde contoso.com, crear un punto de conexión de autorización OAuth 2.0.",
+                    "Recrear AKS1.",
+                    "Desde AKS1, crear un espacio de nombres."
+                ],
+                answer: "Desde contoso.com, crear un punto de conexión de autorización OAuth 2.0.",
+                comment: "Los administradores del clúster pueden configurar el control de acceso basado en roles de Kubernetes (Kubernetes RBAC) basado en la identidad de un usuario o la pertenencia a un grupo. La autenticación de Azure AD se proporciona a los clústeres de AKS con OpenID Connect, que es una capa de identidad construida sobre el protocolo OAuth 2.0.",
+                category: C.COMPUTE,
+                subtopic: "Aprovisionamiento de un contenedor con Azure Container Apps"
+            },
+            // Pregunta 44 del PDF
+            {
+                question: "Tiene un inquilino de Microsoft 365 y un inquilino de Azure Active Directory (Azure AD) llamado contoso.com. Planea conceder acceso a tres usuarios llamados User1, User2 y User3 a una biblioteca de documentos temporal de Microsoft SharePoint llamada Library1. Necesita crear grupos para los usuarios. La solución debe garantizar que los grupos se eliminen automáticamente después de 180 días. ¿Qué dos grupos debe crear?",
+                options: [
+                    "Un grupo de Microsoft 365 que utiliza el tipo de pertenencia Asignado y un grupo de Microsoft 365 que utiliza el tipo de pertenencia de Usuario Dinámico",
+                    "Un grupo de seguridad que utiliza el tipo de pertenencia Asignado y un grupo de seguridad que utiliza el tipo de pertenencia de Usuario Dinámico",
+                    "Un grupo de Microsoft 365 que utiliza el tipo de pertenencia de Usuario Dinámico y un grupo de seguridad que utiliza el tipo de pertenencia de Dispositivo Dinámico",
+                    "Un grupo de seguridad que utiliza el tipo de pertenencia Asignado y un grupo de seguridad que utiliza el tipo de pertenencia de Usuario Dinámico"
+                ],
+                answer: "Un grupo de Microsoft 365 que utiliza el tipo de pertenencia Asignado y un grupo de Microsoft 365 que utiliza el tipo de pertenencia de Usuario Dinámico",
+                comment: "Solo se puede establecer una política de expiración para grupos de Office 365 en Azure Active Directory (Azure AD). Las políticas de expiración ayudan a eliminar grupos inactivos y, cuando un grupo expira, todos sus servicios asociados (buzón, Planner, sitio de SharePoint) también se eliminan. Se puede configurar una regla para la pertenencia dinámica tanto en grupos de seguridad como en grupos de Office 365.",
+                category: C.ID_GOV,
+                subtopic: "Administrar usuarios y grupos de Microsoft Entra"
+            },
+            // Pregunta 45 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado contoso.com que contiene los usuarios que se muestran en la siguiente tabla: (tabla no proporcionada) Configura una revisión de acceso llamada Review1 como se muestra en la siguiente exhibición: (exhibición no proporcionada) Para cada una de las siguientes afirmaciones, seleccione Sí si la afirmación es verdadera. De lo contrario, seleccione No.",
+                options: [
+                    "User3 puede realizar una revisión de acceso de User1: No, User3 puede realizar una revisión de acceso de UserA: No, User3 puede realizar una revisión de acceso de UserB: No",
+                    "User3 puede realizar una revisión de acceso de User1: Sí, User3 puede realizar una revisión de acceso de UserA: Sí, User3 puede realizar una revisión de acceso de UserB: Sí",
+                    "User3 puede realizar una revisión de acceso de User1: No, User3 puede realizar una revisión de acceso de UserA: Sí, User3 puede realizar una revisión de acceso de UserB: No",
+                    "User3 puede realizar una revisión de acceso de User1: Sí, User3 puede realizar una revisión de acceso de UserA: No, User3 puede realizar una revisión de acceso de UserB: Sí"
+                ],
+                answer: "User3 puede realizar una revisión de acceso de User1: No, User3 puede realizar una revisión de acceso de UserA: No, User3 puede realizar una revisión de acceso de UserB: No",
+                comment: "User1 y UserA son Miembros y no Cuentas de Invitado; la Revisión de Acceso especifica \"Solo Invitados\". La revisión de acceso solo mostró las Cuentas de Invitado en Grupo 1 y NO las Cuentas de Invitado en Grupo 2.",
+                category: C.ID_GOV,
+                subtopic: "Administración del acceso de usuarios a los recursos de Azure"
+            },
+            // Pregunta 46 del PDF
+            {
+                question: "Agrega suscripciones de Azure a los grupos de administración como se muestra en la siguiente tabla: (tabla no proporcionada) Crea las políticas de Azure que se muestran en la siguiente tabla: (tabla no proporcionada) Para cada una de las siguientes afirmaciones, seleccione Sí si la afirmación es verdadera. De lo contrario, seleccione No.",
+                options: [
+                    "Las redes virtuales no están permitidas en la raíz y son heredadas. La denegación anula lo permitido: Sí, Se le permite crear una VNET en la Suscripción 2: No, Una Suscripción solo puede asignarse a 1 Grupo de administración: No",
+                    "Las redes virtuales no están permitidas en la raíz y son heredadas. La denegación anula lo permitido: No, Se le permite crear una VNET en la Suscripción 2: Sí, Una Suscripción solo puede asignarse a 1 Grupo de administración: Sí",
+                    "Las redes virtuales no están permitidas en la raíz y son heredadas. La denegación anula lo permitido: Sí, Se le permite crear una VNET en la Suscripción 2: Sí, Una Suscripción solo puede asignarse a 1 Grupo de administración: Sí",
+                    "Las redes virtuales no están permitidas en la raíz y son heredadas. La denegación anula lo permitido: Sí, Se le permite crear una VNET en la Suscripción 2: No, Una Suscripción solo puede asignarse a 1 Grupo de administración: Sí"
+                ],
+                answer: "Las redes virtuales no están permitidas en la raíz y son heredadas. La denegación anula lo permitido: Sí, Se le permite crear una VNET en la Suscripción 2: No, Una Suscripción solo puede asignarse a 1 Grupo de administración: Sí",
+                comment: "Las redes virtuales no están permitidas en la raíz y son heredadas. La denegación anula lo permitido. Una suscripción solo puede asignarse a un Grupo de administración.",
+                category: C.ID_GOV,
+                subtopic: "Configuración de grupos de administración"
+            },
+            // Pregunta 47 del PDF
+            {
+                question: "Tiene una política de Azure como se muestra en la siguiente exhibición: (exhibición no proporcionada, pero la descripción infere el efecto de la política) ¿Cuál es el efecto de la política?",
+                options: [
+                    "Se le impide crear servidores Azure SQL en cualquier lugar de la Suscripción 1.",
+                    "Puede crear servidores Azure SQL solo en ContosoRG1.",
+                    "Se le impide crear servidores Azure SQL solo en ContosoRG1.",
+                    "Puede crear servidores Azure SQL en cualquier grupo de recursos dentro de la Suscripción 1."
+                ],
+                answer: "Puede crear servidores Azure SQL solo en ContosoRG1.",
+                comment: "Se le impide crear servidores Azure SQL en cualquier lugar de la Suscripción 1, con la excepción de ContosoRG1. La opción B es correcta, ya que la política actual impide la creación de servidores SQL en la Suscripción 1, pero debido a la exclusión, solo dentro de ContosoRG1, puede crear servidores SQL.",
+                category: C.ID_GOV,
+                subtopic: "Implementación y administración de Azure Policy"
+            },
+            // Pregunta 48 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene los recursos que se muestran en la siguiente tabla: (tabla no proporcionada, pero se entiende que VNET1 tiene la etiqueta Department: D1 y se crea RG6, luego se implementa VNET2 en RG6 con la etiqueta Label:Value1 aplicada directamente) A RG6, aplica la etiqueta: RGroup: RG6. Implementa una red virtual llamada VNET2 en RG6. ¿Qué etiquetas se aplican a VNET1 y VNET2?",
+                options: [
+                    "Etiquetas para VNET1: Department: D1 only. Etiquetas para VNET2: Label:Value1 only.",
+                    "Etiquetas para VNET1: Department: D1 only. Etiquetas para VNET2: Label:Value1 and RGroup: RG6.",
+                    "Etiquetas para VNET1: Department: D1 and RGroup: RG6. Etiquetas para VNET2: Label:Value1 only.",
+                    "Etiquetas para VNET1: Department: D1 and RGroup: RG6. Etiquetas para VNET2: Label:Value1 and RGroup: RG6."
+                ],
+                answer: "Etiquetas para VNET1: Department: D1 only. Etiquetas para VNET2: Label:Value1 only.",
+                comment: "Las etiquetas de los grupos de recursos no se heredan a los recursos. La etiqueta se aplicó solo al grupo de recursos, por lo que el recurso VNET2 no la heredará.",
+                category: C.ID_GOV,
+                subtopic: "Aplicación y administración de etiquetas en recursos"
+            },
+            // Pregunta 49 del PDF
+            {
+                question: "Tiene una suscripción de Azure llamada AZPT1 que contiene los recursos que se muestran en la siguiente tabla: (tabla no proporcionada, pero se infieren recursos como VM1, storage1, VNET1, VM1Managed, RVAULT1) Crea una nueva suscripción de Azure llamada AZPT2. Necesita identificar qué recursos se pueden mover a AZPT2. ¿Qué recursos debe identificar?",
+                options: [
+                    "VM1, storage1, VNET1 y VM1Managed solamente",
+                    "VM1 y VM1Managed solamente",
+                    "VM1, storage1, VNET1, VM1Managed y RVAULT1"
+                ],
+                answer: "VM1, storage1, VNET1, VM1Managed y RVAULT1",
+                comment: "Puede mover una VM y sus recursos asociados a una suscripción diferente utilizando el portal de Azure. También puede mover un almacén de Azure Recovery Service (ASR) a un nuevo grupo de recursos dentro de la suscripción actual o a una nueva suscripción.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 50 del PDF
+            {
+                question: "Recientemente creó una nueva suscripción de Azure que contiene un usuario llamado Admin1. Admin1 intenta implementar un recurso de Azure Marketplace utilizando una plantilla de Azure Resource Manager. Admin1 implementa la plantilla utilizando Azure PowerShell y recibe el siguiente mensaje de error: User failed validation to purchase resources. Error message: Legal terms have not been accepted for this item on this subscription. To accept legal terms, please go to the Azure portal (...) and configure programmatic deployment for the Marketplace item or create it there for the first time. Debe asegurarse de que Admin1 pueda implementar el recurso de Marketplace con éxito. ¿Qué debe hacer?",
+                options: [
+                    "Desde Azure PowerShell, ejecutar el cmdlet Set-AzApiManagementSubscription.",
+                    "Desde el portal de Azure, registrar el proveedor de recursos Microsoft.Marketplace.",
+                    "Desde Azure PowerShell, ejecutar el cmdlet Set-AzMarketplaceTerms.",
+                    "Desde el portal de Azure, asignar el rol de administrador de facturación a Admin1."
+                ],
+                answer: "Desde Azure PowerShell, ejecutar el cmdlet Set-AzMarketplaceTerms.",
+                comment: "El cmdlet Set-AzMarketplaceTerms se utiliza para aceptar los términos legales de los elementos de Marketplace. La opción -Accept se usa para indicar la aceptación de dichos términos.",
+                category: C.ID_GOV,
+                subtopic: "Administrar suscripciones"
+            },
+            // Pregunta 51 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) que contiene 5,000 cuentas de usuario. Crea una nueva cuenta de usuario llamada AdminUser1. Necesita asignar el rol administrativo de \"Administrador de usuario\" a AdminUser1.",
+                options: [
+                    "Desde el panel de Licencias de Azure AD, asignar una licencia.",
+                    "Desde el panel de Rol de directorio, modificar el rol de directorio.",
+                    "Desde el panel de Grupos, invitar la cuenta de usuario a un nuevo grupo."
+                ],
+                answer: "Desde el panel de Rol de directorio, modificar el rol de directorio.",
+                comment: "Para asignar un rol a un usuario: 1. Inicie sesión en el portal de Azure como administrador global o administrador de roles con privilegios. 2. Seleccione Azure Active Directory, luego Usuarios, y luego un usuario específico. 3. Para el usuario seleccionado, seleccione \"Rol de directorio\", seleccione \"Agregar rol\", y luego elija los roles de administrador apropiados.",
+                category: C.ID_GOV,
+                subtopic: "Administración de roles de Azure integrados"
+            },
+            // Pregunta 52 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado contoso.onmicrosoft.com que contiene 100 cuentas de usuario. Adquiere 10 licencias de Azure AD Premium P2 para el inquilino. Necesita asegurarse de que 10 usuarios puedan utilizar todas las características de Azure AD Premium. ¿Qué debe hacer?",
+                options: [
+                    "Desde el panel de Licencias de Azure AD, asignar una licencia.",
+                    "Desde el panel de Grupos de cada usuario, invitar a los usuarios a un grupo.",
+                    "Desde el dominio de Azure AD, agregar una aplicación empresarial.",
+                    "Desde el panel de Rol de directorio de cada usuario, modificar el rol de directorio."
+                ],
+                answer: "Desde el panel de Licencias de Azure AD, asignar una licencia.",
+                comment: "Para que los usuarios puedan utilizar las características de Azure AD Premium P2, debe asignar a cada uno de ellos una licencia Premium P2. Esto se hace desde el panel de Licencias en la sección de Azure Active Directory del portal de Azure.",
+                category: C.ID_GOV,
+                subtopic: "Administrar licencias en Microsoft Entra ID"
+            },
+            // Pregunta 53 del PDF
+            {
+                question: "Tiene una suscripción de Azure llamada Subscription1 y una implementación local de Microsoft System Center Service Manager. Subscription1 contiene una máquina virtual llamada VM1. (Falta el texto de la pregunta, pero se deduce que se busca una solución para integrar Azure y Service Manager, probablemente para alertas)",
+                options: [
+                    "Crear un runbook de automatización.",
+                    "Implementar una aplicación de funciones.",
+                    "Implementar el Conector de Gestión de Servicios de TI (ITSM).",
+                    "Crear una notificación."
+                ],
+                answer: "Implementar el Conector de Gestión de Servicios de TI (ITSM).",
+                comment: "El Conector de Gestión de Servicios de TI (ITSMC) le permite conectar Azure y un producto/servicio compatible de Gestión de Servicios de TI (ITSM), como Microsoft System Center Service Manager. Con ITSMC, puede crear elementos de trabajo en la herramienta ITSM basándose en sus alertas de Azure (alertas de métricas, alertas de registro de actividad y alertas de Log Analytics).",
+                category: C.MONITOR,
+                subtopic: "Configuración de registros en Azure Monitor"
+            },
+            // Pregunta 54 del PDF
+            {
+                question: "Se suscribe a Azure Active Directory (Azure AD) Premium P2. Necesita agregar un usuario llamado [email protected] como administrador en todos los equipos que se unirán al dominio de Azure AD. ¿Qué debe configurar en Azure AD?",
+                options: [
+                    "Configuración de dispositivos desde el panel de Dispositivos.",
+                    "Proveedores desde el panel de Servidor MFA.",
+                    "Configuración de usuario desde el panel de Usuarios.",
+                    "Configuración general desde el panel de Grupos."
+                ],
+                answer: "Configuración de dispositivos desde el panel de Dispositivos.",
+                comment: "Cuando conecta un dispositivo Windows con Azure AD, Azure AD agrega el rol de administrador global de Azure AD, el rol de administrador de dispositivos de Azure AD y el usuario que realiza la unión a Azure AD al grupo de administradores locales. En el portal de Azure, puede gestionar el rol de administrador de dispositivos en la página Dispositivos. Para modificar el rol de administrador de dispositivos, configure \"Administradores locales adicionales en dispositivos unidos a Azure AD\".",
+                category: C.ID_GOV,
+                subtopic: "Administración de propiedades de usuario y grupo"
+            },
+            // Pregunta 55 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory llamado Contoso.com que incluye los siguientes usuarios: (tabla no proporcionada) Contoso.com incluye los siguientes dispositivos con Windows 10: (tabla no proporcionada) Crea los siguientes grupos de seguridad en Contoso.com: (tabla no proporcionada) Para cada una de las siguientes afirmaciones, seleccione Sí si la afirmación es verdadera. De lo contrario, seleccione No.",
+                options: [
+                    "User1 puede agregar Device2 al Grupo1: No, User2 puede agregar Device1 al Grupo1: Sí, User2 puede agregar Device2 al Grupo2: No",
+                    "User1 puede agregar Device2 al Grupo1: Sí, User2 puede agregar Device1 al Grupo1: No, User2 puede agregar Device2 al Grupo2: Sí",
+                    "User1 puede agregar Device2 al Grupo1: No, User2 puede agregar Device1 al Grupo1: No, User2 puede agregar Device2 al Grupo2: No",
+                    "User1 puede agregar Device2 al Grupo1: Sí, User2 puede agregar Device1 al Grupo1: Sí, User2 puede agregar Device2 al Grupo2: Sí"
+                ],
+                answer: "User1 puede agregar Device2 al Grupo1: No, User2 puede agregar Device1 al Grupo1: Sí, User2 puede agregar Device2 al Grupo2: No",
+                comment: "Los grupos pueden contener dispositivos registrados y unidos. User1 es un administrador de dispositivos en la nube, pero no tiene permisos para administrar otras propiedades del dispositivo más allá de habilitar/deshabilitar/eliminar. User2 es el propietario de Grupo1, por lo que puede agregar Device1. Grupo2 está configurado para pertenencia dinámica, y sus propiedades de membresía no pueden ser cambiadas por un usuario final o un administrador de usuario.",
+                category: C.ID_GOV,
+                subtopic: "Administración de propiedades de usuario y grupo"
+            },
+            // Pregunta 56 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG26. RG26 está configurado en la ubicación de Europa Occidental y se utiliza para crear recursos temporales para un proyecto. RG26 contiene los recursos que se muestran en la siguiente tabla: (la tabla muestra VM1 - estado: En ejecución, VNET1 - Tipo de bloqueo: Eliminación, Vault1 - estado de copia de seguridad: Copia de seguridad realizada) Necesita eliminar RG26. ¿Qué debe hacer primero?",
+                options: [
+                    "Eliminar VM1",
+                    "Detener VM1",
+                    "Detener la copia de seguridad de SQLDB01.",
+                    "Eliminar sa001"
+                ],
+                answer: "Detener la copia de seguridad de SQLDB01.",
+                comment: "El estado de ejecución de las VMs o la existencia de cuentas de almacenamiento no bloquean la eliminación de un Grupo de Recursos. Sin embargo, no puede eliminar un almacén que contiene datos de copia de seguridad. Una vez que los datos de copia de seguridad se eliminan, pasan a un estado de eliminación suave. Para eliminar TestRG, debe eliminar el bloqueo de recurso de VNET1 y eliminar todos los datos en Vault1.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 57 del PDF
+            {
+                question: "Tiene una suscripción de Azure llamada Subscription1 que contiene una red virtual llamada VNet1. VNet1 está en un grupo de recursos llamado RG1. Subscription1 tiene un usuario llamado User1. User1 tiene los siguientes roles: Lector, Administrador de seguridad, Lector de seguridad. Necesita asegurarse de que User1 pueda asignar el rol de Lector para VNet1 a otros usuarios. ¿Qué debe hacer?",
+                options: [
+                    "Eliminar a User1 de los roles de Lector de seguridad y Lector para Subscription1.",
+                    "Asignar a User1 el rol de Administrador de acceso de usuario para VNet1.",
+                    "Asignar a User1 el rol de Colaborador de red para VNet1.",
+                    "Asignar a User1 el rol de Colaborador de red para RG1."
+                ],
+                answer: "Asignar a User1 el rol de Administrador de acceso de usuario para VNet1.",
+                comment: "El rol de Administrador de acceso de usuario tiene acceso completo a todos los recursos, incluido el derecho a delegar acceso a otros. Otra respuesta correcta posible es asignar a User1 el rol de Propietario para VNet1.",
+                category: C.ID_GOV,
+                subtopic: "Asignación de roles en distintos ámbitos"
+            },
+            // Pregunta 58 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado contosocloud.onmicrosoft.com. Su empresa tiene una zona DNS pública para contoso.com. Agrega contoso.com como nombre de dominio personalizado a Azure AD. Debe asegurarse de que Azure pueda verificar el nombre de dominio. ¿Qué tipo de registro DNS debe crear?",
+                options: ["MX", "NSEC", "PTR", "RRSIG"],
+                answer: "MX",
+                comment: "Para verificar su nombre de dominio personalizado en Azure AD, debe usar el tipo de registro TXT o MX.",
+                category: C.ID_GOV,
+                subtopic: "Administración de propiedades de usuario y grupo"
+            },
+            // Pregunta 59 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado Adatum y una suscripción de Azure llamada Subscription1. Adatum contiene un grupo llamado Developers. Subscription1 contiene un grupo de recursos llamado Dev. Necesita proporcionar al grupo Developers la capacidad de crear aplicaciones lógicas de Azure en el grupo de recursos Dev. Solución: En Subscription1, asigna el rol de Usuario de DevTest Labs al grupo Developers. ¿Esto cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "El rol de Usuario de DevTest Labs solo le permite conectar, iniciar, reiniciar y apagar máquinas virtuales en sus Azure DevTest Labs. Para gestionar aplicaciones lógicas, se necesitaría un rol como el de Colaborador de la aplicación lógica.",
+                category: C.ID_GOV,
+                subtopic: "Asignación de roles en distintos ámbitos"
+            },
+            // Pregunta 60 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado Adatum y una suscripción de Azure llamada Subscription1. Adatum contiene un grupo llamado Developers. Subscription1 contiene un grupo de recursos llamado Dev. Necesita proporcionar al grupo Developers la capacidad de crear aplicaciones lógicas de Azure en el grupo de recursos Dev. Solución: En Subscription1, asigna el rol de Operador de la aplicación lógica al grupo Developers. ¿Esto cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "El rol de Operador de la aplicación lógica solo permite a los usuarios ver y administrar aplicaciones lógicas, pero no les permite crear nuevas. Necesitaría el rol de Colaborador de la aplicación lógica.",
+                category: C.ID_GOV,
+                subtopic: "Asignación de roles en distintos ámbitos"
+            },
+            // Pregunta 61 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado Adatum y una suscripción de Azure llamada Subscription1. Adatum contiene un grupo llamado Developers. Subscription1 contiene un grupo de recursos llamado Dev. Necesita proporcionar al grupo Developers la capacidad de crear aplicaciones lógicas de Azure en el grupo de recursos Dev. Solución: En Dev, asigna el rol de Colaborador al grupo Developers. ¿Esto cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "Sí",
+                comment: "Sí, asignar el rol de Colaborador al grupo Developers en el grupo de recursos Dev cumpliría el objetivo. El rol de Colaborador otorga acceso total para administrar todos los recursos en el grupo de recursos, incluida la capacidad de crear y administrar aplicaciones lógicas. Este rol puede administrar todos los recursos (y agregar recursos) en un Grupo de Recursos.",
+                category: C.ID_GOV,
+                subtopic: "Asignación de roles en distintos ámbitos"
+            },
+            // Pregunta 62 del PDF
+            {
+                question: "Tiene una suscripción de Azure que es utilizada por cuatro departamentos en su empresa. La suscripción contiene 10 grupos de recursos. Cada departamento utiliza recursos en varios grupos de recursos. Necesita enviar un informe al departamento de finanzas. El informe debe detallar los costos de cada departamento. ¿Qué tres acciones debe realizar en secuencia?",
+                options: [
+                    "Asignar una etiqueta a cada recurso, Desde el panel de Análisis de costos filtrar la vista por etiqueta, Descargar el informe de uso",
+                    "Crear grupos de recursos por departamento, Asignar roles por departamento, Generar reportes automáticos",
+                    "Configurar alertas de costo, Establecer presupuestos, Programar reportes",
+                    "Implementar Azure Policy, Configurar costos por departamento, Exportar datos"
+                ],
+                answer: "Asignar una etiqueta a cada recurso, Desde el panel de Análisis de costos filtrar la vista por etiqueta, Descargar el informe de uso",
+                comment: "Asignar una etiqueta a cada recurso: Para organizar lógicamente los recursos y permitir su posterior filtrado por departamento. Desde el panel de Análisis de costos, filtrar la vista por etiqueta: El Análisis de costos permite filtrar por propiedades como etiquetas, grupo de recursos y período de tiempo. Descargar el informe de uso: Para exportar la vista filtrada (por ejemplo, a un archivo .csv) para el departamento de finanzas.",
+                category: C.ID_GOV,
+                subtopic: "Administración de costos mediante alertas, presupuestos y recomendaciones de Azure Advisor"
+            },
+            // Pregunta 63 del PDF
+            {
+                question: "Tiene una suscripción de Azure llamada Subscription1 que contiene un espacio de trabajo de Azure Log Analytics llamado Workspace1. Necesita ver los eventos de error de una tabla llamada Event. ¿Qué consulta debe ejecutar en Workspace1?",
+                options: [
+                    "Get-Event Event | where $_.EventType == \"error\"",
+                    "search in (Event) \"error\"",
+                    "select * from Event where EventType == \"error\"",
+                    "search in (Event) * | where EventType -eq \"error\""
+                ],
+                answer: "search in (Event) \"error\"",
+                comment: "Las opciones de consulta correctas incluyen Event | search \"error\", Event | where EventType == \"error\", y search in (Event) \"error\". La opción B es una de las consultas válidas.",
+                category: C.MONITOR,
+                subtopic: "Consulta y análisis de registros en Azure Monitor"
+            },
+            // Pregunta 64 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene una red virtual llamada VNET1 en la región Este de EE. UU. 2. Una interfaz de red llamada VM1-NI está conectada a VNET1. Implementa correctamente la siguiente plantilla de Azure Resource Manager. (plantilla no proporcionada, pero se entiende que crea VMs en zonas) Para cada una de las siguientes afirmaciones, seleccione Sí si la afirmación es verdadera. De lo contrario, seleccione No.",
+                options: [
+                    "VM1 está en la Zona1, VM2 está en la Zona2: Sí, Las VMs están en diferentes zonas: Sí, Las VMs están en la misma zona: No",
+                    "VM1 está en la Zona1, VM2 está en la Zona2: No, Las VMs están en diferentes zonas: No, Las VMs están en la misma zona: Sí",
+                    "VM1 está en la Zona1, VM2 está en la Zona2: Sí, Las VMs están en diferentes zonas: No, Las VMs están en la misma zona: Sí",
+                    "VM1 está en la Zona1, VM2 está en la Zona2: No, Las VMs están en diferentes zonas: Sí, Las VMs están en la misma zona: No"
+                ],
+                answer: "VM1 está en la Zona1, VM2 está en la Zona2: Sí, Las VMs están en diferentes zonas: Sí, Las VMs están en la misma zona: No",
+                comment: "La explicación confirma que la implementación puede resultar en VMs distribuidas en diferentes zonas, como VM1 en Zona1 y VM2 en Zona2.",
+                category: C.COMPUTE,
+                subtopic: "Implementación de máquinas virtuales en zonas de disponibilidad y conjuntos de disponibilidad"
+            },
+            // Pregunta 65 del PDF
+            {
+                question: "Tiene una suscripción de Azure llamada Subscription1. Subscription1 contiene los grupos de recursos en la siguiente tabla: (tabla no proporcionada, pero se infieren RG1 con Policy1 y RG2 con Policy2, y ubicaciones) RG1 tiene una aplicación web llamada WebApp1. WebApp1 está ubicada en Europa Occidental. Mueve WebApp1 a RG2. ¿Cuál es el efecto del movimiento?",
+                options: [
+                    "El plan de App Service para WebApp1 permanece en Europa Occidental. La Política2 se aplica a WebApp1.",
+                    "El plan de App Service para WebApp1 se mueve a Europa del Norte. La Política2 se aplica a WebApp1.",
+                    "El plan de App Service para WebApp1 permanece en Europa Occidental. La Política1 se aplica a WebApp1.",
+                    "El plan de App Service para WebApp1 se mueve a Europa del Norte. La Política1 se aplica a WebApp1."
+                ],
+                answer: "El plan de App Service para WebApp1 permanece en Europa Occidental. La Política2 se aplica a WebApp1.",
+                comment: "Puede mover una aplicación a otro plan de App Service siempre que los planes de origen y destino estén en el mismo grupo de recursos y región geográfica. La región en la que se ejecuta la aplicación es la región de su plan de App Service. Sin embargo, no puede cambiar la región de un plan de App Service. Si WebApp1 se mueve a RG2, heredará Policy2, pero su App Service plan, y por lo tanto su región, permanecerá en Europa Occidental.",
+                category: C.COMPUTE,
+                subtopic: "Crear una instancia de App Service"
+            },
+            // Pregunta 66 del PDF
+            {
+                question: "Tiene una suscripción de Azure llamada Subscription1 con ID de suscripción c276fc76-9cd4-44c9-99a7-4fd71546436e. Necesita crear un rol RBAC personalizado llamado CR1 que cumpla los siguientes requisitos: • Solo se puede asignar a los grupos de recursos de Subscription1. • Impide la gestión de los permisos de acceso para los grupos de recursos. • Permite ver, crear, modificar y eliminar recursos dentro de los grupos de recursos. ¿Qué debe especificar en los alcances asignables y los elementos de permiso de la definición de CR1?",
+                options: [
+                    "assignableScopes: \"/subscriptions/c276fc76-9cd4-44c9-99a7-4fd71546436e\", notActions: \"Microsoft.Authorization/*\"",
+                    "assignableScopes: \"/subscriptions/c276fc76-9cd4-44c9-99a7-4fd71546436e\", notActions: \"Microsoft.Resources/*\"",
+                    "assignableScopes: \"/subscriptions/c276fc76-9cd4-44c9-99a7-4fd71546436e/resourceGroups/*\", notActions: \"Microsoft.Authorization/*\"",
+                    "assignableScopes: \"/subscriptions/c276fc76-9cd4-44c9-99a7-4fd71546436e\", notActions: \"Microsoft.Compute/*\""
+                ],
+                answer: "assignableScopes: \"/subscriptions/c276fc76-9cd4-44c9-99a7-4fd71546436e\", notActions: \"Microsoft.Authorization/*\"",
+                comment: "assignableScopes debe ser la Suscripción, para que el Rol personalizado solo pueda asignarse a Grupos de Recursos dentro de esa Suscripción. notActions debe denegar solo las acciones que interactúan con los puntos de conexión de la API de Autorización (Microsoft.Authorization/*) para evitar la gestión de permisos, permitiendo todo lo demás.",
+                category: C.ID_GOV,
+                subtopic: "Administración de roles de Azure integrados"
+            },
+            // Pregunta 67 del PDF
+            {
+                question: "Tiene una suscripción de Azure. Los usuarios acceden a los recursos de la suscripción desde casa o desde sitios de clientes. (texto de la pregunta incompleto en la fuente, pero se entiende que se trata de distribuir el tráfico a una aplicación entre VMs) Necesita asegurarse de que las conexiones a App1 se distribuyan entre todas las máquinas virtuales. ¿Cuáles son dos posibles servicios de Azure que puede usar?",
+                options: [
+                    "Un equilibrador de carga interno y un Azure Application Gateway",
+                    "Un equilibrador de carga público y una Red de Entrega de Contenido (CDN) de Azure",
+                    "Traffic Manager y un equilibrador de carga interno",
+                    "Un equilibrador de carga público y Traffic Manager"
+                ],
+                answer: "Un equilibrador de carga interno y un Azure Application Gateway",
+                comment: "Un equilibrador de carga interno: Distribuye el tráfico entre las VMs que ejecutan App1. Es un equilibrador de carga de Capa 4 (Transporte) que puede distribuir tráfico dentro de una red virtual. Un Azure Application Gateway: Es un equilibrador de carga de Capa 7 (Aplicación) que puede distribuir tráfico basándose en criterios como la ruta URL, encabezados de host y cookies. Puede realizar descarga SSL, afinidad de sesión y enrutamiento basado en URL.",
+                category: C.NETWORK,
+                subtopic: "Configuración de un equilibrador de carga interno o público"
+            },
+            // Pregunta 68 del PDF
+            {
+                question: "Tiene una suscripción de Azure. Tiene 100 máquinas virtuales de Azure. Necesita identificar rápidamente máquinas virtuales subutilizadas a las que se les pueda cambiar su nivel de servicio a una oferta menos costosa. ¿Qué panel debe usar?",
+                options: [
+                    "Monitor",
+                    "Advisor",
+                    "Métricas",
+                    "Perspectivas del cliente"
+                ],
+                answer: "Advisor",
+                comment: "Advisor le ayuda a optimizar y reducir su gasto general en Azure identificando recursos inactivos y subutilizados. Puede obtener recomendaciones de costos desde la pestaña \"Costo\" en el panel de Advisor.",
+                category: C.ID_GOV,
+                subtopic: "Administración de costos mediante alertas, presupuestos y recomendaciones de Azure Advisor"
+            },
+            // Pregunta 69 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD). Necesita crear una política de acceso condicional que requiera que todos los usuarios utilicen la autenticación multifactor cuando accedan al portal de Azure. ¿Qué tres configuraciones debe configurar?",
+                options: [
+                    "Usuarios y grupos (seleccionar todos los usuarios), Aplicaciones en la nube o acciones (específicamente, el Portal de Azure), Conceder (Requerir autenticación multifactor)",
+                    "Usuarios y grupos (seleccionar administradores), Aplicaciones en la nube o acciones (todas las aplicaciones), Conceder (Requerir autenticación multifactor)",
+                    "Usuarios y grupos (seleccionar usuarios específicos), Aplicaciones en la nube o acciones (específicamente, el Portal de Azure), Conceder (Requerir autenticación multifactor)",
+                    "Usuarios y grupos (seleccionar todos los usuarios), Aplicaciones en la nube o acciones (todas las aplicaciones), Conceder (Requerir autenticación multifactor)"
+                ],
+                answer: "Usuarios y grupos (seleccionar todos los usuarios), Aplicaciones en la nube o acciones (específicamente, el Portal de Azure), Conceder (Requerir autenticación multifactor)",
+                comment: "Las configuraciones mínimas para crear una política de MFA son seleccionar los Usuarios y Grupos (todos los usuarios), las Aplicaciones en la nube a las que se aplica (el Portal de Azure) y la acción de Concesión (Requerir autenticación multifactor).",
+                category: C.ID_GOV,
+                subtopic: "Administración del acceso de usuarios a los recursos de Azure"
+            },
+            // Pregunta 70 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado contoso.onmicrosoft.com. El rol de administrador de usuario está asignado a un usuario llamado Admin1. Un socio externo tiene una cuenta de Microsoft que utiliza el inicio de sesión [email protected]. Admin1 intenta invitar al socio externo a iniciar sesión en el inquilino de Azure AD y recibe el siguiente mensaje de error: Unable to invite user [email protected] \" Generic authorization exception.\" Debe asegurarse de que Admin1 pueda invitar al socio externo a iniciar sesión en el inquilino de Azure AD. ¿Qué debe hacer?",
+                options: [
+                    "Desde el panel de configuración de Usuarios, modificar la configuración de colaboración externa.",
+                    "Desde el panel de nombres de dominio personalizados, agregar un dominio personalizado.",
+                    "Desde el panel de relaciones organizacionales, agregar un proveedor de identidad.",
+                    "Desde el panel de Roles y administradores, asignar el rol de administrador de seguridad a Admin1."
+                ],
+                answer: "Desde el panel de configuración de Usuarios, modificar la configuración de colaboración externa.",
+                comment: "El mensaje de error indica un problema con la configuración de colaboración externa en Azure AD. Estas configuraciones dictan quién puede invitar a usuarios externos y bajo qué circunstancias. Para resolverlo, debe ajustar la configuración de colaboración externa en el panel de \"configuración de Usuarios\" en Azure Active Directory.",
+                category: C.ID_GOV,
+                subtopic: "Administración de usuarios externos"
+            },
+            // Pregunta 71 del PDF
+            {
+                question: "Tiene una suscripción de Azure vinculada a un inquilino de Azure Active Directory. El inquilino incluye una cuenta de usuario llamada User1. Necesita asegurarse de que User1 pueda asignar una política al grupo de administración raíz del inquilino. ¿Qué debe hacer?",
+                options: [
+                    "Asignar el rol de Propietario para la Suscripción de Azure a User1, y luego modificar las políticas de acceso condicional predeterminadas.",
+                    "Asignar el rol de Propietario para la suscripción de Azure a User1, y luego indicar a User1 que configure la gestión de acceso para los recursos de Azure.",
+                    "Elevar el acceso de User1 a Administrador Global en Azure Active Directory.",
+                    "Crear un nuevo grupo de administración y delegar a User1 como el propietario del nuevo grupo de administración."
+                ],
+                answer: "Elevar el acceso de User1 a Administrador Global en Azure Active Directory.",
+                comment: "A nadie se le otorga acceso predeterminado al grupo de administración raíz. Los Administradores Globales de Azure AD son los únicos usuarios que pueden elevarse a sí mismos para obtener acceso. Una vez que tienen acceso, pueden asignar cualquier rol de Azure a otros usuarios para administrarlo.",
+                category: C.ID_GOV,
+                subtopic: "Configuración de grupos de administración"
+            },
+            // Pregunta 72 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) llamado adatum.com. Adatum.com contiene los grupos de la siguiente tabla: (la tabla muestra Grupo1: Usuario dinámico - regla basada en Compañía = Marketing; Grupo2: Usuario dinámico - regla basada en Departamento = Ventas) Crea dos cuentas de usuario configuradas como se muestra en la siguiente tabla: (la tabla muestra User1: Compañía=Marketing, Departamento=TI; User2: Compañía=Marketing, Departamento=Ventas) ¿De qué grupos son miembros User1 y User2?",
+                options: [
+                    "User1 es miembro de: Solo Grupo1, User2 es miembro de: Grupo1 y Grupo2",
+                    "User1 es miembro de: Solo Grupo1, User2 es miembro de: Solo Grupo1",
+                    "User1 es miembro de: Solo Grupo2, User2 es miembro de: Solo Grupo2",
+                    "User1 es miembro de: Grupo1 y Grupo2, User2 es miembro de: Grupo1 y Grupo2"
+                ],
+                answer: "User1 es miembro de: Solo Grupo1, User2 es miembro de: Grupo1 y Grupo2",
+                comment: "User1: Cumple la regla del Grupo1 (Company = Marketing). No cumple la regla del Grupo2 (Department = Sales). User2: Cumple la regla del Grupo1 (Company = Marketing) y la regla del Grupo2 (Department = Sales).",
+                category: C.ID_GOV,
+                subtopic: "Administrar usuarios y grupos de Microsoft Entra"
+            },
+            // Pregunta 73 del PDF
+            {
+                question: "Tiene una implementación híbrida de Azure Active Directory (Azure AD) que contiene los usuarios que se muestran en la siguiente tabla: (tabla no proporcionada, pero se infieren usuarios con diversas propiedades, incluida la ubicación de uso)",
+                options: [
+                    "Los usuarios que pueden ser asignados a una licencia: User1 y User3 solamente, Los usuarios que pueden ser asignados al rol de Administrador Global de Azure AD: User1, User2 y User3",
+                    "Los usuarios que pueden ser asignados a una licencia: User1, User2 y User3, Los usuarios que pueden ser asignados al rol de Administrador Global de Azure AD: User1 y User2 solamente",
+                    "Los usuarios que pueden ser asignados a una licencia: User1 solamente, Los usuarios que pueden ser asignados al rol de Administrador Global de Azure AD: User1, User2 y User3",
+                    "Los usuarios que pueden ser asignados a una licencia: User1, User2 y User3, Los usuarios que pueden ser asignados al rol de Administrador Global de Azure AD: User1, User2 y User3"
+                ],
+                answer: "Los usuarios que pueden ser asignados a una licencia: User1 y User3 solamente, Los usuarios que pueden ser asignados al rol de Administrador Global de Azure AD: User1, User2 y User3",
+                comment: "La ubicación de uso es una propiedad de Azure que solo se puede modificar desde Azure AD (para todos los usuarios, incluidos los sincronizados desde Windows Server AD).",
+                category: C.ID_GOV,
+                subtopic: "Administrar licencias en Microsoft Entra ID"
+            },
+            // Pregunta 74 del PDF
+            {
+                question: "Necesita asegurarse de que un usuario de Azure Active Directory (Azure AD) llamado Admin1 tenga asignado el rol requerido para habilitar el Análisis de Tráfico para una suscripción de Azure. Solución: Asigna el rol de Colaborador de red a nivel de suscripción a Admin1. ¿Esto cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "Sí",
+                comment: "Su cuenta debe tener uno de los siguientes roles de Azure en el ámbito de la suscripción para habilitar el análisis de tráfico: propietario, colaborador, lector o colaborador de red. El rol de Colaborador de red cumple este requisito.",
+                category: C.NETWORK,
+                subtopic: "Solución de problemas de conectividad de red"
+            },
+            // Pregunta 75 del PDF
+            {
+                question: "Necesita asegurarse de que un usuario de Azure Active Directory (Azure AD) llamado Admin1 tenga asignado el rol requerido para habilitar el Análisis de Tráfico para una suscripción de Azure. Solución: Asigna el rol de Propietario a nivel de suscripción a Admin1. ¿Esto cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "Sí",
+                comment: "Su cuenta debe tener uno de los siguientes roles de Azure en el ámbito de la suscripción para habilitar el análisis de tráfico: propietario, colaborador, lector o colaborador de red. El rol de Propietario cumple este requisito.",
+                category: C.NETWORK,
+                subtopic: "Solución de problemas de conectividad de red"
+            },
+            // Pregunta 76 del PDF
+            {
+                question: "Necesita asegurarse de que un usuario de Azure Active Directory (Azure AD) llamado Admin1 tenga asignado el rol requerido para habilitar el Análisis de Tráfico para una suscripción de Azure. Solución: Asigna el rol de Lector a nivel de suscripción a Admin1. ¿Esto cumple el objetivo?",
+                options: ["Sí", "No"],
+                answer: "No",
+                comment: "Asignar el rol de Lector a nivel de suscripción a Admin1 no cumple el objetivo. El rol de Lector tiene permisos para ver recursos, pero no permite operaciones de escritura, que son necesarias para habilitar el Análisis de Tráfico. Admin1 necesitaría un rol con permisos de escritura, como Propietario o Colaborador.",
+                category: C.NETWORK,
+                subtopic: "Solución de problemas de conectividad de red"
+            },
+            // Pregunta 77 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un usuario llamado User1. Necesita asegurarse de que User1 pueda implementar máquinas virtuales y administrar redes virtuales. La solución debe utilizar el principio de privilegio mínimo. ¿Qué rol de control de acceso basado en roles (RBAC) debe asignar a User1?",
+                options: [
+                    "Propietario",
+                    "Colaborador de máquina virtual",
+                    "Colaborador",
+                    "Inicio de sesión de administrador de máquina virtual"
+                ],
+                answer: "Colaborador",
+                comment: "Propietario: Otorga acceso total para administrar todos los recursos, incluida la asignación de roles. Colaborador de máquina virtual: Permite administrar VMs, pero no acceder a ellas ni a la red virtual o cuenta de almacenamiento a las que están conectadas. Inicio de sesión de administrador de máquina virtual: Permite ver VMs e iniciar sesión como administrador. El rol de Colaborador es la opción que cumple el principio de menor privilegio para la tarea, ya que permite la gestión de todos los recursos (incluidas VMs y redes virtuales) en el ámbito asignado.",
+                category: C.ID_GOV,
+                subtopic: "Asignación de roles en distintos ámbitos"
+            },
+            // Pregunta 78 del PDF
+            {
+                question: "Tiene un inquilino de Azure Active Directory (Azure AD) que contiene tres administradores globales llamados Admin1, Admin2 y Admin3. El inquilino está asociado a una suscripción de Azure. El control de acceso para la suscripción está configurado como se muestra en la exhibición de Control de acceso. (exhibición no proporcionada) Inicia sesión en el portal de Azure como Admin1 y configura el inquilino como se muestra en la exhibición de Inquilino. (exhibición no proporcionada) Para cada una de las siguientes afirmaciones, seleccione Sí si la afirmación es verdadera. De lo contrario, seleccione No.",
+                options: [
+                    "Admin1 puede asignar el rol de Propietario: Sí, Admin3 puede asignar el rol de Propietario: Sí, Admin2 puede asignar el rol de Propietario: No",
+                    "Admin1 puede asignar el rol de Propietario: Sí, Admin3 puede asignar el rol de Propietario: No, Admin2 puede asignar el rol de Propietario: No",
+                    "Admin1 puede asignar el rol de Propietario: Sí, Admin3 puede asignar el rol de Propietario: Sí, Admin2 puede asignar el rol de Propietario: Sí",
+                    "Admin1 puede asignar el rol de Propietario: No, Admin3 puede asignar el rol de Propietario: Sí, Admin2 puede asignar el rol de Propietario: No"
+                ],
+                answer: "Admin1 puede asignar el rol de Propietario: Sí, Admin3 puede asignar el rol de Propietario: Sí, Admin2 puede asignar el rol de Propietario: No",
+                comment: "Los roles de Azure (RBAC) y Azure AD son independientes. Sin embargo, un Administrador Global en AD puede elevar el acceso a todas las suscripciones y se convertirá en Administrador de Acceso de Usuario en el ámbito raíz de Azure. Admin1 tiene acceso elevado, por lo que es Administrador de Acceso de Usuario (RBAC) y puede asignar roles. Admin3 es Propietario de la suscripción (RBAC), por lo que también puede asignar roles. Admin2 es solo un Administrador Global en Azure AD, no tiene permiso para asignar roles en la suscripción a menos que eleve su acceso.",
+                category: C.ID_GOV,
+                subtopic: "Asignación de roles en distintos ámbitos"
+            },
+            // Pregunta 79 del PDF
+            {
+                question: "Tiene una suscripción de Azure llamada Subscription1 que contiene una máquina virtual de Azure llamada VM1. VM1 está en un grupo de recursos llamado RG1. VM1 ejecuta servicios que se utilizarán para implementar recursos en RG1. Necesita asegurarse de que un servicio que se ejecuta en VM1 pueda administrar los recursos en RG1 utilizando la identidad de VM1. ¿Qué debe hacer primero?",
+                options: [
+                    "Desde el portal de Azure, modificar la configuración de Identidad Administrada de VM1.",
+                    "Desde el portal de Azure, modificar la configuración de Control de acceso (IAM) de RG1."
+                ],
+                answer: "Desde el portal de Azure, modificar la configuración de Identidad Administrada de VM1.",
+                comment: "Las identidades administradas para recursos de Azure proporcionan a los servicios de Azure una identidad administrada automáticamente en Azure Active Directory. Puede usar esta identidad para autenticarse en cualquier servicio que admita la autenticación de Azure AD sin tener credenciales en su código. Puede habilitar y deshabilitar la identidad administrada asignada por el sistema para la VM utilizando el portal de Azure.",
+                category: C.COMPUTE,
+                subtopic: "Creación de una máquina virtual"
+            },
+            // Pregunta 80 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado TestRG. Utiliza TestRG para validar una implementación de Azure. TestRG contiene los siguientes recursos: (tabla muestra VM1 - estado: En ejecución, VNET1 - Tipo de bloqueo: Eliminación, Vault1 - estado de copia de seguridad: Copia de seguridad realizada) Necesita eliminar TestRG. ¿Qué debe hacer primero?",
+                options: [
+                    "Modificar las configuraciones de copia de seguridad de VM1 y modificar el tipo de bloqueo de recurso de VNET1.",
+                    "Eliminar el bloqueo de recurso de VNET1 y eliminar todos los datos en Vault1.",
+                    "Apagar VM1 y eliminar el bloqueo de recurso de VNET1.",
+                    "Apagar VM1 y eliminar todos los datos en Vault1."
+                ],
+                answer: "Eliminar el bloqueo de recurso de VNET1 y eliminar todos los datos en Vault1.",
+                comment: "Cuando elimina un grupo de recursos, todos sus recursos también se eliminan. Sin embargo, no puede eliminar un almacén que contiene datos de copia de seguridad. Los bloqueos (lock) impiden la eliminación o modificación accidental de recursos, y el bloqueo anula los permisos. Por lo tanto, para eliminar el grupo de recursos, primero debe eliminar el bloqueo de VNET1 y eliminar las copias de seguridad de Vault1.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 81 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué debe hacer primero?",
+                options: [
+                    "Detener VM1",
+                    "Desacoplar Disk1 de VM1",
+                    "Crear RG2",
+                    "Verificar que RG2 esté en la misma región que RG1"
+                ],
+                answer: "Verificar que RG2 esté en la misma región que RG1",
+                comment: "Antes de mover recursos entre grupos de recursos, debe verificar que el grupo de recursos de destino esté en la misma región que el grupo de recursos de origen. Los recursos no se pueden mover entre regiones.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 82 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué debe hacer después de verificar que RG2 esté en la misma región que RG1?",
+                options: [
+                    "Detener VM1",
+                    "Desacoplar Disk1 de VM1",
+                    "Crear RG2",
+                    "Mover VM1 y Disk1 a RG2"
+                ],
+                answer: "Detener VM1",
+                comment: "Después de verificar que RG2 esté en la misma región, debe detener VM1 antes de moverla. Las máquinas virtuales deben estar detenidas antes de ser movidas entre grupos de recursos.",
+                category: C.COMPUTE,
+                subtopic: "Administración de máquinas virtuales"
+            },
+            // Pregunta 83 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué debe hacer después de detener VM1?",
+                options: [
+                    "Desacoplar Disk1 de VM1",
+                    "Crear RG2",
+                    "Mover VM1 y Disk1 a RG2",
+                    "Reiniciar VM1"
+                ],
+                answer: "Mover VM1 y Disk1 a RG2",
+                comment: "Después de detener VM1, puede mover tanto VM1 como Disk1 a RG2 en la misma operación. No es necesario desacoplar el disco antes del movimiento.",
+                category: C.COMPUTE,
+                subtopic: "Administración de máquinas virtuales"
+            },
+            // Pregunta 84 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué debe hacer después de mover VM1 y Disk1 a RG2?",
+                options: [
+                    "Desacoplar Disk1 de VM1",
+                    "Crear RG2",
+                    "Reiniciar VM1",
+                    "Eliminar RG1"
+                ],
+                answer: "Reiniciar VM1",
+                comment: "Después de mover VM1 y Disk1 a RG2, debe reiniciar VM1 para que funcione correctamente en el nuevo grupo de recursos.",
+                category: C.COMPUTE,
+                subtopic: "Administración de máquinas virtuales"
+            },
+            // Pregunta 85 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué debe hacer después de reiniciar VM1?",
+                options: [
+                    "Desacoplar Disk1 de VM1",
+                    "Crear RG2",
+                    "Eliminar RG1",
+                    "Verificar que VM1 funcione correctamente"
+                ],
+                answer: "Verificar que VM1 funcione correctamente",
+                comment: "Después de reiniciar VM1, debe verificar que funcione correctamente en el nuevo grupo de recursos antes de realizar cualquier otra acción.",
+                category: C.COMPUTE,
+                subtopic: "Administración de máquinas virtuales"
+            },
+            // Pregunta 86 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué debe hacer después de verificar que VM1 funcione correctamente?",
+                options: [
+                    "Desacoplar Disk1 de VM1",
+                    "Crear RG2",
+                    "Eliminar RG1",
+                    "Nada más"
+                ],
+                answer: "Eliminar RG1",
+                comment: "Después de verificar que VM1 funcione correctamente en RG2, puede eliminar RG1 si ya no es necesario.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 87 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué debe hacer después de eliminar RG1?",
+                options: [
+                    "Desacoplar Disk1 de VM1",
+                    "Crear RG2",
+                    "Nada más",
+                    "Reiniciar VM1"
+                ],
+                answer: "Nada más",
+                comment: "Después de eliminar RG1, el proceso de movimiento está completo. No es necesario realizar ninguna acción adicional.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 88 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Cuál es el orden correcto de las acciones?",
+                options: [
+                    "Verificar región, Detener VM1, Mover recursos, Reiniciar VM1, Verificar funcionamiento, Eliminar RG1",
+                    "Crear RG2, Detener VM1, Mover recursos, Reiniciar VM1, Verificar funcionamiento, Eliminar RG1",
+                    "Detener VM1, Verificar región, Mover recursos, Reiniciar VM1, Verificar funcionamiento, Eliminar RG1",
+                    "Verificar región, Crear RG2, Detener VM1, Mover recursos, Reiniciar VM1, Verificar funcionamiento, Eliminar RG1"
+                ],
+                answer: "Verificar región, Detener VM1, Mover recursos, Reiniciar VM1, Verificar funcionamiento, Eliminar RG1",
+                comment: "El orden correcto es: 1. Verificar que RG2 esté en la misma región que RG1, 2. Detener VM1, 3. Mover VM1 y Disk1 a RG2, 4. Reiniciar VM1, 5. Verificar que VM1 funcione correctamente, 6. Eliminar RG1.",
+                category: C.COMPUTE,
+                subtopic: "Administración de máquinas virtuales"
+            },
+            // Pregunta 89 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si intenta mover VM1 sin detenerla primero?",
+                options: [
+                    "La operación de movimiento fallará",
+                    "La operación de movimiento se completará exitosamente",
+                    "VM1 se detendrá automáticamente durante el movimiento",
+                    "VM1 se reiniciará automáticamente después del movimiento"
+                ],
+                answer: "La operación de movimiento fallará",
+                comment: "Si intenta mover VM1 sin detenerla primero, la operación de movimiento fallará. Las máquinas virtuales deben estar detenidas antes de ser movidas entre grupos de recursos.",
+                category: C.COMPUTE,
+                subtopic: "Administración de máquinas virtuales"
+            },
+            // Pregunta 90 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si RG2 está en una región diferente a RG1?",
+                options: [
+                    "La operación de movimiento fallará",
+                    "La operación de movimiento se completará exitosamente",
+                    "Los recursos se moverán pero VM1 no funcionará correctamente",
+                    "Los recursos se moverán pero Disk1 se perderá"
+                ],
+                answer: "La operación de movimiento fallará",
+                comment: "Si RG2 está en una región diferente a RG1, la operación de movimiento fallará. Los recursos no se pueden mover entre regiones.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 91 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si no reinicia VM1 después del movimiento?",
+                options: [
+                    "VM1 no funcionará correctamente",
+                    "VM1 funcionará normalmente",
+                    "VM1 se reiniciará automáticamente",
+                    "VM1 se detendrá automáticamente"
+                ],
+                answer: "VM1 no funcionará correctamente",
+                comment: "Si no reinicia VM1 después del movimiento, es posible que no funcione correctamente en el nuevo grupo de recursos.",
+                category: C.COMPUTE,
+                subtopic: "Administración de máquinas virtuales"
+            },
+            // Pregunta 92 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si elimina RG1 antes de verificar que VM1 funcione correctamente?",
+                options: [
+                    "VM1 se eliminará automáticamente",
+                    "VM1 seguirá funcionando en RG2",
+                    "La operación de eliminación fallará",
+                    "VM1 se moverá de vuelta a RG1"
+                ],
+                answer: "VM1 seguirá funcionando en RG2",
+                comment: "Si elimina RG1 antes de verificar que VM1 funcione correctamente, VM1 seguirá funcionando en RG2. Sin embargo, es recomendable verificar el funcionamiento antes de eliminar el grupo de recursos original.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 93 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si RG2 no existe?",
+                options: [
+                    "La operación de movimiento fallará",
+                    "RG2 se creará automáticamente",
+                    "Los recursos se moverán a un grupo de recursos temporal",
+                    "Los recursos permanecerán en RG1"
+                ],
+                answer: "La operación de movimiento fallará",
+                comment: "Si RG2 no existe, la operación de movimiento fallará. Debe crear RG2 antes de intentar mover los recursos.",
+                category: C.ID_GOV,
+                subtopic: "Administración de grupos de recursos"
+            },
+            // Pregunta 94 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si Disk1 está acoplado a VM1 durante el movimiento?",
+                options: [
+                    "La operación de movimiento fallará",
+                    "La operación de movimiento se completará exitosamente",
+                    "Disk1 se desacoplará automáticamente",
+                    "Disk1 se perderá durante el movimiento"
+                ],
+                answer: "La operación de movimiento se completará exitosamente",
+                comment: "Si Disk1 está acoplado a VM1 durante el movimiento, la operación de movimiento se completará exitosamente. No es necesario desacoplar el disco antes del movimiento.",
+                category: C.COMPUTE,
+                subtopic: "Administración de discos de máquinas virtuales"
+            },
+            // Pregunta 95 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si VM1 tiene extensiones instaladas?",
+                options: [
+                    "Las extensiones se moverán automáticamente con VM1",
+                    "Las extensiones se perderán durante el movimiento",
+                    "La operación de movimiento fallará",
+                    "Las extensiones se desinstalarán automáticamente"
+                ],
+                answer: "Las extensiones se moverán automáticamente con VM1",
+                comment: "Si VM1 tiene extensiones instaladas, las extensiones se moverán automáticamente con VM1 al nuevo grupo de recursos.",
+                category: C.COMPUTE,
+                subtopic: "Administración de máquinas virtuales"
+            },
+            // Pregunta 96 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si VM1 tiene una dirección IP pública asignada?",
+                options: [
+                    "La dirección IP pública se moverá automáticamente con VM1",
+                    "La dirección IP pública se perderá durante el movimiento",
+                    "La operación de movimiento fallará",
+                    "La dirección IP pública se liberará automáticamente"
+                ],
+                answer: "La dirección IP pública se moverá automáticamente con VM1",
+                comment: "Si VM1 tiene una dirección IP pública asignada, la dirección IP pública se moverá automáticamente con VM1 al nuevo grupo de recursos.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración de redes virtuales y subredes"
+            },
+            // Pregunta 97 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si VM1 tiene una interfaz de red asignada?",
+                options: [
+                    "La interfaz de red se moverá automáticamente con VM1",
+                    "La interfaz de red se perderá durante el movimiento",
+                    "La operación de movimiento fallará",
+                    "La interfaz de red se desacoplará automáticamente"
+                ],
+                answer: "La interfaz de red se moverá automáticamente con VM1",
+                comment: "Si VM1 tiene una interfaz de red asignada, la interfaz de red se moverá automáticamente con VM1 al nuevo grupo de recursos.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración de redes virtuales y subredes"
+            },
+            // Pregunta 98 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si VM1 tiene un grupo de seguridad de red asignado?",
+                options: [
+                    "El grupo de seguridad de red se moverá automáticamente con VM1",
+                    "El grupo de seguridad de red se perderá durante el movimiento",
+                    "La operación de movimiento fallará",
+                    "El grupo de seguridad de red se desacoplará automáticamente"
+                ],
+                answer: "El grupo de seguridad de red se moverá automáticamente con VM1",
+                comment: "Si VM1 tiene un grupo de seguridad de red asignado, el grupo de seguridad de red se moverá automáticamente con VM1 al nuevo grupo de recursos.",
+                category: C.NETWORK,
+                subtopic: "Creación y configuración de grupos de seguridad de red (NSG) y grupos de seguridad de aplicaciones"
+            },
+            // Pregunta 99 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si VM1 tiene un equilibrador de carga asignado?",
+                options: [
+                    "El equilibrador de carga se moverá automáticamente con VM1",
+                    "El equilibrador de carga se perderá durante el movimiento",
+                    "La operación de movimiento fallará",
+                    "El equilibrador de carga se desacoplará automáticamente"
+                ],
+                answer: "La operación de movimiento fallará",
+                comment: "Si VM1 tiene un equilibrador de carga asignado, la operación de movimiento fallará. Debe desacoplar VM1 del equilibrador de carga antes de moverla.",
+                category: C.NETWORK,
+                subtopic: "Configuración de un equilibrador de carga interno o público"
+            },
+            // Pregunta 100 del PDF
+            {
+                question: "Tiene una suscripción de Azure que contiene un grupo de recursos llamado RG1. RG1 contiene una máquina virtual llamada VM1. VM1 tiene un disco de datos llamado Disk1. Necesita mover VM1 y Disk1 a un grupo de recursos llamado RG2. ¿Qué sucede si VM1 tiene un conjunto de disponibilidad asignado?",
+                options: [
+                    "El conjunto de disponibilidad se moverá automáticamente con VM1",
+                    "El conjunto de disponibilidad se perderá durante el movimiento",
+                    "La operación de movimiento fallará",
+                    "El conjunto de disponibilidad se desacoplará automáticamente"
+                ],
+                answer: "La operación de movimiento fallará",
+                comment: "Si VM1 tiene un conjunto de disponibilidad asignado, la operación de movimiento fallará. Debe desacoplar VM1 del conjunto de disponibilidad antes de moverla.",
+                category: C.COMPUTE,
+                subtopic: "Implementación de máquinas virtuales en zonas de disponibilidad y conjuntos de disponibilidad"
+            }
+        ];
+
         // Revisión y asignación de subtema a todas las preguntas sin subtopic
         for (let i = 0; i < originalQuizData.length; i++) {
             if (!originalQuizData[i].subtopic || originalQuizData[i].subtopic === 'Otro' || originalQuizData[i].subtopic === 'Sin subtema asignado') {
@@ -444,12 +2117,35 @@
             return array;
         }
 
-        function selectQuantity(quantity) {
+        function selectQuantity(type, quantity) {
             quantityModal.classList.add('hidden');
             mainQuizContent.classList.remove('hidden');
-            startGame(quantity);
+            if (type === 'exam') {
+                startExamGame(quantity);
+            } else {
+                startGame(quantity);
+            }
         }
         
+        function startExamGame(numQuestions) {
+            inReviewMode = false;
+            // Usar solo las preguntas del examen
+            quizData = shuffle([...examQuizData]).slice(0, numQuestions);
+            currentQuestionIndex = 0;
+            userAnswers = Array(quizData.length).fill(null);
+            markedQuestions = Array(quizData.length).fill(false);
+            selectedOption = null;
+            startTime = new Date();
+            
+            resultContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            navigationControls.classList.remove('hidden');
+            document.querySelector('header').classList.remove('hidden');
+            
+            updateProgressBarVisual();
+            loadQuestion();
+        }
+
         function startGame(numQuestions) {
             inReviewMode = false;
             quizData = shuffle([...originalQuizData]).slice(0, numQuestions);
@@ -501,7 +2197,10 @@
             let optionsHtml = optionsToDisplay.map((option, index) => {
                 const optionLetter = String.fromCharCode(65 + index);
                 const escapedOption = option.replace(/'/g, "&apos;").replace(/"/g, "&quot;");
-                return `<button class="option-btn w-full text-left p-4 border-2 rounded-lg dark:border-gray-600 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200" data-option-value="${escapedOption}">${optionLetter}. ${option}</button>`;
+                const isSelected = userAnswers[currentQuestionIndex] === option;
+                const isAnswered = userAnswers[currentQuestionIndex] !== null;
+                
+                return `<button class="option-btn w-full text-left p-4 border-2 rounded-lg dark:border-gray-600 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 transition-all duration-200 ${isSelected ? 'selected' : ''}" data-option-value="${escapedOption}" ${isAnswered ? 'disabled' : ''}>${optionLetter}. ${option}</button>`;
             }).join('');
 
             quizContainer.innerHTML = `
@@ -520,22 +2219,26 @@
                 </div>
             `;
             
-            quizContainer.querySelectorAll('.option-btn').forEach(button => {
-                button.addEventListener('click', () => selectOption(button, button.dataset.optionValue));
-            });
-            
-            updateNavigation();
-            
+            // Solo agregar event listeners si la pregunta no está respondida
             const isAnswered = userAnswers[currentQuestionIndex] !== null;
-            if (isAnswered) {
-                const userAnswer = userAnswers[currentQuestionIndex];
-                quizContainer.querySelectorAll('.option-btn').forEach(btn => {
-                    if (btn.dataset.optionValue === userAnswer) {
-                         btn.classList.add('selected');
-                    }
+            if (!isAnswered) {
+                quizContainer.querySelectorAll('.option-btn').forEach(button => {
+                    button.addEventListener('click', () => selectOption(button, button.dataset.optionValue));
                 });
+                
+                // Deshabilitar botón de comprobar inicialmente
+                const checkBtn = document.getElementById('check-btn');
+                if (checkBtn) {
+                    checkBtn.disabled = true;
+                    checkBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    checkBtn.classList.remove('hover:bg-blue-700');
+                }
+            } else {
+                // Si ya está respondida, mostrar feedback
                 showFeedback(false); 
             }
+            
+            updateNavigation();
 
             if(inReviewMode) {
                 document.getElementById('mark-btn').disabled = true;
@@ -558,12 +2261,38 @@
             }
         }
         
+        // Función para seleccionar opción (mejorada para evitar auto-selección)
         function selectOption(btnElement, optionValue) {
-            if (userAnswers[currentQuestionIndex] !== null || inReviewMode) return;
-            quizContainer.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            // Verificar si ya está respondida o en modo review
+            if (inReviewMode || userAnswers[currentQuestionIndex] !== null) {
+                console.log('Pregunta ya respondida o en modo review');
+                return;
+            }
+            
+            // Verificar si el botón está deshabilitado
+            if (btnElement.disabled) {
+                console.log('Botón deshabilitado');
+                return;
+            }
+            
+            console.log('Seleccionando opción:', optionValue);
+            
+            // Remover selección previa
+            quizContainer.querySelectorAll('.option-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Seleccionar nueva opción
             btnElement.classList.add('selected');
             selectedOption = optionValue;
-            checkBtn.disabled = false;
+            
+            // Habilitar botón de comprobar
+            const checkBtn = document.getElementById('check-btn');
+            if (checkBtn) {
+                checkBtn.disabled = false;
+                checkBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                checkBtn.classList.add('hover:bg-blue-700');
+            }
         }
 
         function checkAnswer() {
@@ -963,8 +2692,9 @@
 
             quantityButtonsContainer.querySelectorAll('button').forEach(button => {
                 button.addEventListener('click', (event) => {
+                    const type = event.target.dataset.type;
                     const quantity = parseInt(event.target.dataset.quantity);
-                    selectQuantity(quantity);
+                    selectQuantity(type, quantity);
                 });
             });
         };
@@ -1851,14 +3581,15 @@
 
 
 
-
-
-
+        
+        // Función para generar caso de estudio
 
     </script>
           <!-- Botón de logout fijo -->
       <button id="logout-btn" onclick="logout()" class="fixed top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg z-50 hidden">
           <i class="fas fa-sign-out-alt mr-2"></i>Cerrar Sesión
       </button>
+      
+
 </body>
 </html>
