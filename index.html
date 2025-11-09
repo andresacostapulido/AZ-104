@@ -295,7 +295,7 @@
 
         const originalQuizData = [
             // Módulo 1: Identidades y Gobernanza (20 preguntas)
-            { question: "1. Necesitas asegurarte de que los nuevos recursos de almacenamiento creados en un grupo de recursos específico no permitan el acceso público. ¿Qué herramienta de Azure deberías usar?", options: ["Azure Advisor", "Azure Policy", "Control de Acceso Basado en Roles (RBAC)", "Microsoft Defender for Cloud"], answer: "Azure Policy", comment: "Azure Policy se utiliza para crear, asignar y administrar directivas que aplican reglas y efectos sobre los recursos, garantizando que cumplan con los estándares corporativos.", category: C.ID_GOV, subtopic: "Implementación y administración de Azure Policy" },
+            { type: 'theory', question: "1. Necesitas asegurarte de que los nuevos recursos de almacenamiento creados en un grupo de recursos específico no permitan el acceso público. ¿Qué herramienta de Azure deberías usar?", options: ["Azure Advisor", "Azure Policy", "Control de Acceso Basado en Roles (RBAC)", "Microsoft Defender for Cloud"], answer: "Azure Policy", comment: "Azure Policy se utiliza para crear, asignar y administrar directivas que aplican reglas y efectos sobre los recursos, garantizando que cumplan con los estándares corporativos.", category: C.ID_GOV, subtopic: "Implementación y administración de Azure Policy" },
             { question: "2. Un nuevo empleado necesita permisos para crear y administrar máquinas virtuales en un grupo de recursos específico, pero no debe tener permisos sobre otros tipos de recursos. ¿Qué rol RBAC deberías asignarle?", options: ["Propietario (Owner)", "Colaborador (Contributor)", "Colaborador de la máquina virtual (Virtual Machine Contributor)", "Lector (Reader)"], answer: "Colaborador de la máquina virtual (Virtual Machine Contributor)", comment: "El rol de 'Colaborador de la máquina virtual' proporciona los permisos necesarios para administrar VMs, pero no otros recursos, siguiendo el principio de privilegios mínimos.", category: C.ID_GOV, subtopic: "Administración de roles de Azure integrados" },
             { question: "3. ¿Cuál es el propósito principal de los Grupos de Administración de Azure (Management Groups)?", options: ["Agrupar máquinas virtuales para balanceo de carga.", "Aplicar políticas y control de acceso a múltiples suscripciones.", "Organizar recursos dentro de una suscripción.", "Sincronizar identidades con un Active Directory local."], answer: "Aplicar políticas y control de acceso a múltiples suscripciones.", comment: "Los grupos de administración son un nivel de ámbito por encima de las suscripciones, diseñados para gestionar de forma eficiente el acceso y las directivas en un conjunto de suscripciones.", category: C.ID_GOV, subtopic: "Configuración de grupos de administración" },
             { question: "4. Quieres proteger una máquina virtual crítica para que no sea eliminada accidentalmente. ¿Qué acción debes realizar?", options: ["Asignar una directiva de Azure Deny.", "Aplicar un bloqueo de recursos (Resource Lock) de tipo `CanNotDelete`.", "Quitar el rol de Colaborador a todos los usuarios.", "Habilitar la autenticación multifactor (MFA) para la suscripción."], answer: "Aplicar un bloqueo de recursos (Resource Lock) de tipo `CanNotDelete`.", comment: "Los bloqueos de recursos se utilizan para evitar que los usuarios autorizados eliminen o modifiquen accidentalmente recursos críticos.", category: C.ID_GOV, subtopic: "Configuración de bloqueos de recursos" },
@@ -2130,7 +2130,8 @@
         function startExamGame(numQuestions) {
             inReviewMode = false;
             // Usar solo las preguntas del examen
-            quizData = shuffle([...examQuizData]).slice(0, numQuestions);
+            const examQuestions = examQuizData.map(q => ({...q, type: 'exam'}));
+            quizData = shuffle([...examQuestions]).slice(0, numQuestions);
             currentQuestionIndex = 0;
             userAnswers = Array(quizData.length).fill(null);
             markedQuestions = Array(quizData.length).fill(false);
@@ -2148,7 +2149,9 @@
 
         function startGame(numQuestions) {
             inReviewMode = false;
-            quizData = shuffle([...originalQuizData]).slice(0, numQuestions);
+            // Asegurar que solo se usen preguntas de teoría (originalQuizData)
+            const theoryQuestions = originalQuizData.map(q => ({...q, type: 'theory'}));
+            quizData = shuffle([...theoryQuestions]).slice(0, numQuestions);
             currentQuestionIndex = 0;
             userAnswers = Array(quizData.length).fill(null);
             markedQuestions = Array(quizData.length).fill(false);
@@ -2892,8 +2895,15 @@
             console.log('🔄 Iniciando migración de datos...');
             
             // Migrar datos de allowed_users raíz a projects/az-104/allowed_users
-            const oldAllowedUsers = await dbRef.ref('allowed_users').once('value');
-            if (oldAllowedUsers.exists()) {
+            let oldAllowedUsers;
+            try {
+              oldAllowedUsers = await dbRef.ref('allowed_users').once('value');
+            } catch (permError) {
+              console.log('ℹ️ No hay acceso a allowed_users raíz (probablemente ya migrado)');
+              oldAllowedUsers = null;
+            }
+            
+            if (oldAllowedUsers && oldAllowedUsers.exists()) {
               console.log('📦 Encontrados datos antiguos, migrando...');
               const oldData = oldAllowedUsers.val();
               let migratedCount = 0;
@@ -2974,7 +2984,8 @@
         // - Migra datos de allowed_users raíz a projects/az-104/allowed_users
         // - Elimina pending_requests raíz
         // - Limpia campo 'status' y mantiene solo 'approved'
-        migrateOldData();
+        // NOTA: La migración se ejecuta después del login, no al cargar la página
+        // migrateOldData();
         
         // Función para probar la conexión con Telegram
         async function testTelegramConnection() {
@@ -3034,6 +3045,9 @@
               
               emailUsuarioGoogle = user.email;
               const base64Email = btoa(user.email);
+              
+              // Ejecutar migración de datos una vez autenticado
+              migrateOldData().catch(err => console.log('ℹ️ Migración omitida:', err.message));
               
               try {
                 // Verifica el estado del usuario en allowed_users
