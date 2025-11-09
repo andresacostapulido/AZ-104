@@ -3323,81 +3323,49 @@
         async function notifyTelegram(email, nombre, apellido, pais, ip) {
           const TELEGRAM_BOT_TOKEN = '8046438946:AAHh1m7uiJrmYZiiaTpKjxBLKkAeHna0QAI';
           const TELEGRAM_CHAT_ID = '568985065';
-          const MAX_RETRIES = 3;
           
           try {
-            console.log('ðŸ“¤ Enviando notificacion a Telegram...');
+            console.log('Enviando notificacion a Telegram...');
             
             const uid = auth.currentUser.uid;
-            const firebaseConsoleLink = `https://console.firebase.google.com/project/autenticacion-98dbb/database/realtime/data/~2Fprojects~2Faz-104~2Fallowed_users~2F${uid}`;
+            const firebaseLink = `https://console.firebase.google.com/project/autenticacion-98dbb/database/realtime/data/~2Fprojects~2Faz-104~2Fallowed_users~2F${uid}`;
             
-            const message = encodeURIComponent(
-              `ðŸ†• **Nueva solicitud de acceso AZ-104**\n\n` +
-              `ðŸ“§ **Email:** ${email}\n` +
-              `ðŸ‘¤ **Nombre:** ${nombre} ${apellido}\n` +
-              `ðŸŒ **Pais:** ${pais}\n` +
-              `ðŸŒ **IP:** ${ip}\n` +
-              `â° **Fecha:** ${new Date().toLocaleString('es-ES')}\n\n` +
-              `âœ… **Para aprobar:** [Click aqui](${firebaseConsoleLink})\n` +
-              `ðŸ’¡ **Accion:** Cambiar "approved" a true`
-            );
+            const message = `Nueva solicitud de acceso AZ-104
+
+Email: ${email}
+Nombre: ${nombre} ${apellido}
+Pais: ${pais}
+IP: ${ip}
+Fecha: ${new Date().toLocaleString('es-ES')}
+
+Para aprobar: ${firebaseLink}
+Accion: Cambiar "approved" a true`;
             
-            let retryCount = 0;
-            let success = false;
+            const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message
+              })
+            });
             
-            while (retryCount < MAX_RETRIES && !success) {
-              try {
-                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: decodeURIComponent(message),
-                    parse_mode: 'Markdown',
-                    disable_web_page_preview: true
-                  })
-                });
-                
-                if (response.ok) {
-                  const result = await response.json();
-                  if (result.ok) {
-                    console.log('âœ… Notificacion enviada exitosamente a Telegram');
-                    showToast('Notificacion enviada al administrador', 'success');
-                    success = true;
-                  } else {
-                    throw new Error(`Telegram API error: ${result.description}`);
-                  }
-                } else {
-                  throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-              } catch (error) {
-                retryCount++;
-                console.error(`âŒ Intento ${retryCount} fallo:`, error);
-                
-                if (retryCount < MAX_RETRIES) {
-                  console.log(`ðŸ”„ Reintentando en ${retryCount * 2} segundos...`);
-                  await new Promise(resolve => setTimeout(resolve, retryCount * 2000));
-                } else {
-                  throw error;
-                }
-              }
+            const result = await response.json();
+            
+            if (result.ok) {
+              console.log('Notificacion enviada exitosamente a Telegram');
+              showToast('Notificacion enviada al administrador', 'success');
+              return true;
+            } else {
+              console.error('Error Telegram API:', result.description);
+              showToast('Error al enviar notificacion, pero la solicitud se guardo', 'warning');
+              return false;
             }
-            
-            if (!success) {
-              throw new Error('Fallaron todos los intentos de envio');
-            }
-            
           } catch (error) {
-            console.error('âŒ Error enviando notificacion a Telegram:', error);
+            console.error('Error enviando notificacion a Telegram:', error);
             showToast('Error al enviar notificacion, pero la solicitud se guardo', 'warning');
-            
-            // No fallar la solicitud completa si Telegram falla
             return false;
           }
-          
-          return true;
         }
 
         // Funcion para mostrar notificaciones toast
