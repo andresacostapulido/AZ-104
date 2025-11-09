@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Telegram Simple</title>
+</head>
+<body>
+    <h1>Test Telegram</h1>
+    <button onclick="enviarMensaje()">Enviar Mensaje</button>
+    <div id="log"></div>
+
+    <script>
+        function log(msg) {
+            document.getElementById('log').innerHTML += '<p>' + msg + '</p>';
+            console.log(msg);
+        }
+
+        async function enviarMensaje() {
+            log('Iniciando envío...');
+            
+            const TELEGRAM_BOT_TOKEN = '8046438946:AAHh1m7uiJrmYZiiaTpKjxBLKkAeHna0QAI';
+            const TELEGRAM_CHAT_ID = '568985065';
+            
+            const mensaje = 'Prueba simple desde navegador\nFecha: ' + new Date().toLocaleString('es-ES');
+            
+            try {
+                log('Haciendo fetch...');
+                
+                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: mensaje
+                    })
+                });
+                
+                log('Response status: ' + response.status);
+                
+                const result = await response.json();
+                log('Result: ' + JSON.stringify(result));
+                
+                if (result.ok) {
+                    alert('✅ Mensaje enviado!');
+                } else {
+                    alert('❌ Error: ' + result.description);
+                }
+            } catch (error) {
+                log('ERROR: ' + error.message);
+                alert('❌ Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
